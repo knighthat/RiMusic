@@ -208,6 +208,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import me.knighthat.colorPalette
+import me.knighthat.innertube.Piped
 import me.knighthat.thumbnailShape
 import okhttp3.Call
 import okhttp3.Callback
@@ -318,6 +319,10 @@ class MainActivity :
 
         checkIfAppIsRunningInBackground()
 
+        // Fetch Piped instances
+        lifecycleScope.launch( Dispatchers.IO ) {
+            Piped.fetchPipedInstances()
+        }
     }
 
     private fun checkIfAppIsRunningInBackground(){
