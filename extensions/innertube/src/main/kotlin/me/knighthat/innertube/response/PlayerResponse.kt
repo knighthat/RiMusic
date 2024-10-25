@@ -1,7 +1,8 @@
 package me.knighthat.innertube.response
 
-import javax.sound.sampled.AudioInputStream
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PlayerResponse(
     val audioStreams: List<AudioStream>
 ) {
@@ -19,6 +20,7 @@ data class PlayerResponse(
         get() = audioStreams.sortedBy(AudioStream::bitrate)[audioStreams.size / 2]
 
 
+    @Serializable
     data class AudioStream(
         val url: String,
         val bitrate: Int
