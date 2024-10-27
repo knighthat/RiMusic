@@ -24,7 +24,6 @@ android {
 
     buildTypes {
         create("kbuild") {
-            signingConfig = signingConfigs.getByName("kbuild")
         }
     }
 
