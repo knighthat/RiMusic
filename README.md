@@ -5,6 +5,15 @@
 <p><b>It allowing the user to customize it at will.</b></p>
 </div>
 
+## What is KBuild
+
+You can think of KBuild as an unstable version of RiMusic, this is my playground where I add/test new stuff before
+pushing it back to [upstream branch](https://github.com/fast4x/RiMusic).
+
+# Disclaimer
+
+App may crash or cause data loss (within this app). Users are made aware of these problems prior to download.
+
 ## ✨ Features
 - **Multilingual support:** English, Italian, German, Russian, French, Spanish, Czech, Turkish, Romanian and more. Contributions for other languages are welcome
 - UI Mode, change style from RiMusic to classic ViMusic style and viceversa
