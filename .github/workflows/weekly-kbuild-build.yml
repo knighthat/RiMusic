@@ -47,7 +47,7 @@ jobs:
       uses: actions/upload-artifact@v4.4.1
       with:
         name: unsigned-apks
-        path: composeApp/build/outputs/apk/foss/debug/RiMusic-*-unsigned.apk
+        path: composeApp/build/outputs/apk/full/kbuild/RiMusic-*-unsigned.apk
 
   sign-apk:
     needs: build-apk
