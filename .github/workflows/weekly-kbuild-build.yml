@@ -1,0 +1,160 @@
+name: Build KBuild variant every week
+
+on:
+  schedule:
+  # Gotta wait until contributors.json is updated
+  - cron: '0 0 * * 0'  # Every Sunday at 0AM
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+# Prevent multiple jobs from running at the same time
+concurrency:
+  group: 'weekly-deploy'
+  cancel-in-progress: false  # Don't cancel any in-progress runs in this group
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    # Set date as a variable
+    outputs:
+      BUILD_DATE: ${{ steps.date.outputs.date }}
+
+    steps:
+    - name: Get date
+      id: date
+      # Output of "October 2 2024" will be "20241002"
+      run: echo "::set-output name=date::$(date +'%Y%m%d')"
+
+  build-apk:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4.2.1
+
+    - name: Setup Java 21
+      uses: actions/setup-java@v4.4.0
+      with:
+        java-version: "21"
+        distribution: "corretto"
+        cache: gradle
+
+    - name: Build with Gradle
+      run: ./gradlew assembleKbuild
+
+    - name: Upload built artifact for next job
+      uses: actions/upload-artifact@v4.4.1
+      with:
+        name: unsigned-apks
+        path: composeApp/build/outputs/apk/foss/debug/RiMusic-*-unsigned.apk
+
+  sign-apk:
+    needs: build-apk
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: A place to store APKS
+      run: mkdir unsigned
+
+    - name: Retrieve APK
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: unsigned-apks
+        path: unsigned
+
+    - name: Sign APK
+      uses: Tlaster/android-sign@v1
+      with:
+        releaseDirectory: unsigned
+
+        signingKeyBase64: ${{ secrets.KEYSTORE_IN_BASE64 }}
+        keyStorePassword: ${{ secrets.KEYSTORE_PASSWD }}
+        alias: ${{ secrets.KEY_ALIAS }}
+        keyPassword: ${{ secrets.KEY_PASSWD }}'
+
+        output: build/kbuild/signed
+
+        env:
+          BUILD_TOOLS_VERSION: "35"
+
+    - name: Remove "-unsigned" trail
+      run: for filename in build/kbuild/signed/*.apk; do mv "$filename" "${filename//-unsigned}"; done
+
+    - name: Upload signed APK(s) for next job
+      uses: actions/upload-artifact@v4.4.1
+      with:
+        name: signed-apks
+        path: build/kbuild/signed/RiMusic-*.apk
+
+  upload-to-release:
+    needs: [setup, build-apk, sign-apk]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Retrieve APK
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: signed-apks
+
+    - name: Upload built APK to release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: RiMusic-*.apk
+        name: RiMusic Weekly Build | KBuild | ${{ needs.setup.outputs.BUILD_DATE }}
+        tag_name: "weekly-kbuild"
+        body: |
+          <div align="center">
+            <img src="https://raw.githubusercontent.com/knighthat/RiMusic/refs/heads/master/assets/design/latest/app_logo.svg" width="300" height="100" />
+            <p><b>RiMusic</b> KBuild</p>
+            <p>Custom build by @knighthat</p>
+          </div>
+
+          ## ❗ WARNING ❗
+          
+          This build is not an official release, it is just ideas before it's pushed into [upstream branch](https://github.com/fast4x/RiMusic).\
+          If you are interested, head down to the download section and get a copy.
+          
+          ## 📲 Installation
+          
+          This version is signed by me. Android treats this build as if this is a different app, thus,
+          your old RiMusic app will not be removed
+          
+          ## Verification
+          
+          > Always check for signature before installing any app you downloaded from Github or any other APK distributor.
+          
+          ### My signature hashes
+          
+          | Hash algorithm |  Variant  |  Digest  |
+          |---|---|---|
+          | SHA-256 | kbuild  | 5129c598029012c512541ec17b865c29df91c03c09a414ca9150827eda44ee3c |
+          | SHA-1 | kbuild  | fcb2ddeac851558a3f4af4634f34a889a1c2aefc |
+          | MD5 | kbuild  | 7251d6b4db45d45b67fd99246306bff0 |
+          
+          ## FAQ
+          
+          <details> 
+          <summary>Q1: How do I download your build?</summary>
+            <blockquote>
+              Right below this article, there are link(s) to prebuilt APK(s).<br>
+              Select the one that fits your need to start the download.
+            </blockquote>
+          </details>
+          <details>
+          <summary>Q2: How verify build's signature?</summary>
+            <blockquote>
+              There are 2 main methods:
+              <ol>
+                <li>
+                  Built-in <a href="https://stackoverflow.com/questions/7104624/how-do-i-verify-that-an-android-apk-is-signed-with-a-release-certificate" target="_blank" rel="noopener noreferrer">jarsigner</a>
+                </li>
+                <li>
+                  <a href="https://developer.android.com/tools/apksigner#options-verify" target="_blank" rel="noopener noreferrer">apksigner</a> from AndroidSDK
+                </li>
+              </ol>
+            </blockquote>
+          </details>
+
+        token: ${{ secrets.RELEASE_TOKEN }}
+        generate_release_notes: true
