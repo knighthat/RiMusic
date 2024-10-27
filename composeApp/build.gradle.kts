@@ -138,13 +138,11 @@ android {
             manifestPlaceholders["appName"] = "RiMusic-Debug"
         }
 
-        release {
-            vcsInfo.include = false
-            isMinifyEnabled = true
-            isShrinkResources = true
-            manifestPlaceholders["appName"] = "RiMusic"
-            signingConfig = signingConfigs.getByName("debug")
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        create("kbuild") {
+            signingConfig = signingConfigs.getByName("kbuild")
+            manifestPlaceholders["appName"] = "RiMusic-KBuild"
+            applicationIdSuffix = ".kbuild"
+            versionNameSuffix = "-kb"
         }
     }
 
