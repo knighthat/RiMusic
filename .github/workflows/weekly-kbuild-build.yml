@@ -64,7 +64,7 @@ jobs:
         path: unsigned
 
     - name: Sign APK
-      uses: Tlaster/android-sign@v1
+      uses: Tlaster/android-sign@v1.2.2
       with:
         releaseDirectory: unsigned
 
