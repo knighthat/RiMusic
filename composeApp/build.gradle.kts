@@ -145,6 +145,7 @@ android {
             versionNameSuffix = "-kb"
         }
     }
+    flavorDimensions += listOf("kbuild")
 
     applicationVariants.all {
         val variant = this
@@ -157,16 +158,10 @@ android {
             }
     }
 
-    flavorDimensions += "version"
     productFlavors {
-        create("foss") {
-            dimension = "version"
-        }
-    }
-    productFlavors {
-        create("accrescent") {
-            dimension = "version"
-            manifestPlaceholders["appName"] = "RiMusic-Acc"
+        create("full") {
+            dimension = "kbuild"  
+            versionNameSuffix = "kbf"
         }
     }
 
