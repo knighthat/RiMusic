@@ -141,37 +141,30 @@ android {
             manifestPlaceholders["appName"] = "RiMusic-Debug"
         }
 
-        release {
-            vcsInfo.include = false
-            isMinifyEnabled = true
-            isShrinkResources = true
-            manifestPlaceholders["appName"] = "RiMusic"
-            signingConfig = signingConfigs.getByName("debug")
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        create("kbuild") {
+            manifestPlaceholders += mapOf()
+            manifestPlaceholders["appName"] = "RiMusic-KBuild"
+            applicationIdSuffix = ".kbuild"
+            versionNameSuffix = "-kb"
         }
     }
+    flavorDimensions += listOf("kbuild")
 
     applicationVariants.all {
         val variant = this
         variant.outputs
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
-                //val outputFileName = "app-${variant.baseName}-${variant.versionName}-${variant.versionCode}.apk"
-                val outputFileName = "app-${variant.baseName}.apk"
-                output.outputFileName = outputFileName
+                val buildType = variant.buildType.name
+                val flavor = variant.flavorName
+                output.outputFileName = "RiMusic-$buildType-$flavor-unsigned.apk"
             }
     }
 
-    flavorDimensions += "version"
     productFlavors {
-        create("foss") {
-            dimension = "version"
-        }
-    }
-    productFlavors {
-        create("accrescent") {
-            dimension = "version"
-            manifestPlaceholders["appName"] = "RiMusic-Acc"
+        create("full") {
+            dimension = "kbuild"  
+            versionNameSuffix = "kbf"
         }
     }
 
