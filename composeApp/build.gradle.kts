@@ -139,7 +139,7 @@ android {
         }
 
         create("kbuild") {
-            signingConfig = signingConfigs.getByName("kbuild")
+            manifestPlaceholders += mapOf()
             manifestPlaceholders["appName"] = "RiMusic-KBuild"
             applicationIdSuffix = ".kbuild"
             versionNameSuffix = "-kb"
@@ -152,9 +152,9 @@ android {
         variant.outputs
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
-                //val outputFileName = "app-${variant.baseName}-${variant.versionName}-${variant.versionCode}.apk"
-                val outputFileName = "app-${variant.baseName}.apk"
-                output.outputFileName = outputFileName
+                val buildType = variant.buildType.name
+                val flavor = variant.flavorName
+                output.outputFileName = "RiMusic-$buildType-$flavor-unsigned.apk"
             }
     }
 
