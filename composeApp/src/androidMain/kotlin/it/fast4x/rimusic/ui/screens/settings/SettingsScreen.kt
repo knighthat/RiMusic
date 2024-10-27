@@ -102,7 +102,6 @@ fun SettingsScreen(
                         1 -> AppearanceSettings(navController = navController)
                         2 -> QuickPicsSettings()
                         3 -> DataSettings()
-                        4 -> OtherSettings()
                         5 -> About()
                     }
                 }
