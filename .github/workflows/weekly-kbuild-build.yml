@@ -75,8 +75,8 @@ jobs:
 
         output: build/kbuild/signed
 
-        env:
-          BUILD_TOOLS_VERSION: "35"
+      env:
+        BUILD_TOOLS_VERSION: "35"
 
     - name: Remove "-unsigned" trail
       run: for filename in build/kbuild/signed/*.apk; do mv "$filename" "${filename//-unsigned}"; done
