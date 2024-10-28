@@ -17,6 +17,7 @@ object Piped {
 
     // REGEX's
     private val DOMAIN_NO_PATH_PATTERN = Regex( "https?://(.*?)(?=\\s\\||/.* \\|)" )
+    private val CAPTURE_DOMAIN_REGEX = Regex( "^(?:https?://)?([^/]+)(?:/.*)?\$" )
     private val TLD_REGEX = Regex("([a-zA-Z0-9-]+\\.[a-zA-Z]{2,})$")
     //
 
@@ -33,7 +34,7 @@ object Piped {
      * return **sub1.example.org**
      */
     private fun getDomainName( url: String ) =
-        DOMAIN_NO_PATH_PATTERN.find(url)?.groups?.get(1)?.value ?: url
+        CAPTURE_DOMAIN_REGEX.find(url)?.groups?.get(1)?.value ?: url
 
     fun blacklistUrl( url: String ) {
         val domainName = getDomainName( url )
