@@ -86,10 +86,9 @@ jobs:
 
     - name: Remove trails
       run: |
-        for filename in build/kbuild/signed/*.apk; do 
-          mv "$filename" "${filename//-signed}"
-          mv "$filename" "${filename//-unsigned}"
-        done
+        for filename in build/kbuild/signed/*.apk; do mv "$filename" "${filename//-signed}"; done
+        
+        for filename in build/kbuild/signed/*.apk; do mv "$filename" "${filename//-unsigned}"; done
 
     - name: Upload signed APK(s) for next job
       uses: actions/upload-artifact@v4.4.1
