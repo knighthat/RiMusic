@@ -17,11 +17,7 @@ import okio.IOException
 
 object Piped {
 
-    // REGEX's
-    private val DOMAIN_NO_PATH_PATTERN = Regex( "https?://(.*?)(?=\\s\\||/.* \\|)" )
-    private val CAPTURE_DOMAIN_REGEX = Regex( "^(?:https?://)?([^/]+)(?:/.*)?\$" )
-    private val TLD_REGEX = Regex("([a-zA-Z0-9-]+\\.[a-zA-Z]{2,})$")
-    //
+    internal val DOMAIN_NO_PATH_REGEX = Regex( "https?://(.*?)(?=\\s\\||/.* \\|)" )
 
     private const val INSTANCES_GITHUB =
         "https://raw.githubusercontent.com/wiki/TeamPiped/Piped-Frontend/Instances.md"
@@ -41,11 +37,11 @@ object Piped {
                                   .get( INSTANCES_GITHUB )
                                   .bodyAsText()
 
-        API_INSTANCES = DOMAIN_NO_PATH_PATTERN.findAll( response )
-                                              .map { it.groups[1]?.value }
-                                              .filterNotNull()
-                                              .toList()
-                                              .toTypedArray()
+        API_INSTANCES = DOMAIN_NO_PATH_REGEX.findAll( response )
+                                            .map { it.groups[1]?.value }
+                                            .filterNotNull()
+                                            .toList()
+                                            .toTypedArray()
 
         // Reset unreachable urls
         UNREACHABLE_INSTANCES = mutableListOf()
