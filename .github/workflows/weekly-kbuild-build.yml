@@ -128,9 +128,9 @@ jobs:
           
           | Hash algorithm |  Variant  |  Digest  |
           |---|---|---|
-          | SHA-256 | kbuild  | 5129c598029012c512541ec17b865c29df91c03c09a414ca9150827eda44ee3c |
-          | SHA-1 | kbuild  | fcb2ddeac851558a3f4af4634f34a889a1c2aefc |
-          | MD5 | kbuild  | 7251d6b4db45d45b67fd99246306bff0 |
+          | SHA-256 | kbuild  | 8c1bf1d9f63288f36837aba5ba3dbef929d0e78055d3cd6d9ec8d26ae487f56e |
+          | SHA-1 | kbuild  | 2dae81c56e516193f433c04b5b8b2f79c39ecec2 |
+          | MD5 | kbuild  | b8ac8c9d91e7c6972d966e0e167e0e71 |
           
           ## FAQ
           
