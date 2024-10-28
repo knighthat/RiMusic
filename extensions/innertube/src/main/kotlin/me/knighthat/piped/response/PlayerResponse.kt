@@ -1,4 +1,4 @@
-package me.knighthat.innertube.response
+package me.knighthat.piped.response
 
 import kotlinx.serialization.Serializable
 

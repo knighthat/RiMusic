@@ -16,8 +16,8 @@ import it.fast4x.rimusic.query
 import it.fast4x.rimusic.utils.enableYouTubeLoginKey
 import it.fast4x.rimusic.utils.preferences
 import me.knighthat.appContext
-import me.knighthat.innertube.Piped
-import me.knighthat.innertube.request.player
+import me.knighthat.piped.Piped
+import me.knighthat.piped.request.player
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException

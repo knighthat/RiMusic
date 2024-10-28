@@ -1,4 +1,4 @@
-package me.knighthat.innertube
+package me.knighthat.piped
 
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
