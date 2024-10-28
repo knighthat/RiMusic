@@ -8,6 +8,12 @@ on:
   # Allow manual trigger
   workflow_dispatch:
 
+  # Run jobs when this workflow is updated
+  push:
+    branches: [kbuild]
+    paths:
+      - .github/workflows/weekly-kbuild-build.yml
+
 # Prevent multiple jobs from running at the same time
 concurrency:
   group: 'weekly-deploy'
