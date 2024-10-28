@@ -21,7 +21,8 @@ dependencies {
     implementation(libs.ktor.client.serialization)
     implementation(libs.ktor.serialization.json)
 
-    //testImplementation(libs.junit)
+    // JSON parser - Gson (test only)
+    testImplementation(libs.gson)
 
     // Test engine(s)
     testImplementation(libs.junit.jupiter.api)
