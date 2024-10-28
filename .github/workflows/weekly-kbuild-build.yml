@@ -68,10 +68,10 @@ jobs:
       with:
         releaseDirectory: unsigned
 
-        signingKeyBase64: ${{ secrets.KEYSTORE_IN_BASE64 }}
-        keyStorePassword: ${{ secrets.KEYSTORE_PASSWD }}
-        alias: ${{ secrets.KEY_ALIAS }}
-        keyPassword: ${{ secrets.KEY_PASSWD }}
+        signingKeyBase64: "${{ secrets.KEYSTORE_IN_BASE64 }}"
+        keyStorePassword: "${{ secrets.KEYSTORE_PASSWD }}"
+        alias: "${{ secrets.KEY_ALIAS }}"
+        keyPassword: "${{ secrets.KEY_PASSWD }}"
 
         output: build/kbuild/signed
 
