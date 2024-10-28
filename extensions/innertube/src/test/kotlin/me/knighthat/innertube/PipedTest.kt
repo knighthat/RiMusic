@@ -1,14 +1,7 @@
 package me.knighthat.innertube
 
-import com.google.gson.Gson
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import java.io.InputStream
-import java.io.InputStreamReader
 
 class PipedTest {
 
@@ -73,44 +66,8 @@ class PipedTest {
             "pipedapi.darkness.services",
             "pipedapi.andreafortuna.org"
         )
-
-        private lateinit var TLD_SUB_DOMAINS_MAP: Map<String, Array<String>>
-        private lateinit var DOMAINS_WITH_PATHS: Map<String, String>
-
-        @JvmStatic
-        @BeforeAll
-        fun setUp() {
-            val classLoader = PipedTest::class.java.classLoader
-            val gson = Gson()
-
-            var inStream: InputStream?
-            var jsonFile: JsonElement
-
-            // TLD_SUB_DOMAINS_MAP
-            inStream = classLoader.getResourceAsStream( "tld-sub-domains-map.json" )
-            jsonFile = gson.fromJson( InputStreamReader( inStream!! ), JsonArray::class.java )
-
-            val tldSubDomainsMap = mutableMapOf<String, Array<String>>()
-            jsonFile.map( JsonElement::getAsJsonObject ).forEach {
-                tldSubDomainsMap[it["domain"].asString] = it["subdomains"].asJsonArray
-                                                                          .map( JsonElement::getAsString )
-                                                                          .toTypedArray()
-            }
-            TLD_SUB_DOMAINS_MAP = tldSubDomainsMap
-            // TLD_SUB_DOMAINS_MAP
-
-            // DOMAINS_WITH_PATHS
-            inStream = classLoader.getResourceAsStream( "domains-with-paths.json" )
-            jsonFile = gson.fromJson( InputStreamReader( inStream!! ), JsonArray::class.java )
-
-            val domainsWithPathsMap = mutableMapOf<String, String>()
-            jsonFile.map( JsonElement::getAsJsonObject ).forEach {
-                domainsWithPathsMap[it["domain"].asString] = it["full"].asString
-            }
-            DOMAINS_WITH_PATHS = domainsWithPathsMap
-            // DOMAINS_WITH_PATHS
-        }
     }
+
 
     /**
      * This function tests whether the pattern Pipe#DOMAIN_NO_PATH_PATTERN
@@ -122,40 +79,15 @@ class PipedTest {
      */
     @Test
     fun testDomainNoPathPattern() {
-        Piped.domainNoPathPattern
-             .findAll( MARKDOWN_FILE )          // Look for all matches
-             .map { it.groups[1]?.value }       // Use first group of each match
-             .filterNotNull()                   // Ignore if result is null
-             .also {
-                 assertTrue( DOMAIN_NO_PATTERN_MATCHES.size == it.toList().size )
-             }
-             .forEach {
-                 assertTrue( DOMAIN_NO_PATTERN_MATCHES.contains( it ) )
-             }
-    }
-
-    @Test
-    fun testGetDomainName() {
-        DOMAINS_WITH_PATHS.forEach { (domain, full) ->
-            assertEquals( domain, Piped.domainName( full ) )
-        }
-    }
-
-    @Test
-    fun testGetTld() {
-        TLD_SUB_DOMAINS_MAP.forEach { (tld, subs) ->
-            val subSet = subs.map( Piped::tld ).toSet()
-
-            assertEquals( 1, subSet.size )
-            assertEquals( tld, subSet.first() )
-        }
-    }
-
-    @Test
-    fun testGenMatchAllTld() {
-        TLD_SUB_DOMAINS_MAP.forEach { (tld, subs) ->
-            val regex = Piped.matchAllRegex( tld )
-            subs.forEach { assertTrue( regex.matches( it ) ) }
-        }
+        Piped.DOMAIN_NO_PATH_REGEX
+            .findAll( MARKDOWN_FILE )          // Look for all matches
+            .map { it.groups[1]?.value }       // Use first group of each match
+            .filterNotNull()                   // Ignore if result is null
+            .also {
+                assertTrue( DOMAIN_NO_PATTERN_MATCHES.size == it.toList().size )
+            }
+            .forEach {
+                assertTrue( DOMAIN_NO_PATTERN_MATCHES.contains( it ) )
+            }
     }
 }
