@@ -12,6 +12,7 @@ import io.ktor.http.URLProtocol
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import okio.IOException
+import org.jetbrains.annotations.TestOnly
 
 object Piped {
 
@@ -146,4 +147,21 @@ object Piped {
         // Wait for the first non-null response
         deferredResponses.firstNotNullOfOrNull { it.await() }
     }
+
+// START - Test only section
+
+    internal val domainNoPathPattern: Regex
+        @TestOnly
+        get() = DOMAIN_NO_PATH_PATTERN
+
+    @TestOnly
+    internal fun domainName( url: String ) = getDomainName( url )
+
+    @TestOnly
+    internal fun tld( url: String ) = getTld( url )
+
+    @TestOnly
+    internal fun matchAllRegex( url: String ) = genMatchAllTld( url )
+
+// END - Test only section
 }

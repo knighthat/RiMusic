@@ -1,0 +1,86 @@
+[
+  {
+    "full": "https://blog.example.com/posts/2024/10/28/how-to-code",
+    "domain": "blog.example.com"
+  },
+  {
+    "full": "http://store.testsite.org/products/electronics/phones",
+    "domain": "store.testsite.org"
+  },
+  {
+    "full": "https://mywebsite.net/users/profile/12345",
+    "domain": "mywebsite.net"
+  },
+  {
+    "full": "http://forum.example.com/topics/tech/ai-discussion",
+    "domain": "forum.example.com"
+  },
+  {
+    "full": "https://secure-site.io/api/v1/users/login",
+    "domain": "secure-site.io"
+  },
+  {
+    "full": "http://website123.com/blog/2024/10/top-10-tips",
+    "domain": "website123.com"
+  },
+  {
+    "full": "https://demo-site.org/about/history",
+    "domain": "demo-site.org"
+  },
+  {
+    "full": "http://sampledomain.com/services/consulting",
+    "domain": "sampledomain.com"
+  },
+  {
+    "full": "https://webapp.net/dashboard/overview",
+    "domain": "webapp.net"
+  },
+  {
+    "full": "http://myblog.org/category/recipes/vegan",
+    "domain": "myblog.org"
+  },
+  {
+    "full": "https://coolwebsite.io/features/advanced",
+    "domain": "coolwebsite.io"
+  },
+  {
+    "full": "http://shoppinghub.com/cart/view",
+    "domain": "shoppinghub.com"
+  },
+  {
+    "full": "https://portfolio.net/projects/web-development/portfolio",
+    "domain": "portfolio.net"
+  },
+  {
+    "full": "http://newswebsite.org/archive/2024",
+    "domain": "newswebsite.org"
+  },
+  {
+    "full": "https://socialplatform.com/user/98765/friends",
+    "domain": "socialplatform.com"
+  },
+  {
+    "full": "http://cloudservice.io/docs/getting-started",
+    "domain": "cloudservice.io"
+  },
+  {
+    "full": "https://techblog.net/articles/2024/10/27/tech-trends",
+    "domain": "techblog.net"
+  },
+  {
+    "full": "http://events.example.com/conferences/2024/schedule",
+    "domain": "events.example.com"
+  },
+  {
+    "full": "https://resources.org/tutorials/web-development/html",
+    "domain": "resources.org"
+  },
+  {
+    "full": "http://archive.example.com/movies/2024/genres/action",
+    "domain": "archive.example.com"
+  },
+  {
+    "full": "https://community.site.io/forums/health-and-fitness",
+    "domain": "community.site.io"
+  }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "domain": "techworld.com",
+    "subdomains": [
+      "blog.techworld.com",
+      "api.v1.techworld.com",
+      "support.techworld.com",
+      "userspace.app.techworld.com",
+      "europe.sales.techworld.com"
+    ]
+  },
+  {
+    "domain": "mycompany.net",
+    "subdomains": [
+      "admin.portal.mycompany.net",
+      "beta.mycompany.net",
+      "chat.support.mycompany.net",
+      "us.hr.mycompany.net",
+      "analytics.v2.mycompany.net"
+    ]
+  },
+  {
+    "domain": "learnhub.org",
+    "subdomains": [
+      "courses.learnhub.org",
+      "library.learnhub.org",
+      "online.classes.learnhub.org",
+      "faculty.portal.learnhub.org",
+      "alumni.research.learnhub.org"
+    ]
+  },
+  {
+    "domain": "devspace.io",
+    "subdomains": [
+      "assets.cdn.devspace.io",
+      "api.v2.devspace.io",
+      "staging.dev.devspace.io",
+      "partners.demo.devspace.io",
+      "admin.tools.devspace.io"
+    ]
+  },
+  {
+    "domain": "corporatehub.biz",
+    "subdomains": [
+      "hr.corporatehub.biz",
+      "reports.finance.corporatehub.biz",
+      "careers.corporatehub.biz",
+      "europe.sales.corporatehub.biz",
+      "old.archives.corporatehub.biz"
+    ]
+  },
+  {
+    "domain": "educentral.edu",
+    "subdomains": [
+      "admissions.educentral.edu",
+      "library.research.educentral.edu",
+      "faculty.classes.educentral.edu",
+      "alumni.portal.educentral.edu",
+      "online.courses.educentral.edu"
+    ]
+  },
+  {
+    "domain": "marketplace.co",
+    "subdomains": [
+      "api.v1.marketplace.co",
+      "us.store.marketplace.co",
+      "sales.support.marketplace.co",
+      "feedback.marketplace.co",
+      "app.staging.marketplace.co"
+    ]
+  },
+  {
+    "domain": "globalconnect.org",
+    "subdomains": [
+      "networking.globalconnect.org",
+      "community.events.globalconnect.org",
+      "resources.library.globalconnect.org",
+      "support.forum.globalconnect.org",
+      "data.analytics.globalconnect.org"
+    ]
+  },
+  {
+    "domain": "innovativeapps.com",
+    "subdomains": [
+      "blog.innovativeapps.com",
+      "api.v1.innovativeapps.com",
+      "support.innovativeapps.com",
+      "beta.dev.innovativeapps.com",
+      "clients.dashboard.innovativeapps.com"
+    ]
+  },
+  {
+    "domain": "ecommercesite.info",
+    "subdomains": [
+      "shop.products.ecommercesite.info",
+      "blog.tips.ecommercesite.info",
+      "support.customers.ecommercesite.info",
+      "community.forum.ecommercesite.info",
+      "track.order.ecommercesite.info"
+    ]
+  },
+  {
+    "domain": "freelancehub.net",
+    "subdomains": [
+      "projects.freelancehub.net",
+      "portfolio.freelancehub.net",
+      "jobs.search.freelancehub.net",
+      "support.chat.freelancehub.net",
+      "blog.tips.freelancehub.net"
+    ]
+  },
+  {
+    "domain": "smartsolutions.co",
+    "subdomains": [
+      "services.consulting.smartsolutions.co",
+      "products.smartsolutions.co",
+      "support.tickets.smartsolutions.co",
+      "community.forum.smartsolutions.co",
+      "dev.api.smartsolutions.co"
+    ]
+  }
+]
