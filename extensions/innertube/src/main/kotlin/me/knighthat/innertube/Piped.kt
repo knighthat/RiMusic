@@ -11,6 +11,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.URLProtocol
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import me.knighthat.common.HttpFetcher
 import okio.IOException
 import org.jetbrains.annotations.TestOnly
 

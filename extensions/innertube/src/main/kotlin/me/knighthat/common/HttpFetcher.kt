@@ -1,4 +1,4 @@
-package me.knighthat.innertube
+package me.knighthat.common
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -40,7 +40,9 @@ internal object HttpFetcher {
             })
         }
         install(ContentEncoding) {
-            brotli()
+            brotli(1.0F)
+            gzip(0.9F)
+            deflate(0.8F)
         }
         ProxyPreferences.preference?.let {
             engine {
