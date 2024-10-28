@@ -84,8 +84,12 @@ jobs:
       env:
         BUILD_TOOLS_VERSION: "34.0.0"
 
-    - name: Remove "-signed" trail
-      run: for filename in build/kbuild/signed/*.apk; do mv "$filename" "${filename//-signed}"; done
+    - name: Remove trails
+      run: |
+        for filename in build/kbuild/signed/*.apk; do 
+          mv "$filename" "${filename//-signed}"
+          mv "$filename" "${filename//-unsigned}"
+        done
 
     - name: Upload signed APK(s) for next job
       uses: actions/upload-artifact@v4.4.1
