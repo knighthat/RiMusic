@@ -22,4 +22,12 @@ dependencies {
     implementation(libs.ktor.serialization.json)
 
     //testImplementation(libs.junit)
+
+    // Test engine(s)
+    implementation(libs.junit.jupiter.api)
+    implementation(libs.junit.jupiter.engine)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
