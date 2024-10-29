@@ -1,6 +1,7 @@
 /captures
 .externalNativeBuild
 .cxx
+**.ignore.d/
 
 ###      IDEA
 .idea
