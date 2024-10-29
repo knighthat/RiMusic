@@ -41,6 +41,4 @@ include(":lrclib")
 project(":lrclib").projectDir = file("extensions/lrclib")
 include(":piped")
 project(":piped").projectDir = file("extensions/piped")
-include(":invidious")
-project(":invidious").projectDir = file("extensions/invidious")
 
