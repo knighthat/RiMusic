@@ -136,12 +136,12 @@ suspend fun getInnerTubeFormatUrl(
                                 Database.upsert(
                                     Format(
                                         songId = videoId,
-                                        itag = it?.itag,
+                                        itag = it?.itag?.toInt(),
                                         mimeType = it?.mimeType,
                                         contentLength = it?.contentLength,
-                                        bitrate = it?.bitrate,
+                                        bitrate = it?.bitrate?.toLong(),
                                         lastModified = it?.lastModified,
-                                        loudnessDb = it?.loudnessDb?.toFloat(),
+                                        loudnessDb = playerResponse.playerConfig?.audioConfig?.loudnessDb,
                                     )
                                 )
                         }

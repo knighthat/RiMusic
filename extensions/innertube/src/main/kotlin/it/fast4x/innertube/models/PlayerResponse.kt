@@ -1,6 +1,11 @@
 package it.fast4x.innertube.models
 
+import it.fast4x.invidious.models.AdaptiveFormat
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import me.knighthat.common.response.AudioFormat
+import me.knighthat.common.response.MediaFormatContainer
+import java.util.SortedSet
 
 @Serializable
 data class PlayerResponse(
@@ -21,53 +26,42 @@ data class PlayerResponse(
     ) {
         @Serializable
         data class AudioConfig(
-            private val loudnessDb: Double?
+            val loudnessDb: Float?
         ) {
             // For music clients only
             val normalizedLoudnessDb: Float?
-                get() = loudnessDb?.plus(7)?.toFloat()
+                get() = loudnessDb?.plus(7)
         }
     }
 
     @Serializable
     data class StreamingData(
-        val adaptiveFormats: List<AdaptiveFormat>?,
-        val expiresInSeconds: Long?
-    ) {
+        val expiresInSeconds: Long?,
+        private val adaptiveFormats: List<AdaptiveFormat>,
+    ): MediaFormatContainer<StreamingData.AdaptiveFormat> {
 
-        val autoMaxQualityFormat: AdaptiveFormat?
-            get() = adaptiveFormats?.findLast {
-                it.itag == 251 || it.itag == 141 ||
-                        it.itag == 250 || it.itag == 140 ||
-                        it.itag == 249 || it.itag == 139 || it.itag == 171
-            }
-
-        val highestQualityFormat: AdaptiveFormat?
-            get() = adaptiveFormats?.findLast { it.itag == 251 || it.itag == 141 }
-
-        val mediumQualityFormat: AdaptiveFormat?
-            get() = adaptiveFormats?.findLast { it.itag == 250 || it.itag == 140 }
-
-        val lowestQualityFormat: AdaptiveFormat?
-            get() = adaptiveFormats?.findLast { it.itag == 249 || it.itag == 139 }
-
-
+        override val formats: SortedSet<AdaptiveFormat> =
+            sortedSetOf<AdaptiveFormat>().apply { addAll( adaptiveFormats ) }
 
         @Serializable
         data class AdaptiveFormat(
-            val itag: Int,
-            val mimeType: String,
-            val bitrate: Long?,
             val averageBitrate: Long?,
             val contentLength: Long?,
-            val audioQuality: String?,
             val approxDurationMs: Long?,
             val lastModified: Long?,
-            val loudnessDb: Double?,
-            val audioSampleRate: Int?,
-            val url: String?,
-            val width: Int?
-        ) {
+            val width: Int?,
+            @SerialName("mimeType")
+            val mimeTypeCodec: String,
+            override val itag: UByte,
+            override val url: String,
+            override val bitrate: Int
+        ): AudioFormat {
+
+            override val mimeType: String
+                get() = mimeTypeCodec.split( ";" )[0].trim()
+            override val codec: String
+                get() = mimeTypeCodec.split( ";" )[1].trim()
+
             val isAudio: Boolean
                 get() = width == null
 

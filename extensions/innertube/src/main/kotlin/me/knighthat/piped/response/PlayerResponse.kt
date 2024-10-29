@@ -1,28 +1,25 @@
 package me.knighthat.piped.response
 
 import kotlinx.serialization.Serializable
+import me.knighthat.common.response.AudioFormat
+import me.knighthat.common.response.MediaFormatContainer
+import java.util.SortedSet
 
 @Serializable
 data class PlayerResponse(
-    val audioStreams: List<AudioStream>
-) {
+    private val audioStreams: List<AudioStream>,
+): MediaFormatContainer<PlayerResponse.AudioStream> {
 
-    val autoMaxQualityFormat: AudioStream
-        get() = highestQualityFormat
-
-    val highestQualityFormat: AudioStream
-        get() = audioStreams.sortedBy(AudioStream::bitrate).last()
-
-    val lowestQualityFormat: AudioStream
-        get() = audioStreams.sortedBy(AudioStream::bitrate).first()
-
-    val mediumQualityFormat: AudioStream
-        get() = audioStreams.sortedBy(AudioStream::bitrate)[audioStreams.size / 2]
-
+    override val formats: SortedSet<AudioStream> =
+        sortedSetOf<AudioStream>().apply { addAll( audioStreams ) }
 
     @Serializable
     data class AudioStream(
-        val url: String,
-        val bitrate: Int
-    )
+        val contentLength: UInt,
+        override val itag: UByte,
+        override val url: String,
+        override val mimeType: String,
+        override val codec: String,
+        override val bitrate: Int
+    ): AudioFormat
 }
