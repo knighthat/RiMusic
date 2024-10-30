@@ -41,4 +41,5 @@ include(":lrclib")
 project(":lrclib").projectDir = file("extensions/lrclib")
 include(":piped")
 project(":piped").projectDir = file("extensions/piped")
-
+include(":logger")
+project(":logger").projectDir = file("extensions/logger")

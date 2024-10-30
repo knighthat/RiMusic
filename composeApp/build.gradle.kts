@@ -324,6 +324,7 @@ dependencies {
     implementation(projects.kugou)
     implementation(projects.lrclib)
     implementation(projects.piped)
+    implementation(projects.logger)
 
 
     coreLibraryDesugaring(libs.desugaring)
