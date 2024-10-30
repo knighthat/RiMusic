@@ -316,4 +316,8 @@ dependencies {
 
 
     coreLibraryDesugaring(libs.desugaring)
+
+    // Test engine(s)
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.jupiter.engine)
 }
