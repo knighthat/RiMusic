@@ -58,6 +58,7 @@ import it.fast4x.rimusic.utils.semiBold
 import me.knighthat.Skeleton
 import me.knighthat.colorPalette
 import me.knighthat.typography
+import me.knighthat.ui.screens.settings.OtherSettings
 
 @ExperimentalMaterialApi
 @ExperimentalTextApi
@@ -101,6 +102,7 @@ fun SettingsScreen(
                         1 -> AppearanceSettings(navController = navController)
                         2 -> QuickPicsSettings()
                         3 -> DataSettings()
+                        4 -> OtherSettings()
                         5 -> About()
                     }
                 }
