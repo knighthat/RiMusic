@@ -13,6 +13,8 @@ import it.fast4x.rimusic.utils.coilDiskCacheMaxSizeKey
 import it.fast4x.rimusic.utils.getEnum
 import it.fast4x.rimusic.utils.logDebugEnabledKey
 import it.fast4x.rimusic.utils.preferences
+import me.knighthat.logger.Logger
+import me.knighthat.logger.SimpleLogEngine
 import timber.log.Timber
 import java.io.File
 
@@ -22,6 +24,8 @@ class MainApplication : Application(), ImageLoaderFactory {
         super.onCreate()
         //DatabaseInitializer()
         Dependencies.init(this)
+
+        Logger.init( SimpleLogEngine() )
 
         /**** LOG *********/
         val logEnabled = preferences.getBoolean(logDebugEnabledKey, false)
