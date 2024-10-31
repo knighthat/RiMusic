@@ -53,7 +53,7 @@ data class Developer(
         val uriHandler = LocalUriHandler.current
         val avatarPainter = rememberAsyncImagePainter( this.avatar )
         val borderColor =
-            if( id == 1484476 )
+            if( id == 68310158 )
                 Color.hsl( 132f, .34f, .56f )
             else
                 colorPalette().textSecondary
