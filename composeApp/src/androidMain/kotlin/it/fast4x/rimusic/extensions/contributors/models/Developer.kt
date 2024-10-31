@@ -52,7 +52,11 @@ data class Developer(
     fun Draw() {
         val uriHandler = LocalUriHandler.current
         val avatarPainter = rememberAsyncImagePainter( this.avatar )
-        val backgroundColor = if (id == 1484476) colorPalette().background1 else Color.Transparent
+        val backgroundColor = 
+            if( id == 68310158 )
+                colorPalette().background1 
+            else
+                Color.Transparent
 
 
         Card(
