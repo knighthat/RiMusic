@@ -686,7 +686,7 @@
     <string name="noblur">Pas de flou quand les paroles sont désactivées</string>
     <string name="fadingedge">Bord en dégradé</string>
     <string name="carousel">Vue Carrousel</string>
-    <string name="carouselsize">Taille du Carrousel</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">Ajouté à la lecture suivante</string>
     <string name="info_paused_with_volume_zero">Mettre en pause quand le volume est à 0</string>
     <string name="effect_fade_audio">Fondu audio</string>
@@ -761,4 +761,8 @@
     <string name="login_required_to_play_this_media">Connexion nécessaire pour lire ce média</string>
     <string name="skip_media_on_notavailable_message">Le média précédent n\'est pas disponible, le lecteur est passé au suivant</string>
     <string name="search_results_for">Résultats de la recherche pour :</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

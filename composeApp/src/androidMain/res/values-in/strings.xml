@@ -684,7 +684,7 @@
     <string name="noblur">Jangan kaburkan latar belakang saat lirik nonaktif</string>
     <string name="fadingedge">Tepi Memudar</string>
     <string name="carousel">Tampilan Carousel</string>
-    <string name="carouselsize">Ukuran Carousel</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">Ditambahkan ke Putar selanjutnya</string>
     <string name="info_paused_with_volume_zero">Dijeda karena volume nol</string>
     <string name="effect_fade_audio">Efek pemudaran audio</string>
@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">Login required to play this media</string>
     <string name="skip_media_on_notavailable_message">Previous media is not available, skipped to next</string>
     <string name="search_results_for">Hasil penelusuran untuk:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

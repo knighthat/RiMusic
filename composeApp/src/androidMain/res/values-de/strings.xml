@@ -684,7 +684,7 @@
     <string name="noblur">Keine Unschärfe, wenn Liedtexte deaktiviert sind</string>
     <string name="fadingedge">Kanten verblassen</string>
     <string name="carousel">Karussellansicht</string>
-    <string name="carouselsize">Größe des Karussells</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">Hinzugefügt, um als nächstes abzuspielen</string>
     <string name="info_paused_with_volume_zero">Pausiert mit Lautstärke Null</string>
     <string name="effect_fade_audio">Audio ein-/ausblenden</string>
@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">Anmeldung erforderlich, um dieses Medium abzuspielen</string>
     <string name="skip_media_on_notavailable_message">Da nicht verfügbar, wurde der vorherige Titel übersprungen</string>
     <string name="search_results_for">Suchergebnisse für:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

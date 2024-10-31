@@ -684,7 +684,7 @@
     <string name="noblur">Ingen Sløring, når Sangtekster er Deaktiveret</string>
     <string name="fadingedge">Falmende Kant</string>
     <string name="carousel">Karruselvisning</string>
-    <string name="carouselsize">Karruselstørrelse</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">Afspilles som næste</string>
     <string name="info_paused_with_volume_zero">Pauseret ved nul lydstyrke</string>
     <string name="effect_fade_audio">Udton lyd</string>
@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">Login kræves for at afspille dette medie</string>
     <string name="skip_media_on_notavailable_message">Forrige medie er ikke tilgængeligt; sprang over til næste</string>
     <string name="search_results_for">Søgeresultater for:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

@@ -32,6 +32,9 @@ interface DeleteDownloadsDialog: ConfirmationDialog {
 
     override fun onConfirm() {
         listToProcess().forEach {
+            if(binder == null){ // binder has to be non-null for remove from cache to work
+                return
+            }
             binder?.cache?.removeResource(it.mediaId)
             query {
                 Database.resetFormatContentLength(it.mediaId)

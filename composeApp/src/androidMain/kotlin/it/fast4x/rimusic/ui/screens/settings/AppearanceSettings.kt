@@ -47,6 +47,7 @@ import it.fast4x.rimusic.enums.ThumbnailType
 import it.fast4x.rimusic.ui.components.themed.HeaderWithIcon
 import it.fast4x.rimusic.ui.components.themed.SmartMessage
 import it.fast4x.rimusic.ui.styling.Dimensions
+import it.fast4x.rimusic.utils.actionExpandedKey
 import it.fast4x.rimusic.utils.actionspacedevenlyKey
 import it.fast4x.rimusic.utils.backgroundProgressKey
 import it.fast4x.rimusic.utils.blackgradientKey
@@ -110,6 +111,7 @@ import it.fast4x.rimusic.utils.showlyricsthumbnailKey
 import it.fast4x.rimusic.utils.showsongsKey
 import it.fast4x.rimusic.utils.showthumbnailKey
 import it.fast4x.rimusic.utils.showvisthumbnailKey
+import it.fast4x.rimusic.utils.statsExpandedKey
 import it.fast4x.rimusic.utils.statsfornerdsKey
 import it.fast4x.rimusic.utils.swipeUpQueueKey
 import it.fast4x.rimusic.utils.tapqueueKey
@@ -479,6 +481,8 @@ fun AppearanceSettings(
     var timelineExpanded by rememberPreference(timelineExpandedKey, true)
     var controlsExpanded by rememberPreference(controlsExpandedKey, true)
     var miniQueueExpanded by rememberPreference(miniQueueExpandedKey, true)
+    var statsExpanded by rememberPreference(statsExpandedKey, true)
+    var actionExpanded by rememberPreference(actionExpandedKey, true)
 
     Column(
         modifier = Modifier
@@ -624,28 +628,27 @@ fun AppearanceSettings(
                             onCheckedChange = { carousel = it },
                             modifier = Modifier.padding(start = if (playerBackgroundColors == PlayerBackgroundColors.BlurredCoverColor) 25.dp else 0.dp)
                         )
-                    if (carousel) {
-                        if (searchInput.isBlank() || stringResource(R.string.carouselsize).contains(
-                                searchInput,
-                                true
-                            )
+
+                    if (searchInput.isBlank() || stringResource(R.string.carouselsize).contains(
+                            searchInput,
+                            true
                         )
-                            EnumValueSelectorSettingsEntry(
-                                title = stringResource(R.string.carouselsize),
-                                selectedValue = carouselSize,
-                                onValueSelected = { carouselSize = it },
-                                valueText = {
-                                    when (it) {
-                                        CarouselSize.Small -> stringResource(R.string.small)
-                                        CarouselSize.Medium -> stringResource(R.string.medium)
-                                        CarouselSize.Big -> stringResource(R.string.big)
-                                        CarouselSize.Biggest -> stringResource(R.string.biggest)
-                                        CarouselSize.Expanded -> stringResource(R.string.expanded)
-                                    }
-                                },
-                                modifier = Modifier.padding(start = if (playerBackgroundColors == PlayerBackgroundColors.BlurredCoverColor) 25.dp else 0.dp)
-                            )
-                    }
+                    )
+                        EnumValueSelectorSettingsEntry(
+                            title = stringResource(R.string.carouselsize),
+                            selectedValue = carouselSize,
+                            onValueSelected = { carouselSize = it },
+                            valueText = {
+                                when (it) {
+                                    CarouselSize.Small -> stringResource(R.string.small)
+                                    CarouselSize.Medium -> stringResource(R.string.medium)
+                                    CarouselSize.Big -> stringResource(R.string.big)
+                                    CarouselSize.Biggest -> stringResource(R.string.biggest)
+                                    CarouselSize.Expanded -> stringResource(R.string.expanded)
+                                }
+                            },
+                            modifier = Modifier.padding(start = if (playerBackgroundColors == PlayerBackgroundColors.BlurredCoverColor) 25.dp else 0.dp)
+                        )
                 }
                 if (playerType == PlayerType.Essential) {
                     if (searchInput.isBlank() || stringResource(R.string.thumbnailpause).contains(
@@ -1545,6 +1548,20 @@ fun AppearanceSettings(
                     onCheckedChange = { controlsExpanded = it }
                 )
 
+            if (statsfornerds){
+                if (searchInput.isBlank() || stringResource(R.string.statsfornerds).contains(
+                        searchInput,
+                        true
+                    )
+                )
+                    SwitchSettingEntry(
+                        title = stringResource(R.string.statsfornerds),
+                        text = "",
+                        isChecked = statsExpanded,
+                        onCheckedChange = { statsExpanded = it }
+                    )
+            }
+
             if (showNextSongsInPlayer) {
                 if (searchInput.isBlank() || stringResource(R.string.miniqueue).contains(
                         searchInput,
@@ -1558,6 +1575,34 @@ fun AppearanceSettings(
                         onCheckedChange = { miniQueueExpanded = it }
                     )
             }
+
+            if (
+                showButtonPlayerDownload ||
+                showButtonPlayerAddToPlaylist ||
+                showButtonPlayerLoop ||
+                showButtonPlayerShuffle ||
+                showButtonPlayerLyrics ||
+                showButtonPlayerSleepTimer ||
+                showButtonPlayerSystemEqualizer ||
+                showButtonPlayerArrow ||
+                showButtonPlayerMenu ||
+                expandedplayertoggle ||
+                showButtonPlayerDiscover ||
+                showButtonPlayerVideo
+            ){
+                if (searchInput.isBlank() || stringResource(R.string.actionbar).contains(
+                        searchInput,
+                        true
+                    )
+                )
+                    SwitchSettingEntry(
+                        title = stringResource(R.string.actionbar),
+                        text = "",
+                        isChecked = actionExpanded,
+                        onCheckedChange = { actionExpanded = it }
+                    )
+            }
+
         }
         SettingsGroupSpacer()
         SettingsEntryGroupText(title = stringResource(R.string.background_player))

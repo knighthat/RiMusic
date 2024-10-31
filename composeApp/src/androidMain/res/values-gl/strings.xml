@@ -684,7 +684,7 @@
     <string name="noblur">Sen atenuado cando as letras están desactivadas</string>
     <string name="fadingedge">Bordos que esvaecen</string>
     <string name="carousel">Vista de carrusel</string>
-    <string name="carouselsize">Tamaño do carrusel</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">Engadido para reproducir a continuación</string>
     <string name="info_paused_with_volume_zero">Pausado co volume cero</string>
     <string name="effect_fade_audio">Esvaecer audio</string>
@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">Cómpre iniciar sesión para reproducir este recurso</string>
     <string name="skip_media_on_notavailable_message">A canción anterior non está dispoñible, vaise á seguinte</string>
     <string name="search_results_for">Resultados da procura de:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

@@ -5,6 +5,7 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 
@@ -111,3 +112,16 @@ fun Modifier.fadingEdge(
     top = vertical,
     bottom = vertical
 )
+
+fun Modifier.VerticalfadingEdge2(fade: Float) = this
+    .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+    .drawWithContent {
+        val topFade = Brush.verticalGradient(0f to Color.Transparent, fade to Color.Red)
+        drawContent()
+        drawRect(brush = topFade, blendMode = BlendMode.DstIn)
+    }
+    .drawWithContent {
+        val bottomFade = Brush.verticalGradient(0f to Color.Transparent, fade to Color.Red, startY =  Float.POSITIVE_INFINITY, endY = 0f)
+        drawContent()
+        drawRect(brush = bottomFade, blendMode = BlendMode.DstIn)
+    }

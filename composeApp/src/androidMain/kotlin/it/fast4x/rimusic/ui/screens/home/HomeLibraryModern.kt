@@ -157,7 +157,7 @@ fun HomeLibraryModern(
             override val sizeState = sizeState
         }
     }
-    val shuffle = remember {
+    val shuffle = remember(binder) {
         object: SongsShuffle {
             override val binder = binder
             override val context = context

@@ -36,6 +36,9 @@ interface DownloadAllDialog: ConfirmationDialog {
         downloadState.intValue = Download.STATE_DOWNLOADING
 
         listToProcess().forEach {
+            if(binder == null){ // binder has to be non-null for remove from cache to work
+                return
+            }
             binder?.cache?.removeResource(it.mediaId)
             query {
                 Database.resetFormatContentLength(it.mediaId)

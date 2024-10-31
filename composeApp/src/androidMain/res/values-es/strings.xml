@@ -684,7 +684,7 @@
     <string name="noblur">No desenfocar cuando la letra está desactivada</string>
     <string name="fadingedge">Borde difuminado</string>
     <string name="carousel">Vista de carrusel</string>
-    <string name="carouselsize">Tamaño del carrusel</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">Añadido al siguiente</string>
     <string name="info_paused_with_volume_zero">Pausado con el volumen cero</string>
     <string name="effect_fade_audio">Atenuar audio</string>
@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">Se necesita iniciar sesión para reproducir este contenido</string>
     <string name="skip_media_on_notavailable_message">Contenido previo no disponible, saltado al siguiente</string>
     <string name="search_results_for">Resultados de búsqueda para:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

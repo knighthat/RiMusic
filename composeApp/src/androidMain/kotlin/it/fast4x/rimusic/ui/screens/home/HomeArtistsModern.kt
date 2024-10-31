@@ -141,7 +141,7 @@ fun HomeArtistsModern(
             override fun onClick(item: Artist) = onArtistClick(item)
         }
     }
-    val shuffle = remember {
+    val shuffle = remember(binder) {
         object: SongsShuffle{
             override val binder = binder
             override val context = context

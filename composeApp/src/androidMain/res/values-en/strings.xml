@@ -684,7 +684,7 @@
     <string name="noblur">Remove background blur when lyrics is disabled</string>
     <string name="fadingedge">Fading edge</string>
     <string name="carousel">Carousel view</string>
-    <string name="carouselsize">Size of carousel</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">Added to play next</string>
     <string name="info_paused_with_volume_zero">Paused due to zero volume</string>
     <string name="effect_fade_audio">Fade audio effect</string>
@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">Logging in is required to play this song</string>
     <string name="skip_media_on_notavailable_message">Previous song is not available, skipping to the next song</string>
     <string name="search_results_for">Search results for:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

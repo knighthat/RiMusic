@@ -684,7 +684,7 @@
     <string name="noblur">Sense desenfocament quan la lletra està desactivada</string>
     <string name="fadingedge">Vora esvaïda</string>
     <string name="carousel">Vista de carrusel</string>
-    <string name="carouselsize">Mida del carrusel</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">S\'ha afegit per reproduir a continuació</string>
     <string name="info_paused_with_volume_zero">En pausa amb el volum zero</string>
     <string name="effect_fade_audio">Esvaeix l\'àudio</string>
@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">Cal iniciar sessió per reproduir aquests fitxers multimèdia</string>
     <string name="skip_media_on_notavailable_message">El fitxer multimèdia anterior no està disponible, s\'ha saltat al següent</string>
     <string name="search_results_for">Resultats de la cerca per a:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

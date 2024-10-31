@@ -684,7 +684,7 @@
     <string name="noblur">가사 비활성화 시 블러 없음</string>
     <string name="fadingedge">흐린 모서리</string>
     <string name="carousel">회전목마</string>
-    <string name="carouselsize">회전목마 크기</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">다음 재생에 추가됨</string>
     <string name="info_paused_with_volume_zero">일시정지됨 (소리 크기가 0)</string>
     <string name="effect_fade_audio">오디오 흐림</string>
@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">Login required to play this media</string>
     <string name="skip_media_on_notavailable_message">Previous media is not available, skipped to next</string>
     <string name="search_results_for">Search results for:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

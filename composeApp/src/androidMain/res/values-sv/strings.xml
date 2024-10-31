@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">Login required to play this media</string>
     <string name="skip_media_on_notavailable_message">Previous media is not available, skipped to next</string>
     <string name="search_results_for">Search results for:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

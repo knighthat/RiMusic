@@ -684,7 +684,7 @@
     <string name="noblur">歌詞が無効なら、透かし効果なし</string>
     <string name="fadingedge">Fading Edge</string>
     <string name="carousel">カルーセルの表示</string>
-    <string name="carouselsize">カルーセルの大きさ</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">次の再生曲として追加しました</string>
     <string name="info_paused_with_volume_zero">音量ゼロで停止</string>
     <string name="effect_fade_audio">音声をフェード</string>
@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">Login required to play this media</string>
     <string name="skip_media_on_notavailable_message">Previous media is not available, skipped to next</string>
     <string name="search_results_for">Search results for:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

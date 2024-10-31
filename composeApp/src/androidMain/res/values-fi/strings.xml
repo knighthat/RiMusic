@@ -684,7 +684,7 @@
     <string name="noblur">Ei sumennusta kun sanoitukset on poistettu käytöstä</string>
     <string name="fadingedge">Häivytä reuna</string>
     <string name="carousel">Karusellinäkymä</string>
-    <string name="carouselsize">Karusellin koko</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">Lisätty toistettavaksi seuraavaksi</string>
     <string name="info_paused_with_volume_zero">Keskeytetty äänenvoimakkuuden ollessa nolla</string>
     <string name="effect_fade_audio">Häivytä ääni</string>
@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">Kirjautuminen vaaditaan tämän median toistamiseen</string>
     <string name="skip_media_on_notavailable_message">Edellinen media ei ole käytettävissä, siirrytään seuraavaan</string>
     <string name="search_results_for">Hakutulokset haulle:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

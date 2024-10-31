@@ -684,7 +684,7 @@
     <string name="noblur">当歌词被禁用时不启用模糊效果</string>
     <string name="fadingedge">渐变边缘</string>
     <string name="carousel">轮播视图</string>
-    <string name="carouselsize">轮播视图大小</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">已添加到接下来播放</string>
     <string name="info_paused_with_volume_zero">已暂停且静音</string>
     <string name="effect_fade_audio">音频淡入淡出</string>
@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">需要登录才能播放此媒体</string>
     <string name="skip_media_on_notavailable_message">上一个媒体不可用，跳至下一个</string>
     <string name="search_results_for">搜索结果：</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

@@ -684,7 +684,7 @@
     <string name="noblur">Walang blur kapag naka disable ang lyrics</string>
     <string name="fadingedge">Fading Edge</string>
     <string name="carousel">View ng Carousel</string>
-    <string name="carouselsize">Size ng Carousel</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">Na-add na ito sa play next</string>
     <string name="info_paused_with_volume_zero">Nag pause dahil sa zero volume</string>
     <string name="effect_fade_audio">Fade audio</string>
@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">Login required to play this media</string>
     <string name="skip_media_on_notavailable_message">Previous media is not available, skipped to next</string>
     <string name="search_results_for">Search results for:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

@@ -315,7 +315,7 @@ fun HomeSongsModern(
             override val sortByState = deviceFolderSortState
         }
     }
-    val shuffle = remember {
+    val shuffle = remember(binder) {
         object: SongsShuffle {
             override val binder = binder
             override val context = context
@@ -374,7 +374,7 @@ fun HomeSongsModern(
             }
         }
     }
-    val downloadAllDialog = remember {
+    val downloadAllDialog = remember(binder) {
         object: DownloadAllDialog {
             override val context = context
             override val binder = binder
@@ -390,7 +390,7 @@ fun HomeSongsModern(
                     listOf()
         }
     }
-    val deleteDownloadsDialog = remember {
+    val deleteDownloadsDialog = remember(binder) {
         object: DeleteDownloadsDialog {
             override val context = context
             override val binder = binder
@@ -531,7 +531,7 @@ fun HomeSongsModern(
         }
         BuiltInPlaylist.Downloaded, BuiltInPlaylist.Favorites, BuiltInPlaylist.Offline, BuiltInPlaylist.Top -> {
 
-            LaunchedEffect(Unit, builtInPlaylist, sortBy, sortOrder, searchInput, topPlaylistPeriod) {
+            LaunchedEffect(Unit, builtInPlaylist, sortBy, sortOrder, searchInput, topPlaylistPeriod, binder) {
 
                 var songFlow: Flow<List<SongEntity>> = flowOf()
                 var dispatcher = Dispatchers.Default

@@ -213,6 +213,8 @@ import it.fast4x.rimusic.utils.carouselKey
 import it.fast4x.rimusic.utils.carouselSizeKey
 import it.fast4x.rimusic.cleanPrefix
 import it.fast4x.rimusic.enums.QueueLoopType
+import it.fast4x.rimusic.utils.VerticalfadingEdge2
+import it.fast4x.rimusic.utils.actionExpandedKey
 import it.fast4x.rimusic.utils.textoutlineKey
 import kotlin.Float.Companion.POSITIVE_INFINITY
 import it.fast4x.rimusic.utils.clickOnLyricsTextKey
@@ -255,6 +257,8 @@ import it.fast4x.rimusic.utils.getIconQueueLoopState
 import it.fast4x.rimusic.utils.isDownloadedSong
 import it.fast4x.rimusic.utils.playNext
 import it.fast4x.rimusic.utils.playPrevious
+import it.fast4x.rimusic.utils.statsExpandedKey
+import it.fast4x.rimusic.utils.thumbnailFadeKey
 import me.knighthat.colorPalette
 import me.knighthat.thumbnailShape
 import me.knighthat.typography
@@ -310,9 +314,11 @@ fun Player(
     val defaultDarkenFactor = 0.2f
     val defaultOffset = 0f
     val defaultSpacing = 0f
+    val defaultFade = 5f
     var blurStrength by rememberPreference(blurStrengthKey, defaultStrength)
     var thumbnailOffset  by rememberPreference(thumbnailOffsetKey, defaultOffset)
     var thumbnailSpacing  by rememberPreference(thumbnailSpacingKey, defaultSpacing)
+    var thumbnailFade  by rememberPreference(thumbnailFadeKey, defaultFade)
     var blurDarkenFactor by rememberPreference(blurDarkenFactorKey, defaultDarkenFactor)
     var showBlurPlayerDialog by rememberSaveable {
         mutableStateOf(false)
@@ -344,7 +350,8 @@ fun Player(
         ThumbnailOffsetDialog(
             onDismiss = { showThumbnailOffsetDialog = false},
             scaleValue = { thumbnailOffset = it },
-            spacingValue = { thumbnailSpacing = it }
+            spacingValue = { thumbnailSpacing = it },
+            fadeValue = { thumbnailFade = it }
         )
     }
 
@@ -365,7 +372,8 @@ fun Player(
 
     val queueDurationExpanded by rememberPreference(queueDurationExpandedKey, true)
     val miniQueueExpanded by rememberPreference(miniQueueExpandedKey, true)
-
+    val statsExpanded by rememberPreference(statsExpandedKey, true)
+    val actionExpanded by rememberPreference(actionExpandedKey, true)
 
     binder.player.DisposableListener {
         object : Player.Listener {
@@ -1073,8 +1081,7 @@ fun Player(
             .fillMaxSize()
     ) {
         val actionsBarContent: @Composable () -> Unit = {
-            if (
-                !showButtonPlayerDownload &&
+            if ((!showButtonPlayerDownload &&
                 !showButtonPlayerAddToPlaylist &&
                 !showButtonPlayerLoop &&
                 !showButtonPlayerShuffle &&
@@ -1082,7 +1089,11 @@ fun Player(
                 !showButtonPlayerSleepTimer &&
                 !showButtonPlayerSystemEqualizer &&
                 !showButtonPlayerArrow &&
-                !showButtonPlayerMenu
+                !showButtonPlayerMenu &&
+                !expandedplayertoggle &&
+                !showButtonPlayerDiscover &&
+                !showButtonPlayerVideo) ||
+                (expandedplayer && isShowingLyrics && !actionExpanded)
             ) {
                 Row(
                 ) {
@@ -1931,7 +1942,7 @@ fun Player(
                                                      0.dp
                                                  )
                                              )
-                                             .conditional(fadingedge) { horizontalFadingEdge() }
+                                             .conditional(fadingedge) {horizontalFadingEdge()}
                                          ) { it ->
 
                                          AsyncImage(
@@ -2333,7 +2344,9 @@ fun Player(
                                                  vertical = 2.5.dp
                                              )
                                          }
-                                         .conditional(fadingedge) { verticalFadingEdge() }
+                                         .conditional(fadingedge) {
+                                             VerticalfadingEdge2(fade = thumbnailFade*0.05f)
+                                         }
                                  ){ it ->
 
                                      AsyncImage(
@@ -2344,7 +2357,7 @@ fun Player(
                                          contentScale = ContentScale.Fit,
                                          modifier = Modifier
                                              .fillMaxWidth()
-                                             .padding(all = if (carousel && expandedplayer) carouselSize.size.dp else playerThumbnailSize.size.dp)
+                                             .padding(all = if (expandedplayer) carouselSize.size.dp else playerThumbnailSize.size.dp)
                                              .zIndex(
                                                  if (it == pagerState.currentPage) 1f
                                                  else if (it == (pagerState.currentPage + 1) || it == (pagerState.currentPage - 1)) 0.85f
@@ -2602,11 +2615,13 @@ fun Player(
                 }
 
                 if (!showthumbnail || playerType == PlayerType.Modern) {
-                    StatsForNerds(
-                        mediaId = mediaItem.mediaId,
-                        isDisplayed = statsfornerds,
-                        onDismiss = {}
-                    )
+                    if (!expandedplayer || !isShowingLyrics || statsExpanded) {
+                        StatsForNerds(
+                            mediaId = mediaItem.mediaId,
+                            isDisplayed = statsfornerds,
+                            onDismiss = {}
+                        )
+                    }
                 }
                 actionsBarContent()
               }

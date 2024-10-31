@@ -684,7 +684,7 @@
     <string name="noblur">Nessuna sfocatura quando il testo è disabilitato</string>
     <string name="fadingedge">Margine Dissolvenza</string>
     <string name="carousel">Vista A Carosello</string>
-    <string name="carouselsize">Dimensione del carosello</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">Aggiunto come prossimo brano</string>
     <string name="info_paused_with_volume_zero">Pausa quando il volume è a zero</string>
     <string name="effect_fade_audio">Dissolvenza audio</string>
@@ -759,4 +759,8 @@
     <string name="login_required_to_play_this_media">Accesso richiesto per riprodurre questo media</string>
     <string name="skip_media_on_notavailable_message">Il media precedente non è disponibile, saltato al successivo</string>
     <string name="search_results_for">Risultati della ricerca per:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>

@@ -685,7 +685,7 @@
     <string name="noblur">Без размытия, если текст песни отключён</string>
     <string name="fadingedge">Затухающий Край</string>
     <string name="carousel">\"Карусель\"</string>
-    <string name="carouselsize">Размер карусели</string>
+    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
     <string name="addednext">Добавлено в очередь</string>
     <string name="info_paused_with_volume_zero">Пауза при нулевой громкости</string>
     <string name="effect_fade_audio">Затухание аудио</string>
@@ -761,4 +761,8 @@
     <string name="login_required_to_play_this_media">Необходимо войти для воспроизведения этого медиа</string>
     <string name="skip_media_on_notavailable_message">Предыдущий файл недоступен, переход к следующему</string>
     <string name="search_results_for">Результаты поиска для:</string>
+    <string name="statsfornerds">Stats for Nerds</string>
+    <string name="actionbar">Action Bar</string>
+    <string name="center">Center</string>
+    <string name="lyricsalignment">Lyrics Alignment</string>
 </resources>
