@@ -114,7 +114,7 @@ jobs:
         tag_name: "weekly-kbuild"
         body: |
           <div align="center">
-            <img src="https://raw.githubusercontent.com/knighthat/RiMusic/refs/heads/master/assets/design/latest/app_logo.svg" width="300" height="100" />
+            <img src="https://raw.githubusercontent.com/knighthat/RiMusic/refs/tags/weekly-kbuild/assets/design/latest/app_logo.svg" width="300" height="100" />
             <p><b>RiMusic</b> KBuild</p>
             <p>Custom build by @knighthat</p>
           </div>
@@ -126,10 +126,10 @@ jobs:
           
           ## 📲 Installation
           
-          This version is signed by me. Android treats this build as if this is a different app, thus,
-          your old RiMusic app will not be removed
+          Download a copy and install APK like any other APK. Your old RiMusic may be removed (or asked
+          to be removed) before installing this version
           
-          ## Verification
+          ## ✅ Verification
           
           > Always check for signature before installing any app you downloaded from Github or any other APK distributor.
           
@@ -141,7 +141,7 @@ jobs:
           | SHA-1 | kbuild  | 2dae81c56e516193f433c04b5b8b2f79c39ecec2 |
           | MD5 | kbuild  | b8ac8c9d91e7c6972d966e0e167e0e71 |
           
-          ## FAQ
+          ## 🗨️ FAQ
           
           <details> 
           <summary>Q1: How do I download your build?</summary>
