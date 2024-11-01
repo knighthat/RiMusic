@@ -684,7 +684,7 @@
     <string name="noblur">Şarkı Sözleri Devre Dışı Bırakıldığında Bulanıklık Yok</string>
     <string name="fadingedge">Solan Kenar</string>
     <string name="carousel">Dönme Dolap Görünümü</string>
-    <string name="carouselsize">Thumbnail Size in Expanded Mode</string>
+    <string name="carouselsize">Genişletilmiş Modda Kapak Resmi Boyutu</string>
     <string name="addednext">Sıradaki şarkı olarak eklendi</string>
     <string name="info_paused_with_volume_zero">Ses seviyesi sıfıra düşürüldüğünden duraklatıldı</string>
     <string name="effect_fade_audio">Kademeli ses</string>
@@ -759,8 +759,8 @@
     <string name="login_required_to_play_this_media">Bu medyayı oynatmak için giriş gerekli</string>
     <string name="skip_media_on_notavailable_message">Önceki medya mevcut değil, sonrakine atlandı</string>
     <string name="search_results_for">Arama sonuçları:</string>
-    <string name="statsfornerds">Stats for Nerds</string>
-    <string name="actionbar">Action Bar</string>
-    <string name="center">Center</string>
-    <string name="lyricsalignment">Lyrics Alignment</string>
+    <string name="statsfornerds">Meraklısı için istatistikler</string>
+    <string name="actionbar">Eylem Çubuğu</string>
+    <string name="center">Orta</string>
+    <string name="lyricsalignment">Şarkı Sözleri Hizalama</string>
 </resources>

@@ -684,7 +684,7 @@
     <string name="noblur">Sem desfoque quando a letra estiver desativada</string>
     <string name="fadingedge">Borda Desvanecente</string>
     <string name="carousel">Visão de carrossel</string>
-    <string name="carouselsize">Tamanho do Carrossel</string>
+    <string name="carouselsize">Tamanho do carrossel</string>
     <string name="addednext">Adicionado para tocar na sequência</string>
     <string name="info_paused_with_volume_zero">Pausado com o volume zerado</string>
     <string name="effect_fade_audio">Desvanecer áudio</string>
@@ -747,20 +747,20 @@
     <string name="settings_loudness_base_gain">Estrutura de ganho</string>
     <string name="settings_target_gain_loudness_info">Alvo ganho para a normalização do ruído</string>
     <string name="error_media_cannot_be_played">Mídia incapaz de reproduzir</string>
-    <string name="full_screen_lyrics_components">Componentes das Letras em Tela Cheia</string>
+    <string name="full_screen_lyrics_components">COMPONENTES NAS LETRAS EM TELA CHEIA</string>
     <string name="titleartist">Título e Artistas</string>
     <string name="miniqueue">Mini Fila</string>
     <string name="controls">Controles</string>
     <string name="add_to_favorites">Adicionar aos favoritos</string>
     <string name="import_favorites">Importar favoritos</string>
     <string name="skip_media_on_error">Pular imediatamente em caso de erro</string>
-    <string name="skip_media_on_error_description">Se um erro ocorrer, a mídia é alterada</string>
+    <string name="skip_media_on_error_description">Se ocorrer um erro, a mídia será alterada</string>
     <string name="skip_media_on_error_message">Erro na mídia %1$s</string>
     <string name="login_required_to_play_this_media">É necessário fazer login para reproduzir esta mídia</string>
-    <string name="skip_media_on_notavailable_message">A mídia anterior não está disponível, pulando para a próxima</string>
-    <string name="search_results_for">Pesquisar resultados para:</string>
-    <string name="statsfornerds">Stats for Nerds</string>
-    <string name="actionbar">Action Bar</string>
-    <string name="center">Center</string>
-    <string name="lyricsalignment">Lyrics Alignment</string>
+    <string name="skip_media_on_notavailable_message">A música anterior não está disponível, pulando para a próxima música</string>
+    <string name="search_results_for">Resultados de pesquisa para:</string>
+    <string name="statsfornerds">Estatísticas para Nerds</string>
+    <string name="actionbar">Barra de Ação</string>
+    <string name="center">Centro</string>
+    <string name="lyricsalignment">Alinhamento das Letras</string>
 </resources>

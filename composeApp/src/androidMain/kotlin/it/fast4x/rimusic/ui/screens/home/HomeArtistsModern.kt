@@ -11,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -210,10 +211,9 @@ fun HomeArtistsModern(
             LazyVerticalGrid(
                 state = lazyGridState,
                 columns = GridCells.Adaptive( itemSize.sizeState.value.dp ),
-                //contentPadding = LocalPlayerAwareWindowInsets.current.asPaddingValues(),
-                modifier = Modifier
-                    .background(colorPalette().background0)
-                    .fillMaxSize()
+                modifier = Modifier.background( colorPalette().background0 )
+                                   .fillMaxSize(),
+                contentPadding = PaddingValues( bottom = Dimensions.bottomSpacer )
             ) {
                 items(items = items, key = Artist::id) { artist ->
                     ArtistItem(
@@ -233,13 +233,6 @@ fun HomeArtistsModern(
                                            }),
                         disableScrollingText = disableScrollingText
                     )
-                }
-                item(
-                    key = "footer",
-                    contentType = 0,
-                    span = { GridItemSpan(maxLineSpan) }
-                ) {
-                    Spacer(modifier = Modifier.height(Dimensions.bottomSpacer))
                 }
             }
         }
