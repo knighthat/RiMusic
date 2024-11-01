@@ -42,7 +42,6 @@ import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.R
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.models.Album
-import it.fast4x.rimusic.models.Song
 import it.fast4x.rimusic.models.SongAlbumMap
 import it.fast4x.rimusic.query
 import it.fast4x.rimusic.ui.components.LocalMenuState
@@ -84,6 +83,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.knighthat.Skeleton
+import java.net.URLDecoder
 
 @ExperimentalMaterialApi
 @ExperimentalTextApi
@@ -126,7 +126,7 @@ fun SearchResultScreen(
                     verticalPadding = 4.dp
                 )
                 Title(
-                    title = query,
+                    title = URLDecoder.decode( query, "UTF-8" ),
                     icon = R.drawable.pencil,
                     onClick = {
                         /*
