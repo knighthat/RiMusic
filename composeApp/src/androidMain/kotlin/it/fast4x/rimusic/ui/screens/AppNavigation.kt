@@ -80,6 +80,7 @@ import it.fast4x.rimusic.utils.preferences
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.thumbnailRoundnessKey
 import it.fast4x.rimusic.utils.transitionEffectKey
+import java.net.URLEncoder
 
 @androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class,
@@ -384,12 +385,10 @@ fun AppNavigation(
                 //pop = popDestination,
                 onSearch = { query ->
                     println("onSearch: $query")
+
+                    val urlSafe = URLEncoder.encode( query, "UTF-8" )
                     navController.navigate(
-                        route = "${NavRoutes.searchResults.name}/${
-                            cleanString(
-                                query
-                            )
-                        }"
+                        route = "${NavRoutes.searchResults.name}/$urlSafe"
                     )
 
                     if (!context.preferences.getBoolean(pauseSearchHistoryKey, false)) {
