@@ -84,6 +84,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.knighthat.Skeleton
+import java.net.URLDecoder
 
 @ExperimentalMaterialApi
 @ExperimentalTextApi
@@ -126,7 +127,7 @@ fun SearchResultScreen(
                     verticalPadding = 4.dp
                 )
                 Title(
-                    title = query,
+                    title = URLDecoder.decode( query, "UTF-8" ),
                     icon = R.drawable.pencil,
                     onClick = {
                         navController.navigate("${NavRoutes.search.name}?text=${Uri.encode( query )}")
