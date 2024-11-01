@@ -19,12 +19,6 @@ fun cleanPrefix(text: String): String {
     return cleanText
 }
 
-fun cleanString(text: String): String {
-    var cleanText = text.replace("/", "", true)
-    cleanText = cleanText.replace("#", "", true)
-    return cleanText
-}
-
 fun String?.thumbnail(size: Int): String? {
     return when {
         this?.startsWith("https://lh3.googleusercontent.com") == true -> "$this-w$size-h$size"
