@@ -1,5 +1,6 @@
 package it.fast4x.rimusic.ui.screens
 
+import android.net.Uri
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -43,7 +44,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import it.fast4x.rimusic.Database
-import it.fast4x.rimusic.cleanString
 import it.fast4x.rimusic.enums.BuiltInPlaylist
 import it.fast4x.rimusic.enums.DeviceLists
 import it.fast4x.rimusic.enums.NavRoutes
@@ -381,15 +381,11 @@ fun AppNavigation(
                 miniPlayer = miniPlayer,
                 initialTextInput = text,
                 onViewPlaylist = {},
-                //pop = popDestination,
                 onSearch = { query ->
                     println("onSearch: $query")
+
                     navController.navigate(
-                        route = "${NavRoutes.searchResults.name}/${
-                            cleanString(
-                                query
-                            )
-                        }"
+                        route = "${NavRoutes.searchResults.name}/${Uri.encode( query )}",
                     )
 
                     if (!context.preferences.getBoolean(pauseSearchHistoryKey, false))
@@ -500,27 +496,6 @@ fun AppNavigation(
             NewreleasesScreen(
                 navController = navController,
                 miniPlayer = miniPlayer,
-            )
-        }
-
-        composable(
-            "searchScreenRoute/{query}"
-        ) { backStackEntry ->
-            val context = LocalContext.current
-            val query = backStackEntry.arguments?.getString("query")?: ""
-            SearchScreen(
-                navController = navController,
-                miniPlayer = miniPlayer,
-                initialTextInput = query ,
-                onViewPlaylist = {},
-                onSearch = { newQuery ->
-                    navController.navigate(route = "${NavRoutes.searchResults.name}/${cleanString(newQuery)}")
-
-                    if (!context.preferences.getBoolean(pauseSearchHistoryKey, false))
-                        Database.transaction {
-                            searchQuery.insert( SearchQuery(query = newQuery) )
-                        }
-                },
             )
         }
     }

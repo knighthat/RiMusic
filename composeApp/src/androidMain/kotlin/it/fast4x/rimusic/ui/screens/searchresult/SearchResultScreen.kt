@@ -1,6 +1,7 @@
 package it.fast4x.rimusic.ui.screens.searchresult
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
@@ -127,13 +128,7 @@ fun SearchResultScreen(
                     title = query,
                     icon = R.drawable.pencil,
                     onClick = {
-                        /*
-                                context.persistMap?.keys?.removeAll {
-                                   it.startsWith("searchResults/$query/")
-                                }
-                                onSearchAgain()
-                                */
-                        navController.navigate("searchScreenRoute/${query}")
+                        navController.navigate("${NavRoutes.search.name}?text=${Uri.encode( query )}")
                     },
                     verticalPadding = 4.dp
                 )
