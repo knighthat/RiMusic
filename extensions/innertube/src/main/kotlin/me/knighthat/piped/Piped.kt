@@ -26,6 +26,15 @@ object Piped {
     private lateinit var API_INSTANCES: Array<String>
     private lateinit var UNREACHABLE_INSTANCES: MutableList<Regex>
 
+    internal val REACHABLE_INSTANCES: Collection<String>
+        get() = API_INSTANCES.filter {
+            for ( regex in UNREACHABLE_INSTANCES )
+                if ( regex.matches(it) )
+                    return@filter false
+
+            true
+        }
+
     fun blacklistUrl( url: String ) {
         if( !::UNREACHABLE_INSTANCES.isInitialized )
             throw UninitializedPropertyAccessException( "Please initialize Piped instances with Piped#fetchPipedInstance()" )
