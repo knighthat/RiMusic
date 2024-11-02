@@ -1,17 +1,29 @@
 package me.knighthat.common
 
 import io.ktor.client.HttpClient
+import io.ktor.client.call.NoTransformationFoundException
+import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.compression.brotli
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.request
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
 import it.fast4x.innertube.utils.ProxyPreferences
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Proxy
 
@@ -126,4 +138,91 @@ internal object HttpFetcher {
      */
     internal fun genMatchAllTld( url: String ) =
         Regex( "(?:[a-zA-Z0-9-]+\\.)*${getTld(url)}" )
+
+    /**
+     * Attempt to send a request to provided server
+     *
+     * @param method purpose of the request. For example, GET/POST/UPDATE. Visit [HttpMethod] for details
+     * @param host domain name or IP address of the server
+     * @param endpoint path to send request to on the server
+     * @param protocol or scheme such as HTTP(S). To learn more, visit [URLProtocol]
+     * @param port to connect. Defaults to port of [protocol]
+     * @param body additional information to be sent with the request
+     *
+     * @return [HttpResponse] represents the data retrieved from the server
+     *
+     * @throws IOException mainly because of server takes too long to response
+     */
+    suspend inline fun singleRequest(
+        method: HttpMethod,
+        host: String,
+        endpoint: String,
+        protocol: URLProtocol = URLProtocol.HTTPS,
+        port: Int = protocol.defaultPort,
+        crossinline body: (HttpRequestBuilder) -> Unit = {}
+    ): HttpResponse =
+        CLIENT.request {
+
+            this.method = method
+            this.url {
+                this.protocol = protocol
+                this.host = "$host$endpoint"
+                this.port = port
+            }
+            body( this )
+        }
+
+    /**
+     * Simultaneously send out requests to multiple servers provided in [hosts].
+     * Each response from server will be evaluate and convert into [T].
+     * First response to parse successfully will be return, while others are getting
+     * stopped all together.
+     *
+     * @param method purpose of the request. For example, GET/POST/UPDATE. Visit [HttpMethod] for details
+     * @param hosts a list of domain names or IP addresses
+     * @param endpoint path to send request to on the server
+     * @param protocol or scheme such as HTTP(S). To learn more, visit [URLProtocol]
+     * @param port to connect. Defaults to port of [protocol]
+     * @param body additional information to be sent with the request
+     * @param onServerFailure what to do when user takes too long to response or when [T] does
+     * not represent the response
+     */
+    suspend inline fun <reified T> asyncMultiRequestGetFirstValid(
+        method: HttpMethod,
+        hosts: Collection<String>,
+        endpoint: String,
+        protocol: URLProtocol = URLProtocol.HTTPS,
+        port: Int = protocol.defaultPort,
+        crossinline body: (HttpRequestBuilder) -> Unit = {},
+        crossinline onServerFailure: (Exception, String) -> T?
+    ): T? =
+        coroutineScope {
+
+            val deferredResponses = hosts.map { hostUrl ->
+                async {
+                    try {
+                        val response = singleRequest( method, hostUrl, endpoint, protocol, port, body )
+
+                        // Only accept successful responses
+                        if ( response.status == HttpStatusCode.OK ) {
+                            println("Fetch $hostUrl$endpoint returned code: ${response.status}:")
+                            println(response.bodyAsText().replace("\n", ""))
+
+                            response.body<T>()
+                        } else
+                            null
+
+                    } catch ( e: Exception ) {
+                        when( e ) {
+                            is IOException,
+                            is NoTransformationFoundException -> onServerFailure(e, hostUrl)
+                            else -> throw e
+                        }
+                    }
+                }
+            }
+
+            // Wait for the first non-null response
+            deferredResponses.firstNotNullOfOrNull { it.await() }
+        }
 }
