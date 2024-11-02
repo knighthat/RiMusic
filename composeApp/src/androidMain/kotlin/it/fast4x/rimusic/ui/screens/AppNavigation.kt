@@ -1,5 +1,6 @@
 package it.fast4x.rimusic.ui.screens
 
+import android.net.Uri
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -35,7 +36,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -43,7 +43,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import it.fast4x.rimusic.Database
-import it.fast4x.rimusic.cleanString
 import it.fast4x.rimusic.enums.BuiltInPlaylist
 import it.fast4x.rimusic.enums.DeviceLists
 import it.fast4x.rimusic.enums.NavRoutes
@@ -80,7 +79,6 @@ import it.fast4x.rimusic.utils.preferences
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.thumbnailRoundnessKey
 import it.fast4x.rimusic.utils.transitionEffectKey
-import java.net.URLEncoder
 
 @androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class,
@@ -374,13 +372,11 @@ fun AppNavigation(
                 miniPlayer = miniPlayer,
                 initialTextInput = text,
                 onViewPlaylist = {},
-                //pop = popDestination,
                 onSearch = { query ->
                     println("onSearch: $query")
 
-                    val urlSafe = URLEncoder.encode( query, "UTF-8" )
                     navController.navigate(
-                        route = "${NavRoutes.searchResults.name}/$urlSafe"
+                        route = "${NavRoutes.searchResults.name}/${Uri.encode( query )}",
                     )
 
                     if (!context.preferences.getBoolean(pauseSearchHistoryKey, false)) {
@@ -389,8 +385,7 @@ fun AppNavigation(
                         }
                     }
                 },
-
-                )
+            )
         }
 
         composable(
@@ -493,28 +488,6 @@ fun AppNavigation(
             NewreleasesScreen(
                 navController = navController,
                 miniPlayer = miniPlayer,
-            )
-        }
-
-        composable(
-            "searchScreenRoute/{query}"
-        ) { backStackEntry ->
-            val context = LocalContext.current
-            val query = backStackEntry.arguments?.getString("query")?: ""
-            SearchScreen(
-                navController = navController,
-                miniPlayer = miniPlayer,
-                initialTextInput = query ,
-                onViewPlaylist = {},
-                onSearch = { newQuery ->
-                    navController.navigate(route = "${NavRoutes.searchResults.name}/${cleanString(newQuery)}")
-
-                    if (!context.preferences.getBoolean(pauseSearchHistoryKey, false)) {
-                        it.fast4x.rimusic.query {
-                            Database.insert(SearchQuery(query = newQuery))
-                        }
-                    }
-                },
             )
         }
     }
