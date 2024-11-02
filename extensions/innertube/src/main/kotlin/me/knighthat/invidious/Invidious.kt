@@ -2,6 +2,7 @@ package me.knighthat.invidious
 
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
+import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.request
@@ -12,6 +13,7 @@ import io.ktor.http.URLProtocol
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import me.knighthat.common.HttpFetcher
+import me.knighthat.piped.Piped
 import java.io.IOException
 
 object Invidious {
@@ -29,19 +31,25 @@ object Invidious {
     suspend fun fetchInvidiousInstances( unofficial: Boolean ) {
         val url = if( unofficial ) UNOFFICIAL_PUBLIC_INSTANCES else VERIFIED_PUBLIC_INSTANCES
 
-        val sectionStart = "## List of public Invidious Instances (sorted from oldest to newest):"
-        val sectionEnd = "### Tor Onion Services:"
-        val response = HttpFetcher.CLIENT
-                                  .get( url )
-                                  .bodyAsText()
-                                  .substringAfter( sectionStart )
-                                  .substringBefore( sectionEnd )
+        try {
+            val sectionStart = "## List of public Invidious Instances (sorted from oldest to newest):"
+            val sectionEnd = "### Tor Onion Services:"
+            val response = HttpFetcher.CLIENT
+                                      .get( url )
+                                      .bodyAsText()
+                                      .substringAfter( sectionStart )
+                                      .substringBefore( sectionEnd )
 
-        API_INSTANCES = DOMAIN_NO_PATH_REGEX.findAll( response )
-                                            .map { it.groups[1]?.value }
-                                            .filterNotNull()
-                                            .toList()
-                                            .toTypedArray()
+            API_INSTANCES = DOMAIN_NO_PATH_REGEX.findAll( response )
+                                                .map { it.groups[1]?.value }
+                                                .filterNotNull()
+                                                .toList()
+                                                .toTypedArray()
+        } catch ( e: HttpRequestTimeoutException ) {
+            println( "Failed to fetch Invidious instances: ${e.message}" )
+
+            API_INSTANCES = arrayOf()
+        }
 
         // Reset unreachable urls
         UNREACHABLE_INSTANCES = mutableListOf()

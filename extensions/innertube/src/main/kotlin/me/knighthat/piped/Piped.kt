@@ -2,6 +2,7 @@ package me.knighthat.piped
 
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
+import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.request
@@ -33,15 +34,23 @@ object Piped {
     }
 
     suspend fun fetchPipedInstances() {
-        val response = HttpFetcher.CLIENT
-                                  .get( INSTANCES_GITHUB )
-                                  .bodyAsText()
 
-        API_INSTANCES = DOMAIN_NO_PATH_REGEX.findAll( response )
-                                            .map { it.groups[1]?.value }
-                                            .filterNotNull()
-                                            .toList()
-                                            .toTypedArray()
+        try {
+            val response = HttpFetcher.CLIENT
+                                      .get( INSTANCES_GITHUB )
+                                      .bodyAsText()
+
+            API_INSTANCES = DOMAIN_NO_PATH_REGEX.findAll( response )
+                                                .map { it.groups[1]?.value }
+                                                .filterNotNull()
+                                                .toList()
+                                                .toTypedArray()
+        } catch ( e: HttpRequestTimeoutException ) {
+            println( "Failed to fetch Piped instances: ${e.message}" )
+
+            API_INSTANCES = arrayOf()
+        }
+
 
         // Reset unreachable urls
         UNREACHABLE_INSTANCES = mutableListOf()
