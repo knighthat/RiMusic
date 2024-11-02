@@ -3,7 +3,6 @@ package me.knighthat.piped.request
 import io.ktor.http.HttpMethod
 import it.fast4x.innertube.utils.runCatchingNonCancellable
 import me.knighthat.common.HttpFetcher
-import me.knighthat.invidious.Invidious
 import me.knighthat.piped.Piped
 import me.knighthat.piped.response.PlayerResponse
 
@@ -23,7 +22,7 @@ suspend fun Piped.player( videoId: String ): Result<PlayerResponse?>? =
              * data in the future shorter because there's less
              * link to fetch, also less error to check.
              */
-            Invidious.blacklistUrl(hostUrl)
+            blacklistUrl(hostUrl)
             null
         }
     }
