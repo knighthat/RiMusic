@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import it.fast4x.rimusic.R
 import it.fast4x.rimusic.enums.NavRoutes
@@ -40,10 +39,7 @@ class AppHeader(
     private fun BackButton() {
         if ( NavRoutes.home.isNotHere( navController ) )
             androidx.compose.material3.IconButton(
-                onClick = {
-                    if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED)
-                        navController.popBackStack()
-                }
+                onClick = { NavRoutes.back( navController ) }
             ) {
                 Button(
                     R.drawable.chevron_back,

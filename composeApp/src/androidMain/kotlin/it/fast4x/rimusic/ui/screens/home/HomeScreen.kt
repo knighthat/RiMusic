@@ -17,7 +17,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.lifecycle.Lifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import it.fast4x.compose.persist.PersistMapCleanup
@@ -32,7 +31,6 @@ import it.fast4x.rimusic.R
 import it.fast4x.rimusic.enums.CheckUpdateState
 import it.fast4x.rimusic.enums.HomeScreenTabs
 import it.fast4x.rimusic.enums.NavRoutes
-import it.fast4x.rimusic.enums.PopupType
 import it.fast4x.rimusic.models.toUiMood
 import it.fast4x.rimusic.ui.components.themed.ConfirmationDialog
 import it.fast4x.rimusic.ui.components.themed.SmartMessage
@@ -253,9 +251,7 @@ fun HomeScreen(
     BackHandler {
         // Prevent this from being applied when user is not on HomeScreen
         if( NavRoutes.home.isNotHere( navController ) )  {
-            if ( navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED )
-                navController.popBackStack()
-
+            NavRoutes.back( navController )
             return@BackHandler
         }
 

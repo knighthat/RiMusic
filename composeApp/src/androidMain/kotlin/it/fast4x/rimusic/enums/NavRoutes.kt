@@ -1,5 +1,6 @@
 package it.fast4x.rimusic.enums
 
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 
 enum class NavRoutes {
@@ -28,6 +29,11 @@ enum class NavRoutes {
     companion object {
 
         fun current( navController: NavController ) = navController.currentBackStackEntry?.destination?.route
+
+        fun back( navController: NavController ) {
+            if ( navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED )
+                navController.popBackStack()
+        }
     }
 
     fun isHere( navController: NavController ) = current( navController ) == this.name

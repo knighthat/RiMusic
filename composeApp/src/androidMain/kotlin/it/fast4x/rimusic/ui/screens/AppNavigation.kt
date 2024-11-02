@@ -117,10 +117,7 @@ fun AppNavigation(
 
         CustomModalBottomSheet(
             showSheet = showSheet,
-            onDismissRequest = {
-                if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED)
-                    navController.popBackStack()
-            },
+            onDismissRequest = { NavRoutes.back( navController ) },
             containerColor = Color.Transparent,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             dragHandle = {
@@ -186,11 +183,6 @@ fun AppNavigation(
             { browseId: String -> navController.navigate("${NavRoutes.artist.name}/$browseId") }
         val navigateToPlaylist =
             { browseId: String -> navController.navigate("${NavRoutes.playlist.name}/$browseId") }
-        val pop = {
-            if (navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) navController.popBackStack()
-        }
-
-
 
         composable(route = NavRoutes.home.name) {
             HomeScreen(

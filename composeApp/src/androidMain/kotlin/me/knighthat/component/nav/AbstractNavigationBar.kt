@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import it.fast4x.rimusic.R
 import it.fast4x.rimusic.enums.NavRoutes
@@ -28,10 +27,7 @@ abstract class AbstractNavigationBar(
     @Composable
     internal open fun BackButton(): NavigationButton {
         val button = NavigationButton( navController, R.drawable.chevron_back, colorPalette().favoritesIcon )
-        button.clickEvent {
-            if ( navController.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED )
-                navController.popBackStack()
-        }
+        button.clickEvent { NavRoutes.back( navController ) }
         return button
     }
 
