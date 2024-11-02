@@ -62,7 +62,6 @@ import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerAwareWindowInsets
 import it.fast4x.rimusic.LocalPlayerServiceBinder
 import it.fast4x.rimusic.R
-import it.fast4x.rimusic.cleanString
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.enums.NavigationBarPosition
 import it.fast4x.rimusic.enums.ThumbnailRoundness
@@ -232,9 +231,8 @@ fun OnlineSearch(
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                             keyboardActions = KeyboardActions(
                                 onSearch = {
-                                    if (textFieldValue.text.isNotEmpty() && textFieldValue.text != "/") {
-                                        onSearch(cleanString(textFieldValue.text))
-                                    }
+                                    if ( textFieldValue.text.isNotEmpty() )
+                                        onSearch( textFieldValue.text )
                                 }
                             ),
                             cursorBrush = SolidColor(colorPalette().text),
