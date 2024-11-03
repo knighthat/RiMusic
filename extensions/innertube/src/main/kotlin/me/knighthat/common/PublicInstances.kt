@@ -1,5 +1,7 @@
 package me.knighthat.common
 
+import org.jetbrains.annotations.TestOnly
+
 abstract class PublicInstances {
 
     protected lateinit var instances: Array<String>
@@ -46,4 +48,12 @@ abstract class PublicInstances {
         else
             unreachableInstances.add( HttpFetcher.genMatchAllTld( url ) )
     }
+
+    // START - Test only area
+
+    @TestOnly
+    fun isInstancesInitialized() = ::instances.isInitialized
+
+    @TestOnly
+    fun isUnreachableInstancesInitialized() = ::unreachableInstances.isInitialized
 }
