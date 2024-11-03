@@ -1,0 +1,40 @@
+{
+  "matches": [
+    "(https://example.com/path/to/resource)",
+    "(http://domain.org/subpath/another)",
+    "(https://sub.domain.co.uk/more/path?query=123)",
+    "(https://another-example.com)",
+    "(http://website.net/)",
+    "(https://site.edu/resource?key=value&other=123)"
+  ],
+  "not_matches": [
+    "https://example.com/path",
+    "(ftp://example.com/path)",
+    "(example.com)",
+    "(https://example.com?query=value&param)",
+    "(https://)"
+  ],
+  "instances": [
+    "yewtu.be",
+    "yt.artemislena.eu",
+    "invidious.flokinet.to",
+    "invidious.privacydev.net",
+    "iv.melmac.space",
+    "inv.nadeko.net",
+    "inv.tux.pizza",
+    "invidious.protokolla.fi",
+    "invidious.private.coffee",
+    "yt.drgnz.club",
+    "iv.datura.network",
+    "invidious.fdn.fr",
+    "invidious.perennialte.ch",
+    "invidious.drgns.space",
+    "inv.us.projectsegfau.lt",
+    "invidious.jing.rocks",
+    "invidious.privacyredirect.com",
+    "invidious.reallyaweso.me",
+    "invidious.materialio.us",
+    "inv.in.projectsegfau.lt",
+    "invidious.incogniweb.net"
+  ]
+}
