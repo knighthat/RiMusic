@@ -217,6 +217,7 @@ import okhttp3.Response
 import timber.log.Timber
 import java.io.File
 import java.net.Proxy
+import java.net.UnknownHostException
 import java.util.Locale
 import java.util.Objects
 import kotlin.math.sqrt
@@ -321,8 +322,13 @@ class MainActivity :
 
         // Fetch Piped & Invidious instances
         lifecycleScope.launch( Dispatchers.IO ) {
-            Piped.fetchInstances()
-            Invidious.fetchInstances()
+            try {
+                Piped.fetchInstances()
+                Invidious.fetchInstances()
+            } catch ( _: UnknownHostException ) {
+                // Probably because there's no internet connection
+                // See report #4328
+            }
         }
     }
 
