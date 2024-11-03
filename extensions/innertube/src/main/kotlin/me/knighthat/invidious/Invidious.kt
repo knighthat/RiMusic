@@ -15,6 +15,9 @@ object Invidious: PublicInstances() {
         "https://raw.githubusercontent.com/iv-org/documentation/refs/heads/master/docs/instances.md"
     private const val UNOFFICIAL_PUBLIC_INSTANCES =
         "https://raw.githubusercontent.com/foreign-affairs/invidious-documentation/refs/heads/master/docs/instances.md"
+    internal const val SECTION_START =
+        "## List of public Invidious Instances (sorted from oldest to newest):"
+    internal const val SECTION_END = "### Tor Onion Services:"
 
     internal val DOMAIN_NO_PATH_REGEX = Regex( "\\((https?://[^)]+?)\\)" )
 
@@ -37,13 +40,11 @@ object Invidious: PublicInstances() {
         val url = if( useUnofficialInstances ) UNOFFICIAL_PUBLIC_INSTANCES else VERIFIED_PUBLIC_INSTANCES
 
         try {
-            val sectionStart = "## List of public Invidious Instances (sorted from oldest to newest):"
-            val sectionEnd = "### Tor Onion Services:"
             val response = HttpFetcher.CLIENT
                                       .get( url )
                                       .bodyAsText()
-                                      .substringAfter( sectionStart )
-                                      .substringBefore( sectionEnd )
+                                      .substringAfter( SECTION_START )
+                                      .substringBefore( SECTION_END )
 
             instances = getDistinctFirstGroup( response, DOMAIN_NO_PATH_REGEX )
         } catch ( e: HttpRequestTimeoutException ) {
