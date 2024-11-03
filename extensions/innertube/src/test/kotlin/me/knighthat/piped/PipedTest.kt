@@ -10,7 +10,7 @@ class PipedTest {
         private val MARKDOWN_FILE =
             PipedTest::class.java.classLoader?.getResource("piped-instances.md")?.readText() ?: ""
 
-        private val DOMAIN_NO_PATTERN_MATCHES = arrayOf(
+        private val DOMAIN_NO_PATH_MATCHES = arrayOf(
             "pipedapi.kavin.rocks",
             "pipedapi.tokhmi.xyz",
             "pipedapi.moomoo.me",
@@ -84,10 +84,10 @@ class PipedTest {
             .map { it.groups[1]?.value }       // Use first group of each match
             .filterNotNull()                   // Ignore if result is null
             .also {
-                assertTrue( DOMAIN_NO_PATTERN_MATCHES.size == it.toList().size )
+                assertTrue( DOMAIN_NO_PATH_MATCHES.size == it.toList().size )
             }
             .forEach {
-                assertTrue( DOMAIN_NO_PATTERN_MATCHES.contains( it ) )
+                assertTrue( DOMAIN_NO_PATH_MATCHES.contains( it ) )
             }
     }
 }
