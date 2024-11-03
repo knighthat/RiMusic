@@ -3,9 +3,13 @@ package me.knighthat.invidious
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.knighthat.common.HttpFetcher
+import me.knighthat.common.PublicInstances
 
-object Invidious {
+object Invidious: PublicInstances() {
 
     private const val VERIFIED_PUBLIC_INSTANCES =
         "https://raw.githubusercontent.com/iv-org/documentation/refs/heads/master/docs/instances.md"
@@ -14,20 +18,23 @@ object Invidious {
 
     internal val DOMAIN_NO_PATH_REGEX = Regex( "\\((https?://[^)]+?)\\)" )
 
-    private lateinit var API_INSTANCES: Array<String>
-    private lateinit var UNREACHABLE_INSTANCES: MutableList<Regex>
+    var useUnofficialInstances: Boolean = false
+        set(value) {
+            if( field == value )
+                return
+            else
+                field = value
 
-    internal val REACHABLE_INSTANCES: Collection<String>
-        get() = API_INSTANCES.filter {
-            for ( regex in UNREACHABLE_INSTANCES)
-                if ( regex.matches(it) )
-                    return@filter false
-
-            true
+            // Re-fetch instances when boolean is flipped
+            CoroutineScope( Dispatchers.IO ).launch {
+                this@Invidious.fetchInstances()
+            }
         }
 
-    suspend fun fetchInvidiousInstances( unofficial: Boolean ) {
-        val url = if( unofficial ) UNOFFICIAL_PUBLIC_INSTANCES else VERIFIED_PUBLIC_INSTANCES
+    override suspend fun fetchInstances() {
+        super.fetchInstances()
+
+        val url = if( useUnofficialInstances ) UNOFFICIAL_PUBLIC_INSTANCES else VERIFIED_PUBLIC_INSTANCES
 
         try {
             val sectionStart = "## List of public Invidious Instances (sorted from oldest to newest):"
@@ -38,25 +45,9 @@ object Invidious {
                                       .substringAfter( sectionStart )
                                       .substringBefore( sectionEnd )
 
-            API_INSTANCES = DOMAIN_NO_PATH_REGEX.findAll( response )
-                                                .map { it.groups[1]?.value }
-                                                .filterNotNull()
-                                                .toList()
-                                                .toTypedArray()
+            instances = getDistinctFirstGroup( response, DOMAIN_NO_PATH_REGEX )
         } catch ( e: HttpRequestTimeoutException ) {
             println( "Failed to fetch Invidious instances: ${e.message}" )
-
-            API_INSTANCES = arrayOf()
         }
-
-        // Reset unreachable urls
-        UNREACHABLE_INSTANCES = mutableListOf()
-    }
-
-    fun blacklistUrl( url: String ) {
-        if( !::UNREACHABLE_INSTANCES.isInitialized )
-            throw UninitializedPropertyAccessException( "Please initialize Invidious instances with Invidious#fetchInvidiousInstances()" )
-        else
-            UNREACHABLE_INSTANCES.add( HttpFetcher.genMatchAllTld( url ) )
     }
 }

@@ -10,7 +10,7 @@ suspend fun Piped.player( videoId: String ): Result<PlayerResponse?>? =
     runCatchingNonCancellable {
         HttpFetcher.asyncMultiRequestGetFirstValid<PlayerResponse>(
             HttpMethod.Get,
-            REACHABLE_INSTANCES,
+            reachableInstances,
             "/streams/$videoId"
         ) { _, hostUrl ->
             /**
@@ -22,7 +22,7 @@ suspend fun Piped.player( videoId: String ): Result<PlayerResponse?>? =
              * data in the future shorter because there's less
              * link to fetch, also less error to check.
              */
-            blacklistUrl(hostUrl)
+            blacklistUrl( hostUrl )
             null
         }
     }

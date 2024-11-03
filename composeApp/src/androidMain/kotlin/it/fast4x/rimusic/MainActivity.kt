@@ -321,8 +321,8 @@ class MainActivity :
 
         // Fetch Piped & Invidious instances
         lifecycleScope.launch( Dispatchers.IO ) {
-            Piped.fetchPipedInstances()
-            Invidious.fetchInvidiousInstances( true )
+            Piped.fetchInstances()
+            Invidious.fetchInstances()
         }
     }
 

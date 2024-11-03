@@ -10,7 +10,7 @@ suspend fun Invidious.player( videoId: String ): Result<PlayerResponse?>? =
     runCatchingNonCancellable {
         HttpFetcher.asyncMultiRequestGetFirstValid<PlayerResponse>(
             HttpMethod.Get,
-            REACHABLE_INSTANCES,
+            reachableInstances,
             "/api/v1/videos/$videoId"
         ) { _, hostUrl ->
             /**
