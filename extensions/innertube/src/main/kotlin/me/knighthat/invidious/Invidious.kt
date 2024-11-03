@@ -31,7 +31,7 @@ object Invidious: PublicInstances() {
      */
     internal val DOMAIN_NO_PATH_REGEX = Regex( "\\(https?://([^)|\\s]+\\.[a-z]{2,})(?:/[^)]*)?\\)" )
 
-    var useUnofficialInstances: Boolean = false
+    var useUnofficialInstances: Boolean = true      // TODO: implement a setting toggle
         set(value) {
             if( field == value )
                 return
