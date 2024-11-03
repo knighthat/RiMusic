@@ -19,7 +19,17 @@ object Invidious: PublicInstances() {
         "## List of public Invidious Instances (sorted from oldest to newest):"
     internal const val SECTION_END = "### Tor Onion Services:"
 
-    internal val DOMAIN_NO_PATH_REGEX = Regex( "\\((https?://[^)]+?)\\)" )
+    /**
+     * This pattern translates to:
+     * "match any HTTP(S) url (path included) within opening and closing parentheses,
+     * but only capture the domain name"
+     *
+     * - `\(` and `\)`: Match the opening and closing parentheses.
+     * - `https?:\/\/`: Match either **_http://_** or **_https://_**.
+     * - `([^)|\s]+\.[a-z]{2,})`: Capture only the domain name (excluding paths).
+     * - `(?:\/[^)]*)?`: This is a non-capturing group that matches any path after the domain, but doesn’t capture it in the results.
+     */
+    internal val DOMAIN_NO_PATH_REGEX = Regex( "\\(https?://([^)|\\s]+\\.[a-z]{2,})(?:/[^)]*)?\\)" )
 
     var useUnofficialInstances: Boolean = false
         set(value) {
