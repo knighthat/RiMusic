@@ -3,7 +3,7 @@
 compose-compiler = "1.5.15"
 compose-plugin = "1.6.11"
 #junit = "4.13.2"
-agp = "8.5.2"
+agp = "8.7.2"
 junitJupiterApi = "5.11.3"
 kotlin = "2.0.21"
 kotlin-ksp = "2.0.21-1.0.26"
