@@ -777,4 +777,5 @@
     <string name="removed_thumbnail">Kapak Resmi Kaldırıldı</string>
     <string name="failed_to_remove_thumbnail">Kapak Resmi Silinemedi</string>
     <string name="showsecondline">İkinci Satırda Çeviriyi Göster</string>
+    <string name="enter_the_value">Enter The Value</string>
 </resources>

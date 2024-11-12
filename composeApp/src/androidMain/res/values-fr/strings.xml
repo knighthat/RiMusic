@@ -779,4 +779,5 @@
     <string name="removed_thumbnail">Removed Thumbnail</string>
     <string name="failed_to_remove_thumbnail">Failed to Remove Thumbnail</string>
     <string name="showsecondline">Show Translation in the Second Line</string>
+    <string name="enter_the_value">Enter The Value</string>
 </resources>

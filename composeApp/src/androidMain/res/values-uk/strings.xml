@@ -777,4 +777,5 @@
     <string name="removed_thumbnail">Мініатюру видалено</string>
     <string name="failed_to_remove_thumbnail">Не вдалося видалити мініатюру</string>
     <string name="showsecondline">Показати переклад у другому рядку</string>
+    <string name="enter_the_value">Enter The Value</string>
 </resources>
