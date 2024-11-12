@@ -12,7 +12,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,16 +47,17 @@ import androidx.navigation.compose.rememberNavController
 import io.ktor.http.Url
 import it.fast4x.compose.persist.persistList
 import it.fast4x.innertube.utils.parseCookieString
-import it.fast4x.piped.Piped
 import it.fast4x.piped.models.Instance
+import it.fast4x.piped.Piped
+
 import it.fast4x.rimusic.R
+import it.fast4x.rimusic.enums.CheckUpdateState
 import it.fast4x.rimusic.enums.NavigationBarPosition
 import it.fast4x.rimusic.enums.PopupType
 import it.fast4x.rimusic.enums.ThumbnailRoundness
 import it.fast4x.rimusic.enums.ValidationType
 import it.fast4x.rimusic.extensions.discord.DiscordLoginAndGetToken
 import it.fast4x.rimusic.extensions.youtubelogin.YouTubeLogin
-import it.fast4x.rimusic.service.PlayerMediaBrowserService
 import it.fast4x.rimusic.service.modern.PlayerServiceModern
 import it.fast4x.rimusic.ui.components.CustomModalBottomSheet
 import it.fast4x.rimusic.ui.components.LocalMenuState
@@ -62,14 +65,13 @@ import it.fast4x.rimusic.ui.components.themed.DefaultDialog
 import it.fast4x.rimusic.ui.components.themed.HeaderWithIcon
 import it.fast4x.rimusic.ui.components.themed.Menu
 import it.fast4x.rimusic.ui.components.themed.MenuEntry
+import it.fast4x.rimusic.ui.components.themed.SecondaryTextButton
 import it.fast4x.rimusic.ui.components.themed.SmartMessage
 import it.fast4x.rimusic.ui.styling.Dimensions
-import it.fast4x.rimusic.utils.TextCopyToClipboard
-import it.fast4x.rimusic.utils.ytAccountChannelHandleKey
-import it.fast4x.rimusic.utils.ytAccountEmailKey
-import it.fast4x.rimusic.utils.ytAccountNameKey
-import it.fast4x.rimusic.utils.ytCookieKey
-import it.fast4x.rimusic.utils.ytVisitorDataKey
+import it.fast4x.rimusic.ui.styling.LocalAppearance
+import it.fast4x.rimusic.utils.CheckAvailableNewVersion
+import it.fast4x.rimusic.utils.textCopyToClipboard
+import it.fast4x.rimusic.utils.checkUpdateStateKey
 import it.fast4x.rimusic.utils.defaultFolderKey
 import it.fast4x.rimusic.utils.discordPersonalAccessTokenKey
 import it.fast4x.rimusic.utils.enableYouTubeLoginKey
@@ -81,12 +83,12 @@ import it.fast4x.rimusic.utils.isAtLeastAndroid7
 import it.fast4x.rimusic.utils.isAtLeastAndroid81
 import it.fast4x.rimusic.utils.isDiscordPresenceEnabledKey
 import it.fast4x.rimusic.utils.isIgnoringBatteryOptimizations
-import it.fast4x.rimusic.utils.isInvincibilityEnabledKey
 import it.fast4x.rimusic.utils.isKeepScreenOnEnabledKey
 import it.fast4x.rimusic.utils.isPipedCustomEnabledKey
 import it.fast4x.rimusic.utils.isPipedEnabledKey
 import it.fast4x.rimusic.utils.isProxyEnabledKey
 import it.fast4x.rimusic.utils.logDebugEnabledKey
+import it.fast4x.rimusic.utils.navigationBarPositionKey
 import it.fast4x.rimusic.utils.parentalControlEnabledKey
 import it.fast4x.rimusic.utils.pipedApiBaseUrlKey
 import it.fast4x.rimusic.utils.pipedApiTokenKey
@@ -101,6 +103,11 @@ import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.restartActivityKey
 import it.fast4x.rimusic.utils.showFoldersOnDeviceKey
 import it.fast4x.rimusic.utils.thumbnailRoundnessKey
+import it.fast4x.rimusic.utils.ytAccountChannelHandleKey
+import it.fast4x.rimusic.utils.ytAccountEmailKey
+import it.fast4x.rimusic.utils.ytAccountNameKey
+import it.fast4x.rimusic.utils.ytCookieKey
+import it.fast4x.rimusic.utils.ytVisitorDataKey
 import kotlinx.coroutines.launch
 import me.knighthat.colorPalette
 import me.knighthat.thumbnailShape
@@ -115,10 +122,12 @@ import java.net.Proxy
 @Composable
 fun OtherSettings() {
     val context = LocalContext.current
+    val (colorPalette, typography, thumbnailShape) = LocalAppearance.current
     val thumbnailRoundness by rememberPreference(
         thumbnailRoundnessKey,
         ThumbnailRoundness.Heavy
     )
+
     var isAndroidAutoEnabled by remember {
         val component = ComponentName(context, PlayerServiceModern::class.java)
         val disabledFlag = PackageManager.COMPONENT_ENABLED_STATE_DISABLED
@@ -159,7 +168,12 @@ fun OtherSettings() {
 
     var isKeepScreenOnEnabled by rememberPreference(isKeepScreenOnEnabledKey, false)
 
-    //var checkUpdateState by rememberPreference(checkUpdateStateKey, CheckUpdateState.Disabled)
+    var checkUpdateState by rememberPreference(checkUpdateStateKey, CheckUpdateState.Disabled)
+
+    val navigationBarPosition by rememberPreference(
+        navigationBarPositionKey,
+        NavigationBarPosition.Bottom
+    )
 
     var showFolders by rememberPreference(showFoldersOnDeviceKey, true)
 
@@ -181,14 +195,15 @@ fun OtherSettings() {
 
     Column(
         modifier = Modifier
-            .background(colorPalette().background0)
+            .background(colorPalette.background0)
             //.fillMaxSize()
             .fillMaxHeight()
             .fillMaxWidth(
-                if (NavigationBarPosition.Right.isCurrent())
-                    Dimensions.contentWidthRightBar
-                else
-                    1f
+                if (navigationBarPosition == NavigationBarPosition.Left ||
+                    navigationBarPosition == NavigationBarPosition.Top ||
+                    navigationBarPosition == NavigationBarPosition.Bottom
+                ) 1f
+                else Dimensions.contentWidthRightBar
             )
             .verticalScroll(rememberScrollState())
         /*
@@ -209,14 +224,28 @@ fun OtherSettings() {
             onClick = {}
         )
 
-        /*
         SettingsEntryGroupText(title = stringResource(R.string.check_update))
+
+        var checkUpdateNow by remember { mutableStateOf(false) }
+        if (checkUpdateNow)
+            CheckAvailableNewVersion(
+                onDismiss = { checkUpdateNow = false },
+                updateAvailable = {
+                    if (!it)
+                        SmartMessage(
+                            context.resources.getString(R.string.info_no_update_available),
+                            type = PopupType.Info,
+                            context = context
+                        )
+                }
+            )
+
         EnumValueSelectorSettingsEntry(
             title = stringResource(R.string.enable_check_for_update),
             selectedValue = checkUpdateState,
             onValueSelected = { checkUpdateState = it },
             valueText = {
-                when(it) {
+                when (it) {
                     CheckUpdateState.Disabled -> stringResource(R.string.vt_disabled)
                     CheckUpdateState.Enabled -> stringResource(R.string.enabled)
                     CheckUpdateState.Ask -> stringResource(R.string.ask)
@@ -225,9 +254,23 @@ fun OtherSettings() {
             }
         )
         SettingsDescription(text = stringResource(R.string.when_enabled_a_new_version_is_checked_and_notified_during_startup))
-         */
+        AnimatedVisibility(visible = checkUpdateState != CheckUpdateState.Disabled) {
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                SettingsDescription(
+                    text = stringResource(R.string.check_update),
+                    important = true,
+                    modifier = Modifier.weight(1f)
+                )
 
-
+                SecondaryTextButton(
+                    text = stringResource(R.string.info_check_update_now),
+                    onClick = { checkUpdateNow = true },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 24.dp)
+                )
+            }
+        }
 
 
         // rememberEncryptedPreference only works correct with API 24 and up
@@ -247,6 +290,7 @@ fun OtherSettings() {
         val isLoggedIn = remember(cookie) {
             "SAPISID" in parseCookieString(cookie)
         }
+        //if (!isLoggedIn) isYouTubeLoginEnabled = false // disable if not logged in
 
         SettingsGroupSpacer()
         SettingsEntryGroupText(title = "YOUTUBE MUSIC")
@@ -255,7 +299,16 @@ fun OtherSettings() {
             title = "Enable YouTube Music Login",
             text = "",
             isChecked = isYouTubeLoginEnabled,
-            onCheckedChange = { isYouTubeLoginEnabled = it }
+            onCheckedChange = {
+                isYouTubeLoginEnabled = it
+                if (!it) {
+                    visitorData = ""
+                    cookie = ""
+                    accountName = ""
+                    accountChannelHandle = ""
+                    accountEmail = ""
+                }
+            }
         )
 
         AnimatedVisibility(visible = isYouTubeLoginEnabled) {
@@ -263,7 +316,6 @@ fun OtherSettings() {
                 modifier = Modifier.padding(start = 25.dp)
             ) {
                 if (isAtLeastAndroid7) {
-
                     Column {
                         ButtonBarSettingEntry(
                             isEnabled = true,
@@ -335,7 +387,6 @@ fun OtherSettings() {
         }
 
         /****** YOUTUBE LOGIN ******/
-
 
         /****** PIPED ******/
 
@@ -476,6 +527,8 @@ fun OtherSettings() {
             }
 
 
+
+
             SettingsGroupSpacer()
             SettingsEntryGroupText(title = stringResource(R.string.piped_account))
             SwitchSettingEntry(
@@ -549,7 +602,7 @@ fun OtherSettings() {
                             pipedInstanceName
                         ) else "",
                         icon = R.drawable.piped_logo,
-                        iconColor = colorPalette().red,
+                        iconColor = colorPalette.red,
                         onClick = {
                             if (pipedApiToken.isNotEmpty()) {
                                 pipedApiToken = ""
@@ -585,7 +638,9 @@ fun OtherSettings() {
             )
 
             AnimatedVisibility(visible = isDiscordPresenceEnabled) {
-                Column {
+                Column(
+                    modifier = Modifier.padding(start = 25.dp)
+                ) {
                     ButtonBarSettingEntry(
                         isEnabled = true,
                         title = if (discordPersonalAccessToken.isNotEmpty()) stringResource(R.string.discord_disconnect) else stringResource(
@@ -593,7 +648,7 @@ fun OtherSettings() {
                         ),
                         text = if (discordPersonalAccessToken.isNotEmpty()) stringResource(R.string.discord_connected_to_discord_account) else "",
                         icon = R.drawable.logo_discord,
-                        iconColor = colorPalette().text,
+                        iconColor = colorPalette.text,
                         onClick = {
                             if (discordPersonalAccessToken.isNotEmpty())
                                 discordPersonalAccessToken = ""
@@ -607,15 +662,15 @@ fun OtherSettings() {
                         onDismissRequest = {
                             loginDiscord = false
                         },
-                        containerColor = colorPalette().background0,
-                        contentColor = colorPalette().background0,
+                        containerColor = colorPalette.background0,
+                        contentColor = colorPalette.background0,
                         modifier = Modifier.fillMaxWidth(),
                         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
                         dragHandle = {
                             Surface(
                                 modifier = Modifier.padding(vertical = 0.dp),
-                                color = colorPalette().background0,
-                                shape = thumbnailShape()
+                                color = colorPalette.background0,
+                                shape = thumbnailShape
                             ) {}
                         },
                         shape = thumbnailRoundness.shape()
@@ -752,16 +807,6 @@ fun OtherSettings() {
             }
         )
 
-        /*
-    SwitchSettingEntry(
-        title = stringResource(R.string.invincible_service),
-        text = stringResource(R.string.turning_off_battery_optimizations_is_not_enough),
-        isChecked = isInvincibilityEnabled,
-        onCheckedChange = { isInvincibilityEnabled = it }
-    )
-
-         */
-
         SettingsGroupSpacer()
 
         SettingsGroupSpacer()
@@ -811,14 +856,6 @@ fun OtherSettings() {
         SettingsGroupSpacer()
 
         var text by remember { mutableStateOf(null as String?) }
-        var copyToClipboard by remember {
-            mutableStateOf(false)
-        }
-
-        if (copyToClipboard) text?.let {
-            TextCopyToClipboard(it)
-            copyToClipboard = false
-        }
 
         val noLogAvailable = stringResource(R.string.no_log_available)
 
@@ -856,7 +893,9 @@ fun OtherSettings() {
                 val file = File(context.filesDir.resolve("logs"), "RiMusic_log.txt")
                 if (file.exists()) {
                     text = file.readText()
-                    copyToClipboard = true
+                    text?.let {
+                        textCopyToClipboard(it, context)
+                    }
                 } else
                     SmartMessage(noLogAvailable, type = PopupType.Info, context = context)
             }
@@ -870,7 +909,9 @@ fun OtherSettings() {
                 val file = File(context.filesDir.resolve("logs"), "RiMusic_crash_log.txt")
                 if (file.exists()) {
                     text = file.readText()
-                    copyToClipboard = true
+                    text?.let {
+                        textCopyToClipboard(it, context)
+                    }
                 } else
                     SmartMessage(noLogAvailable, type = PopupType.Info, context = context)
             }
