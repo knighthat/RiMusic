@@ -49,7 +49,7 @@ mediaPlayerKMP = "2.0.2"
 navigationKMP = "2.7.0-alpha07"
 vlcj = "4.8.2"
 kotlinxCoroutinesSwing = "1.9.0"
-hilt = "2.51.1"
+hilt = "2.52"
 #kotlinxCoroutinesAndroid = "1.9.0"
 #conveyor = "1.11"
 
