@@ -4,7 +4,6 @@ import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import me.knighthat.common.HttpFetcher
-import me.knighthat.common.HttpFetcher.genMatchAllTld
 import me.knighthat.common.PublicInstances
 
 object Piped: PublicInstances() {

@@ -24,7 +24,6 @@ import io.ktor.http.userAgent
 import io.ktor.serialization.kotlinx.json.json
 import it.fast4x.innertube.models.AccountInfo
 import it.fast4x.innertube.models.AccountMenuResponse
-import it.fast4x.innertube.models.Context
 import it.fast4x.innertube.models.MusicNavigationButtonRenderer
 import it.fast4x.innertube.models.NavigationEndpoint
 import it.fast4x.innertube.models.Runs
@@ -32,7 +31,6 @@ import it.fast4x.innertube.models.Thumbnail
 import it.fast4x.innertube.models.YouTubeClient
 import it.fast4x.innertube.models.YouTubeLocale
 import it.fast4x.innertube.models.bodies.AccountMenuBody
-import it.fast4x.innertube.models.bodies.PlayerBody
 import it.fast4x.innertube.utils.ProxyPreferences
 import it.fast4x.innertube.utils.YoutubePreferences
 import it.fast4x.innertube.utils.parseCookieString
