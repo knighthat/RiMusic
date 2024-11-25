@@ -1,7 +1,5 @@
 package it.fast4x.rimusic.utils
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import io.ktor.http.Url
 import it.fast4x.rimusic.models.PipedSession
 import me.knighthat.appContext

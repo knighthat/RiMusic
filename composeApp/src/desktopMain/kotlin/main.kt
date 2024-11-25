@@ -4,7 +4,6 @@ import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.application
 import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.setSingletonImageLoaderFactory
-import database.MusicDatabaseDesktop
 import it.fast4x.rimusic.getAsyncImageLoader
 import it.fast4x.rimusic.ui.ThreeColumnsApp
 import it.fast4x.rimusic.ui.theme.DesktopTheme
