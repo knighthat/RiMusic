@@ -17,10 +17,8 @@ import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,17 +26,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import database.DB
-import database.MusicDatabaseDesktop
 import database.entities.Album
-import database.entities.Song
-import database.entities.SongEntity
 import it.fast4x.rimusic.items.AlbumItem
-import it.fast4x.rimusic.items.SongItem
-import it.fast4x.rimusic.styling.Dimensions
 import it.fast4x.rimusic.styling.Dimensions.albumThumbnailSize
 import it.fast4x.rimusic.styling.Dimensions.layoutColumnBottomSpacer
-import it.fast4x.rimusic.utils.asSong
-import kotlinx.coroutines.flow.asFlow
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

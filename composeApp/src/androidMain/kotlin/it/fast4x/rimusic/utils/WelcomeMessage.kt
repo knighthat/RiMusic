@@ -9,7 +9,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import it.fast4x.rimusic.R
 import it.fast4x.rimusic.ui.components.themed.TitleMiniSection
-import it.fast4x.rimusic.ui.components.themed.TitleSection
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
