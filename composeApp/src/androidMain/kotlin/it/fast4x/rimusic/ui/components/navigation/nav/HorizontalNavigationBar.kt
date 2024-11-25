@@ -60,7 +60,7 @@ class HorizontalNavigationBar(
     }
 
     @Composable
-    private fun addButton(button: Button, modifier: Modifier = Modifier ) =
+    private fun addButton( button: Button, modifier: Modifier = Modifier ) =
         // buttonList() duplicates button instead of updating them.
         // Do NOT use it
         buttonList.add {
@@ -69,7 +69,7 @@ class HorizontalNavigationBar(
 
     @SuppressLint("ComposableNaming")
     @Composable
-    private fun addButton(index: Int, button: Button, modifier: Modifier = Modifier ) =
+    private fun addButton( index: Int, button: Button, modifier: Modifier = Modifier ) =
         // buttonList() duplicates button instead of updating them
         // Do NOT use it
         buttonList.add( index ) {

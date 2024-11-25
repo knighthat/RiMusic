@@ -2,14 +2,12 @@ package it.fast4x.rimusic.utils
 
 import android.app.Activity
 import android.app.PendingIntent
-import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
-import android.net.Uri
 import android.os.PowerManager
 import android.widget.Toast
 import androidx.annotation.OptIn

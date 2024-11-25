@@ -31,7 +31,7 @@ interface Icon: Button {
 
     @Composable
     override fun ToolBarButton() {
-        if( this is Clickable)
+        if( this is Clickable )
             TabToolBar.Icon(
                 icon,
                 color,

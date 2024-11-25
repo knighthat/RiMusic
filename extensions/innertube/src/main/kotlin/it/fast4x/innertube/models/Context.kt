@@ -6,10 +6,6 @@ import it.fast4x.innertube.Innertube
 import it.fast4x.innertube.utils.LocalePreferences
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 
 @Serializable
 data class Context(

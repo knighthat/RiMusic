@@ -61,44 +61,7 @@ fun CustomModalBottomSheet(
 ) {
     val bottomPadding = if(isLandscape) 0.dp else WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 
-    //NEW SHEET
-//    val mbSheetState: ModalBottomSheetState = androidx.compose.material.rememberModalBottomSheetState(
-//        initialValue = androidx.compose.material.ModalBottomSheetValue.Expanded,
-//        skipHalfExpanded = true,
-//        confirmValueChange = {
-//            if (it == androidx.compose.material.ModalBottomSheetValue.Hidden) {
-//                onDismissRequest()
-//            }
-//            true
-//        }
-//    )
-
     if (showSheet) {
-
-        //NEW SHEET
-//        val scope = rememberCoroutineScope()
-//        SideEffect {
-//            scope.launch {
-//                mbSheetState.show()
-//            }
-//        }
-//        ModalBottomSheetLayout(
-//            sheetState =  mbSheetState,
-//            sheetContentColor = colorPalette().background0,
-//            sheetBackgroundColor = colorPalette().background0,
-//            sheetShape = shape,
-//            sheetElevation = tonalElevation,
-//            scrimColor = scrimColor,
-//            sheetContent = {
-//                Column(Modifier.padding(bottom = bottomPadding)) {
-//                    content()
-//                }
-//            },
-//            content = {}
-//        )
-        // NEW SHEET
-
-        //PREVIOUS SHEET
         ModalBottomSheet(
             onDismissRequest = onDismissRequest,
             modifier = modifier,
@@ -130,6 +93,5 @@ fun CustomModalBottomSheet(
                 content()
             }
         }
-        //PREVIOUS SHEET
     }
 }
