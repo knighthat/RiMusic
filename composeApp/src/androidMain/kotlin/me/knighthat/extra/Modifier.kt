@@ -14,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
 import it.fast4x.rimusic.ui.styling.shimmer
 import me.knighthat.colorPalette
@@ -52,3 +54,18 @@ fun Modifier.shimmerEffect(): Modifier = composed {
         size = it.size
     }
 }
+
+fun Modifier.vertical( enabled: Boolean = true ) =
+    if ( enabled )
+        layout { measurable, constraints ->
+            val c: Constraints = constraints.copy( maxWidth = Int.MAX_VALUE )
+            val placeable = measurable.measure( c )
+
+            layout( placeable.height, placeable.width ) {
+                placeable.place(
+                    x = -(placeable.width / 2 - placeable.height / 2),
+                    y = -(placeable.height / 2 - placeable.width / 2)
+                )
+            }
+        }
+    else this
