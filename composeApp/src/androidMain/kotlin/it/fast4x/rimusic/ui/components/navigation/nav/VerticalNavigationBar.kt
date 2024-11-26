@@ -39,22 +39,7 @@ import it.fast4x.rimusic.ui.components.themed.Button
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.showSearchIconInNav
 import it.fast4x.rimusic.typography
-
-// TODO: Move this to where it belongs. Currently, UNKNOWN
-fun Modifier.vertical( enabled: Boolean = true ) =
-    if ( enabled )
-        layout { measurable, constraints ->
-            val c: Constraints = constraints.copy( maxWidth = Int.MAX_VALUE )
-            val placeable = measurable.measure( c )
-
-            layout( placeable.height, placeable.width ) {
-                placeable.place(
-                    x = -(placeable.width / 2 - placeable.height / 2),
-                    y = -(placeable.height / 2 - placeable.width / 2)
-                )
-            }
-        }
-    else this
+import it.fast4x.rimusic.utils.vertical
 
 // Shown when "Navigation bar position" is set to "left" or "right"
 class VerticalNavigationBar(
@@ -99,8 +84,8 @@ class VerticalNavigationBar(
                             color = colorPalette().text,
                         ),
                         modifier = Modifier.vertical( enabled = !isLandscape )
-                                    .rotate(if (isLandscape) 0f else -90f)
-                                    .padding(horizontal = 16.dp)
+                                           .rotate(if (isLandscape) 0f else -90f)
+                                           .padding(horizontal = 16.dp)
                     )
             }
 
