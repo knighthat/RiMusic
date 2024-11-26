@@ -37,24 +37,9 @@ import it.fast4x.rimusic.utils.isLandscape
 import it.fast4x.rimusic.utils.semiBold
 import me.knighthat.button.Button
 import me.knighthat.colorPalette
+import me.knighthat.extra.vertical
 import me.knighthat.showSearchIconInNav
 import me.knighthat.typography
-
-// TODO: Move this to where it belongs. Currently, UNKNOWN
-fun Modifier.vertical( enabled: Boolean = true ) =
-    if ( enabled )
-        layout { measurable, constraints ->
-            val c: Constraints = constraints.copy( maxWidth = Int.MAX_VALUE )
-            val placeable = measurable.measure( c )
-
-            layout( placeable.height, placeable.width ) {
-                placeable.place(
-                    x = -(placeable.width / 2 - placeable.height / 2),
-                    y = -(placeable.height / 2 - placeable.width / 2)
-                )
-            }
-        }
-    else this
 
 // Shown when "Navigation bar position" is set to "left" or "right"
 class VerticalNavigationBar(
