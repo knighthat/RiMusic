@@ -72,7 +72,6 @@ open class Sort<T: Enum<T>> protected constructor(
     override val iconId: Int = R.drawable.arrow_up
     override val menuIconTitle: String
         @Composable
-        // TODO: Add string "sort_item"
         get() = stringResource( R.string.sorting_order )
 
 
