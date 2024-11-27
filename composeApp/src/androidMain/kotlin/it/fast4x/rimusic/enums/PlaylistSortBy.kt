@@ -2,16 +2,13 @@ package it.fast4x.rimusic.enums
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import it.fast4x.rimusic.R
 import me.knighthat.enums.Drawable
 import me.knighthat.enums.MenuTitle
 
 enum class PlaylistSortBy(
     @StringRes val textId: Int,
-    @DrawableRes val iconId: Int
+    @field:DrawableRes override val iconId: Int
 ): MenuTitle, Drawable {
 
     MostPlayed( R.string.sort_listening_time, R.drawable.trending ),
@@ -24,8 +21,4 @@ enum class PlaylistSortBy(
 
     override val titleId: Int
         get() = this.textId
-
-    override val icon: Painter
-        @Composable
-        get() = painterResource( this.iconId )
 }

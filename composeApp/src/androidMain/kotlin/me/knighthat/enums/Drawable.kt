@@ -1,12 +1,16 @@
 package me.knighthat.enums
 
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 
-@FunctionalInterface
 interface Drawable {
+
+    @get:DrawableRes
+    val iconId: Int
 
     val icon: Painter
         @Composable
-        get
+        get() = painterResource( this.iconId )
 }
