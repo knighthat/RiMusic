@@ -2,7 +2,6 @@
 [versions]
 #compose-compiler = "1.5.15"
 compose-plugin = "1.7.1"
-#junit = "4.13.2"
 agp = "8.7.2"
 junitJupiterApi = "5.11.3"
 kotlin = "2.0.21"
@@ -45,16 +44,12 @@ glance = "1.1.1"
 kizzyrpc = "1.0.71"
 gson = "2.11.0"
 mediaPlayerKMP = "2.0.4"
-navigationKMP = "2.7.0-alpha07"
+navigationKMP = "2.7.0-alpha07" # Do NOT update to "2.8.0-dev1920", it breaks scrolling text
 vlcj = "4.8.2"
 kotlinxCoroutinesSwing = "1.9.0"
 hilt = "2.51.1"
-#kotlinxCoroutinesAndroid = "1.9.0"
-#conveyor = "1.11"
 
 [libraries]
-#gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
-#junit = { group = "junit", name = "junit", version = "junit" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiterApi" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junitJupiterApi" }
 kotlin-coroutines = {group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin-coroutine"}
@@ -78,7 +73,6 @@ media3-exoplayer = {group = "androidx.media3", name = "media3-exoplayer", versio
 media3-session = {group = "androidx.media3", name = "media3-session", version.ref = "media3"}
 media3-datasource-okhttp = {group = "androidx.media3", name = "media3-datasource-okhttp", version.ref = "media3"}
 ktor-client-core = {group = "io.ktor", name = "ktor-client-core", version.ref = "ktor"}
-#ktor-client-cio = {group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor"}
 ktor-client-okhttp = {group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor"}
 ktor-client-content-negotiation = {group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor"}
 ktor-client-encoding = {group = "io.ktor", name = "ktor-client-encoding", version.ref = "ktor"}
@@ -116,13 +110,11 @@ navigation-kmp = { group = "org.jetbrains.androidx.navigation", name = "navigati
 vlcj = { group = "uk.co.caprica", name = "vlcj", version.ref = "vlcj"}
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
 coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
-#coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor", version.ref = "coil3" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil3" }
 coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "coil3" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinxCoroutinesSwing" }
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
-#kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 
 
 [plugins]
@@ -137,6 +129,5 @@ kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
 room = { id = "androidx.room", version.ref = "room" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-#conveyor = { id = "dev.hydraulic.conveyor", version.ref = "conveyor" }
 
 
