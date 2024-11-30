@@ -23,6 +23,7 @@ import android.window.OnBackInvokedDispatcher
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.LinearEasing
@@ -246,10 +247,8 @@ import kotlin.system.exitProcess
 
 @UnstableApi
 class MainActivity :
-//MonetCompatActivity(),
     AppCompatActivity(),
     MonetColorsChangedListener
-//,PersistMapOwner
 {
     var downloadUtil = MyDownloadHelper
 
