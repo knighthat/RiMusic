@@ -1107,9 +1107,7 @@ fun UiSettings(
                 title = stringResource(R.string.now_playing_indicator),
                 selectedValue = nowPlayingIndicator,
                 onValueSelected = { nowPlayingIndicator = it },
-                valueText = {
-                    it.textName
-                }
+                valueText = { it.text }
             )
 
         if (search.input.isBlank() || stringResource(R.string.persistent_queue).contains(search.input,true)) {

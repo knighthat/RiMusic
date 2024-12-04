@@ -32,7 +32,7 @@ import me.knighthat.component.tab.toolbar.Clickable
 import me.knighthat.component.tab.toolbar.Menu
 import me.knighthat.component.tab.toolbar.MenuIcon
 import me.knighthat.enums.Drawable
-import me.knighthat.enums.MenuTitle
+import me.knighthat.enums.TextView
 import me.knighthat.typography
 import org.intellij.lang.annotations.MagicConstant
 import kotlin.enums.EnumEntries
@@ -99,10 +99,10 @@ open class Sort<T: Enum<T>> protected constructor(
                 else
                     painterResource( R.drawable.text )
 
-            if( it is MenuTitle)
+            if( it is TextView )
                 MenuEntry(
                     painter = icon,
-                    text = stringResource( it.titleId ),
+                    text = it.text,
                     onClick = {
                         onDismiss()
                         actions( it )
