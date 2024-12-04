@@ -110,13 +110,13 @@ import it.fast4x.rimusic.utils.showButtonPlayerSleepTimerKey
 import it.fast4x.rimusic.utils.showButtonPlayerStartRadioKey
 import it.fast4x.rimusic.utils.showButtonPlayerSystemEqualizerKey
 import it.fast4x.rimusic.utils.showButtonPlayerVideoKey
+import it.fast4x.rimusic.utils.showCoverThumbnailAnimationKey
 import it.fast4x.rimusic.utils.showDownloadButtonBackgroundPlayerKey
 import it.fast4x.rimusic.utils.showLikeButtonBackgroundPlayerKey
 import it.fast4x.rimusic.utils.showNextSongsInPlayerKey
 import it.fast4x.rimusic.utils.showRemainingSongTimeKey
 import it.fast4x.rimusic.utils.showTopActionsBarKey
 import it.fast4x.rimusic.utils.showTotalTimeQueueKey
-import it.fast4x.rimusic.utils.showCoverThumbnailAnimationKey
 import it.fast4x.rimusic.utils.showalbumcoverKey
 import it.fast4x.rimusic.utils.showlyricsthumbnailKey
 import it.fast4x.rimusic.utils.showsongsKey
@@ -966,7 +966,7 @@ fun AppearanceSettings(
                 title = stringResource(R.string.timeline),
                 selectedValue = playerTimelineType,
                 onValueSelected = { playerTimelineType = it },
-                valueText = { it.textName }
+                valueText = { it.text }
             )
 
         if (search.input.isBlank() || stringResource(R.string.transparentbar).contains(
@@ -1677,9 +1677,7 @@ fun AppearanceSettings(
                     notificationPlayerFirstIcon = it
                     restartService = true
                 },
-                valueText = {
-                    it.displayName
-                },
+                valueText = { it.text },
             )
             EnumValueSelectorSettingsEntry(
                 title = stringResource(R.string.notificationPlayerSecondIcon),
@@ -1688,9 +1686,7 @@ fun AppearanceSettings(
                     notificationPlayerSecondIcon = it
                     restartService = true
                 },
-                valueText = {
-                    it.displayName
-                },
+                valueText = { it.text },
             )
             RestartPlayerService(restartService, onRestart = { restartService = false })
         }

@@ -5,9 +5,9 @@ import androidx.annotation.StringRes
 import it.fast4x.rimusic.R
 
 enum class OnDeviceSongSortBy(
-    @StringRes val textId: Int,
+    @field:StringRes override val textId: Int,
     @field:DrawableRes override val iconId: Int
-): MenuTitle, Drawable {
+): TextView, Drawable {
 
     Title( R.string.sort_title, R.drawable.text ),
 
@@ -18,7 +18,4 @@ enum class OnDeviceSongSortBy(
     Duration( R.string.sort_duration, R.drawable.time ),
 
     Album( R.string.sort_album, R.drawable.album );
-
-    override val titleId: Int
-        get() = this.textId
 }

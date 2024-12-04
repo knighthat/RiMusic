@@ -119,7 +119,7 @@ fun HomeAlbums(
     }
 
     var albumType by rememberPreference(albumTypeKey, AlbumsType.Favorites )
-    val buttonsList = AlbumsType.entries.map { it to it.textName }
+    val buttonsList = AlbumsType.entries.map { it to it.text }
 
     LaunchedEffect( sort.sortBy, sort.sortOrder, albumType ) {
         when ( albumType ) {

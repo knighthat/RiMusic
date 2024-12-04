@@ -32,7 +32,7 @@ import it.fast4x.rimusic.ui.components.tab.toolbar.Clickable
 import it.fast4x.rimusic.ui.components.tab.toolbar.Menu
 import it.fast4x.rimusic.ui.components.tab.toolbar.MenuIcon
 import it.fast4x.rimusic.enums.Drawable
-import it.fast4x.rimusic.enums.MenuTitle
+import it.fast4x.rimusic.enums.TextView
 import it.fast4x.rimusic.typography
 import org.intellij.lang.annotations.MagicConstant
 import kotlin.enums.EnumEntries
@@ -99,10 +99,10 @@ open class Sort<T: Enum<T>> protected constructor(
                 else
                     painterResource( R.drawable.text )
 
-            if( it is MenuTitle)
+            if( it is TextView )
                 MenuEntry(
                     painter = icon,
-                    text = stringResource( it.titleId ),
+                    text = it.text,
                     onClick = {
                         onDismiss()
                         actions( it )

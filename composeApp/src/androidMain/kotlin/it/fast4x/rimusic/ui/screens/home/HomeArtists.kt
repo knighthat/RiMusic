@@ -105,7 +105,7 @@ fun HomeArtists(
     }
 
     var artistType by rememberPreference(artistTypeKey, ArtistsType.Favorites )
-    val buttonsList = ArtistsType.entries.map { it to it.textName }
+    val buttonsList = ArtistsType.entries.map { it to it.text }
 
 
     LaunchedEffect( sort.sortBy, sort.sortOrder, artistType ) {
