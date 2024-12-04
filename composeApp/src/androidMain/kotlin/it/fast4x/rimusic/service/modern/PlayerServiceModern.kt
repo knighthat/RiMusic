@@ -118,7 +118,6 @@ import it.fast4x.rimusic.utils.YouTubeRadio
 import it.fast4x.rimusic.utils.activityPendingIntent
 import it.fast4x.rimusic.utils.audioQualityFormatKey
 import it.fast4x.rimusic.utils.autoLoadSongsInQueueKey
-import it.fast4x.rimusic.utils.broadCastPendingIntent
 import it.fast4x.rimusic.utils.closebackgroundPlayerKey
 import it.fast4x.rimusic.utils.collect
 import it.fast4x.rimusic.utils.discordPersonalAccessTokenKey
@@ -1016,8 +1015,10 @@ class PlayerServiceModern : MediaLibraryService(),
             buttons
                 .filter { it == notificationPlayerFirstIcon }
                 .map {
+                    val displayName = appContext().resources.getString( it.textId )
+
                     CommandButton.Builder()
-                        .setDisplayName(it.displayName)
+                        .setDisplayName( displayName )
                         .setIconResId(
                             it.getStateIcon(
                                 it,
@@ -1036,8 +1037,10 @@ class PlayerServiceModern : MediaLibraryService(),
             buttons
                 .filter { it == notificationPlayerSecondIcon }
                 .map {
+                    val displayName = appContext().resources.getString( it.textId )
+
                     CommandButton.Builder()
-                        .setDisplayName(it.displayName)
+                        .setDisplayName( displayName )
                         .setIconResId(
                             it.getStateIcon(
                                 it,
@@ -1056,8 +1059,10 @@ class PlayerServiceModern : MediaLibraryService(),
             buttons
                 .filterNot { it == notificationPlayerFirstIcon || it == notificationPlayerSecondIcon }
                 .map {
+                    val displayName = appContext().resources.getString( it.textId )
+
                     CommandButton.Builder()
-                        .setDisplayName(it.displayName)
+                        .setDisplayName( displayName )
                         .setIconResId(
                             it.getStateIcon(
                                 it,

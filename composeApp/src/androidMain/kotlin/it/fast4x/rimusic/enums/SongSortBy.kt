@@ -4,12 +4,12 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import it.fast4x.rimusic.R
 import me.knighthat.enums.Drawable
-import me.knighthat.enums.MenuTitle
+import me.knighthat.enums.TextView
 
 enum class SongSortBy(
-    @StringRes val textId: Int,
+    @field:StringRes override val textId: Int,
     @field:DrawableRes override val iconId: Int
-): MenuTitle, Drawable {
+): TextView, Drawable {
 
     PlayTime( R.string.sort_listening_time, R.drawable.trending ),
 
@@ -26,7 +26,4 @@ enum class SongSortBy(
     Duration( R.string.sort_duration, R.drawable.time ),
 
     AlbumName( R.string.sort_album, R.drawable.album );
-
-    override val titleId: Int
-        get() = this.textId
 }

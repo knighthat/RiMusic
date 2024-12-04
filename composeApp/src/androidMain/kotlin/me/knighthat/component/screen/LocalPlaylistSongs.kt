@@ -159,22 +159,13 @@ class PlaylistSongsSort private constructor(
     }
 
     @Composable
-    private fun sortTitle( sortBy: PlaylistSongSortBy ): String =
-        when( sortBy ) {
-            PlaylistSongSortBy.ArtistAndAlbum ->
-                "${stringResource(R.string.sort_artist)}, ${stringResource(R.string.sort_album)}"
-
-            else -> stringResource( sortBy.titleId )
-        }
-
-    @Composable
     override fun MenuComponent() {
         super.Menu( sortByEntries ) {
             val icon = it.icon
 
             MenuEntry(
                 painter = icon,
-                text = sortTitle( it ),
+                text = it.text,
                 onClick = {
                     // Don't pass menuState::hide, it won't work
                     menuState.hide()
@@ -189,7 +180,7 @@ class PlaylistSongsSort private constructor(
         super.ToolBarButton()
 
         BasicText(
-            text = sortTitle( this.sortBy ),
+            text = this.sortBy.text,
             style = typography().xs.semiBold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

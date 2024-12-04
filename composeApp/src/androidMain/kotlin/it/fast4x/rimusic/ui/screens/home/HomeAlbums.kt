@@ -41,7 +41,6 @@ import it.fast4x.rimusic.MODIFIED_PREFIX
 import it.fast4x.rimusic.R
 import it.fast4x.rimusic.enums.AlbumSortBy
 import it.fast4x.rimusic.enums.AlbumsType
-import it.fast4x.rimusic.enums.ArtistsType
 import it.fast4x.rimusic.enums.NavigationBarPosition
 import it.fast4x.rimusic.enums.UiType
 import it.fast4x.rimusic.models.Album
@@ -60,7 +59,6 @@ import it.fast4x.rimusic.utils.addNext
 import it.fast4x.rimusic.utils.albumSortByKey
 import it.fast4x.rimusic.utils.albumSortOrderKey
 import it.fast4x.rimusic.utils.albumTypeKey
-import it.fast4x.rimusic.utils.artistTypeKey
 import it.fast4x.rimusic.utils.asMediaItem
 import it.fast4x.rimusic.utils.disableScrollingTextKey
 import it.fast4x.rimusic.utils.enqueue
@@ -121,7 +119,7 @@ fun HomeAlbums(
     }
 
     var albumType by rememberPreference(albumTypeKey, AlbumsType.Favorites )
-    val buttonsList = AlbumsType.entries.map { it to it.textName }
+    val buttonsList = AlbumsType.entries.map { it to it.text }
 
     LaunchedEffect( sort.sortBy, sort.sortOrder, albumType ) {
         when ( albumType ) {
