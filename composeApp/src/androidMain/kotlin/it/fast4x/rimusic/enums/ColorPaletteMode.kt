@@ -1,8 +1,17 @@
 package it.fast4x.rimusic.enums
 
-enum class ColorPaletteMode {
-    Light,
-    Dark,
-    PitchBlack,
-    System
+import androidx.annotation.StringRes
+import it.fast4x.rimusic.R
+
+enum class ColorPaletteMode(
+    @field:StringRes override val textId: Int
+): TextView {
+
+    Light( R.string._light ),
+
+    Dark( R.string.dark ),
+
+    PitchBlack( R.string.system ),
+
+    System( R.string.theme_mode_pitch_black );
 }

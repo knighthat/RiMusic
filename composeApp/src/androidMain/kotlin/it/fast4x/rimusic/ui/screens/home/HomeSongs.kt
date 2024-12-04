@@ -241,15 +241,7 @@ fun HomeSongs(
 
     // Update playlistNameState's value based on current builtInPlaylist
     LaunchedEffect( builtInPlaylist ) {
-        playlistNameState.value =
-            when (builtInPlaylist) {
-                BuiltInPlaylist.All -> context.resources.getString(R.string.songs)
-                BuiltInPlaylist.OnDevice -> context.resources.getString(R.string.on_device)
-                BuiltInPlaylist.Favorites -> context.resources.getString(R.string.favorites)
-                BuiltInPlaylist.Downloaded -> context.resources.getString(R.string.downloaded)
-                BuiltInPlaylist.Offline -> context.resources.getString(R.string.cached)
-                BuiltInPlaylist.Top -> context.resources.getString(R.string.playlist_top)
-            }
+        playlistNameState.value = context.resources.getString( builtInPlaylist.textId )
     }
 
     val search = Search.init()
@@ -347,17 +339,17 @@ fun HomeSongs(
     val showDownloadedPlaylist by rememberPreference(showDownloadedPlaylistKey, true)
     val showOnDevicePlaylist by rememberPreference(showOnDevicePlaylistKey, true)
 
-    var buttonsList = listOf(BuiltInPlaylist.All to stringResource(R.string.all))
+    var buttonsList = listOf(BuiltInPlaylist.All to BuiltInPlaylist.All.text)
     if (showFavoritesPlaylist) buttonsList +=
-        BuiltInPlaylist.Favorites to stringResource(R.string.favorites)
+        BuiltInPlaylist.Favorites to BuiltInPlaylist.Favorites.text
     if (showCachedPlaylist) buttonsList +=
-        BuiltInPlaylist.Offline to stringResource(R.string.cached)
+        BuiltInPlaylist.Offline to BuiltInPlaylist.Offline.text
     if (showDownloadedPlaylist) buttonsList +=
-        BuiltInPlaylist.Downloaded to stringResource(R.string.downloaded)
+        BuiltInPlaylist.Downloaded to BuiltInPlaylist.Downloaded.text
     if (showMyTopPlaylist) buttonsList +=
-        BuiltInPlaylist.Top to stringResource(R.string.my_playlist_top,maxTopPlaylistItems.number)
+        BuiltInPlaylist.Top to stringResource( R.string.my_playlist_top, maxTopPlaylistItems.number )
     if (showOnDevicePlaylist) buttonsList +=
-        BuiltInPlaylist.OnDevice to stringResource(R.string.on_device)
+        BuiltInPlaylist.OnDevice to BuiltInPlaylist.OnDevice.text
 
     val excludeSongWithDurationLimit by rememberPreference(excludeSongsWithDurationLimitKey, DurationInMinutes.Disabled)
     val hapticFeedback = LocalHapticFeedback.current

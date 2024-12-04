@@ -1,10 +1,23 @@
 package it.fast4x.rimusic.enums
 
-enum class BuiltInPlaylist {
-    All,
-    Favorites,
-    Offline,
-    Downloaded,
-    Top,
-    OnDevice
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import it.fast4x.rimusic.R
+
+enum class BuiltInPlaylist(
+    @field:DrawableRes override val iconId: Int,
+    @field:StringRes override val textId: Int
+): Drawable, TextView {
+
+    All( R.drawable.musical_notes, R.string.songs ),
+
+    Favorites( R.drawable.heart, R.string.favorites ),
+
+    Offline( R.drawable.sync, R.string.cached ),
+
+    Downloaded( R.drawable.downloaded, R.string.downloaded ),
+
+    Top( R.drawable.trending, R.string.playlist_top ),
+
+    OnDevice( R.drawable.musical_notes, R.string.on_device )
 }

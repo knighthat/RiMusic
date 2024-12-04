@@ -1,11 +1,21 @@
 package it.fast4x.rimusic.enums
 
-enum class CarouselSize {
-    Small,
-    Medium,
-    Big,
-    Biggest,
-    Expanded;
+import androidx.annotation.StringRes
+import it.fast4x.rimusic.R
+
+enum class CarouselSize(
+    @field:StringRes override val textId: Int
+): TextView {
+
+    Small( R.string.small ),
+
+    Medium( R.string.medium ),
+
+    Big( R.string.big ),
+
+    Biggest( R.string.biggest ),
+
+    Expanded( R.string.expanded );
 
     val size: Int
         get() = when (this) {

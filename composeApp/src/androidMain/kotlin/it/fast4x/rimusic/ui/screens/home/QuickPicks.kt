@@ -483,11 +483,7 @@ fun QuickPicks(
                     )
 
                     BasicText(
-                        text = when (playEventType) {
-                            PlayEventsType.MostPlayed -> stringResource(R.string.by_most_played_song)
-                            PlayEventsType.LastPlayed -> stringResource(R.string.by_last_played_song)
-                            PlayEventsType.CasualPlayed -> stringResource(R.string.by_casual_played_song)
-                        },
+                        text = playEventType.text,
                         style = typography().xxs.secondary,
                         modifier = Modifier
                             .padding(horizontal = 16.dp)

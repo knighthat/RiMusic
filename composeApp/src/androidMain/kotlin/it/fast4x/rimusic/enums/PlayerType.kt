@@ -1,6 +1,12 @@
 package it.fast4x.rimusic.enums
 
-enum class PlayerType {
-    Essential,
-    Modern
+import androidx.annotation.StringRes
+import it.fast4x.rimusic.R
+
+enum class PlayerType(
+    @field:StringRes override val textId: Int
+): TextView {
+
+    Essential( R.string.pcontrols_modern ),
+    Modern( R.string.pcontrols_essential );
 }

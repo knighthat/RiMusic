@@ -1,6 +1,12 @@
 package it.fast4x.rimusic.enums
 
-enum class MenuStyle {
-    List,
-    Grid
+import androidx.annotation.StringRes
+import it.fast4x.rimusic.R
+
+enum class MenuStyle(
+    @field:StringRes override val textId: Int
+): TextView {
+
+    List( R.string.style_list ),
+    Grid( R.string.style_grid );
 }

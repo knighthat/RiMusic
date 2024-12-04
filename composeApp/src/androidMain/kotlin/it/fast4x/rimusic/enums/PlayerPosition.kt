@@ -1,6 +1,12 @@
 package it.fast4x.rimusic.enums
 
-enum class PlayerPosition {
-    Top,
-    Bottom
+import androidx.annotation.StringRes
+import it.fast4x.rimusic.R
+
+enum class PlayerPosition(
+    @field:StringRes override val textId: Int
+): TextView {
+
+    Top( R.string.position_top ),
+    Bottom( R.string.position_bottom );
 }

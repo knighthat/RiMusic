@@ -47,9 +47,8 @@ import androidx.navigation.compose.rememberNavController
 import io.ktor.http.Url
 import it.fast4x.compose.persist.persistList
 import it.fast4x.innertube.utils.parseCookieString
-import it.fast4x.piped.models.Instance
 import it.fast4x.piped.Piped
-
+import it.fast4x.piped.models.Instance
 import it.fast4x.rimusic.R
 import it.fast4x.rimusic.enums.CheckUpdateState
 import it.fast4x.rimusic.enums.NavigationBarPosition
@@ -70,7 +69,6 @@ import it.fast4x.rimusic.ui.components.themed.SmartMessage
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.LocalAppearance
 import it.fast4x.rimusic.utils.CheckAvailableNewVersion
-import it.fast4x.rimusic.utils.textCopyToClipboard
 import it.fast4x.rimusic.utils.checkUpdateStateKey
 import it.fast4x.rimusic.utils.defaultFolderKey
 import it.fast4x.rimusic.utils.discordPersonalAccessTokenKey
@@ -102,6 +100,7 @@ import it.fast4x.rimusic.utils.rememberEncryptedPreference
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.restartActivityKey
 import it.fast4x.rimusic.utils.showFoldersOnDeviceKey
+import it.fast4x.rimusic.utils.textCopyToClipboard
 import it.fast4x.rimusic.utils.thumbnailRoundnessKey
 import it.fast4x.rimusic.utils.ytAccountChannelHandleKey
 import it.fast4x.rimusic.utils.ytAccountEmailKey
@@ -244,14 +243,7 @@ fun OtherSettings() {
             title = stringResource(R.string.enable_check_for_update),
             selectedValue = checkUpdateState,
             onValueSelected = { checkUpdateState = it },
-            valueText = {
-                when (it) {
-                    CheckUpdateState.Disabled -> stringResource(R.string.vt_disabled)
-                    CheckUpdateState.Enabled -> stringResource(R.string.enabled)
-                    CheckUpdateState.Ask -> stringResource(R.string.ask)
-                }
-
-            }
+            valueText = { it.text }
         )
         SettingsDescription(text = stringResource(R.string.when_enabled_a_new_version_is_checked_and_notified_during_startup))
         AnimatedVisibility(visible = checkUpdateState != CheckUpdateState.Disabled) {
