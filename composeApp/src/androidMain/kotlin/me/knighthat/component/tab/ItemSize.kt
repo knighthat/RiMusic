@@ -45,6 +45,7 @@ class ItemSize private constructor(
         MenuEntry(
             size.iconId,
             stringResource( size.textId ),
+            size.text,
             onClick = {
                 sizeState.value = size
                 menuState::hide

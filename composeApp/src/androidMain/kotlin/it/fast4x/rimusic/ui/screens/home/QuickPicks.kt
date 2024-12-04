@@ -113,7 +113,6 @@ import it.fast4x.rimusic.utils.loadedDataKey
 import it.fast4x.rimusic.utils.manageDownload
 import it.fast4x.rimusic.utils.parentalControlEnabledKey
 import it.fast4x.rimusic.utils.playEventsTypeKey
-import it.fast4x.rimusic.utils.quickPicsChartsPageKey
 import it.fast4x.rimusic.utils.quickPicsDiscoverPageKey
 import it.fast4x.rimusic.utils.quickPicsRelatedPageKey
 import it.fast4x.rimusic.utils.quickPicsTrendingSongKey
@@ -134,7 +133,6 @@ import it.fast4x.rimusic.utils.showSimilarArtistsKey
 import it.fast4x.rimusic.utils.showTipsKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -485,11 +483,7 @@ fun QuickPicks(
                     )
 
                     BasicText(
-                        text = when (playEventType) {
-                            PlayEventsType.MostPlayed -> stringResource(R.string.by_most_played_song)
-                            PlayEventsType.LastPlayed -> stringResource(R.string.by_last_played_song)
-                            PlayEventsType.CasualPlayed -> stringResource(R.string.by_casual_played_song)
-                        },
+                        text = playEventType.text,
                         style = typography().xxs.secondary,
                         modifier = Modifier
                             .padding(horizontal = 16.dp)

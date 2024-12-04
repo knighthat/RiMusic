@@ -66,13 +66,7 @@ fun PeriodMenu (
         TopPlaylistPeriod.entries.forEach {
             MenuEntry(
                 icon = R.drawable.time,
-                text = when (it) {
-                    TopPlaylistPeriod.PastDay -> stringResource(R.string.past_day)
-                    TopPlaylistPeriod.PastWeek -> stringResource(R.string.past_week)
-                    TopPlaylistPeriod.PastMonth -> stringResource(R.string.past_month)
-                    TopPlaylistPeriod.PastYear -> stringResource(R.string.past_year)
-                    TopPlaylistPeriod.AllTime -> stringResource(R.string.all_time)
-                },
+                text = it.text,
                 onClick = {
                     onDismiss(it)
 

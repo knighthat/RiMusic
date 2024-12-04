@@ -154,13 +154,7 @@ fun  QuickPicsSettings() {
                 title = stringResource(R.string.tips),
                 selectedValue = playEventType,
                 onValueSelected = { playEventType = it },
-                valueText = {
-                    when (it) {
-                        PlayEventsType.MostPlayed -> stringResource(R.string.by_most_played_song)
-                        PlayEventsType.LastPlayed -> stringResource(R.string.by_last_played_song)
-                        PlayEventsType.CasualPlayed -> stringResource(R.string.by_casual_played_song)
-                    }
-                }
+                valueText = { it.text }
             )
         }
 
