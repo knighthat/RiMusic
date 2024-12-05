@@ -1,7 +1,6 @@
 package it.fast4x.rimusic.service
 
 
-import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
