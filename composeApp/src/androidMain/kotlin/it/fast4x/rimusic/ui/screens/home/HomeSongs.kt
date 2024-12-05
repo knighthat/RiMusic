@@ -347,7 +347,7 @@ fun HomeSongs(
     if (showDownloadedPlaylist) buttonsList +=
         BuiltInPlaylist.Downloaded to BuiltInPlaylist.Downloaded.text
     if (showMyTopPlaylist) buttonsList +=
-        BuiltInPlaylist.Top to stringResource( R.string.my_playlist_top, maxTopPlaylistItems.number )
+        BuiltInPlaylist.Top to stringResource( R.string.my_playlist_top, maxTopPlaylistItems.toInt() )
     if (showOnDevicePlaylist) buttonsList +=
         BuiltInPlaylist.OnDevice to BuiltInPlaylist.OnDevice.text
 
@@ -368,10 +368,10 @@ fun HomeSongs(
             BuiltInPlaylist.Offline -> Database.listOfflineSongs( songSort.sortBy, songSort.sortOrder )
             BuiltInPlaylist.Top -> {
                 if (topPlaylists.period.duration == Duration.INFINITE)
-                    Database.songsEntityByPlayTimeWithLimitDesc(limit = maxTopPlaylistItems.number.toInt())
+                    Database.songsEntityByPlayTimeWithLimitDesc(limit = maxTopPlaylistItems.toInt())
                 else
                     Database.trendingSongEntity(
-                        limit = maxTopPlaylistItems.number.toInt(),
+                        limit = maxTopPlaylistItems.toInt(),
                         period = topPlaylists.period.duration.inWholeMilliseconds
                     )
             }
@@ -861,10 +861,10 @@ fun HomeSongs(
                                     onClick = {
                                         search.onItemSelected()
 
-                                        val maxSongs = maxSongsInQueue.number.toInt()
+                                        val maxSongs = maxSongsInQueue.toInt()
                                         val itemsRange: IntRange
                                         val playIndex: Int
-                                        if (itemsOnDisplay.size < maxSongsInQueue.number) {
+                                        if ( itemsOnDisplay.size < maxSongs ) {
                                             itemsRange = itemsOnDisplay.indices
                                             playIndex = index
                                         } else {
