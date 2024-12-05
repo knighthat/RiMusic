@@ -5,7 +5,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.rememberTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ScrollState

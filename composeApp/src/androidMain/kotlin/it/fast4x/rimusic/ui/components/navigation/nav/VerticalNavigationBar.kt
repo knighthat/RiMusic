@@ -23,9 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
