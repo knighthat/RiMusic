@@ -40,8 +40,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import it.fast4x.rimusic.Database
-import it.fast4x.rimusic.enums.BuiltInPlaylist
-import it.fast4x.rimusic.enums.DeviceLists
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.enums.StatisticsType
 import it.fast4x.rimusic.enums.ThumbnailRoundness
@@ -53,14 +51,12 @@ import it.fast4x.rimusic.models.SearchQuery
 import it.fast4x.rimusic.ui.components.CustomModalBottomSheet
 import it.fast4x.rimusic.ui.screens.album.AlbumScreen
 import it.fast4x.rimusic.ui.screens.artist.ArtistScreen
-import it.fast4x.rimusic.ui.screens.builtinplaylist.BuiltInPlaylistScreen
 import it.fast4x.rimusic.ui.screens.history.HistoryScreen
 import it.fast4x.rimusic.ui.screens.home.HomeScreen
 import it.fast4x.rimusic.ui.screens.localplaylist.LocalPlaylistScreen
 import it.fast4x.rimusic.ui.screens.mood.MoodScreen
 import it.fast4x.rimusic.ui.screens.mood.MoodsPageScreen
 import it.fast4x.rimusic.ui.screens.newreleases.NewreleasesScreen
-import it.fast4x.rimusic.ui.screens.ondevice.DeviceListSongsScreen
 import it.fast4x.rimusic.ui.screens.player.Player
 import it.fast4x.rimusic.ui.screens.player.Queue
 import it.fast4x.rimusic.ui.screens.playlist.PlaylistScreen
@@ -394,24 +390,6 @@ fun AppNavigation(
         }
 
         composable(
-            route = "${NavRoutes.builtInPlaylist.name}/{index}",
-            arguments = listOf(
-                navArgument(
-                    name = "index",
-                    builder = { type = NavType.IntType }
-                )
-            )
-        ) { navBackStackEntry ->
-            val index = navBackStackEntry.arguments?.getInt("index") ?: 0
-
-            BuiltInPlaylistScreen(
-                navController = navController,
-                builtInPlaylist = BuiltInPlaylist.entries[index],
-                miniPlayer = miniPlayer,
-            )
-        }
-
-        composable(
             route = "${NavRoutes.localPlaylist.name}/{id}",
             arguments = listOf(
                 navArgument(
@@ -456,16 +434,6 @@ fun AppNavigation(
                 navController = navController
             )
 
-        }
-
-        composable(
-            route = NavRoutes.onDevice.name
-        ) { navBackStackEntry ->
-            DeviceListSongsScreen(
-                navController = navController,
-                deviceLists = DeviceLists.LocalSongs,
-                miniPlayer = miniPlayer,
-            )
         }
 
         composable(
