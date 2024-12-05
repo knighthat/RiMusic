@@ -526,14 +526,7 @@ fun BuiltInPlaylistSongs(
 
                     if (songs.isEmpty())
                     PlaylistItem(
-                        icon = when (builtInPlaylist) {
-                            BuiltInPlaylist.All -> R.drawable.musical_notes
-                            BuiltInPlaylist.OnDevice -> R.drawable.musical_notes
-                            BuiltInPlaylist.Favorites -> R.drawable.heart
-                            BuiltInPlaylist.Downloaded -> R.drawable.downloaded
-                            BuiltInPlaylist.Offline -> R.drawable.sync
-                            BuiltInPlaylist.Top -> R.drawable.trending
-                        },
+                        icon = builtInPlaylist.iconId,
                         colorTint = colorPalette().favoritesIcon,
                         name = builtInPlaylist.text,
                         songCount = null,
