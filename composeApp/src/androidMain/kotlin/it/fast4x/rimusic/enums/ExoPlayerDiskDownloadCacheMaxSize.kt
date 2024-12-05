@@ -4,27 +4,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import it.fast4x.rimusic.R
 
-enum class ExoPlayerDiskDownloadCacheMaxSize: TextView {
-    `Disabled`,
-    `32MB`,
-    `512MB`,
-    `1GB`,
-    `2GB`,
-    `4GB`,
-    `8GB`,
-    Unlimited;
+enum class ExoPlayerDiskDownloadCacheMaxSize(
+    val megabytes: Int
+): TextView {
 
-    val bytes: Long
-        get() = when (this) {
-            Disabled -> 16
-            `32MB` -> 32
-            `512MB` -> 512
-            `1GB` -> 1024
-            `2GB` -> 2048
-            `4GB` -> 4096
-            `8GB` -> 8192
-            Unlimited -> 0
-        } * 1000 * 1000L
+    `Disabled`( 16 ),
+
+    `32MB`( 32 ),
+
+    `512MB`( 512 ),
+
+    `1GB`( 1024 ),
+
+    `2GB`( 2048 ),
+
+    `4GB`( 4096 ),
+
+    `8GB`( 8192 ),
+
+    Unlimited( 0 );
+
+    val bytes: Long = this.megabytes * 1000L * 1000
 
     override val text: String
         @Composable

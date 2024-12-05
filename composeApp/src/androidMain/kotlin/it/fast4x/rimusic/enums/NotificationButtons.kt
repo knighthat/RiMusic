@@ -20,31 +20,22 @@ import it.fast4x.rimusic.service.modern.PlayerServiceModern
 import it.fast4x.rimusic.appContext
 
 enum class NotificationButtons(
+    val sessionCommand: SessionCommand,
     @field:StringRes override val textId: Int,
     @field:DrawableRes override val iconId: Int
 ): TextView, Drawable {
 
-    Download( R.string.download, R.drawable.download ),
+    Download( CommandToggleDownload, R.string.download, R.drawable.download ),
 
-    Favorites( R.string.favorites, R.drawable.heart_outline ),
+    Favorites( CommandToggleLike, R.string.favorites, R.drawable.heart_outline ),
 
-    Repeat( R.string.repeat, R.drawable.repeat ),
+    Repeat( CommandToggleRepeatMode, R.string.repeat, R.drawable.repeat ),
 
-    Shuffle( R.string.shuffle, R.drawable.shuffle ),
+    Shuffle( CommandToggleShuffle, R.string.shuffle, R.drawable.shuffle ),
 
-    Radio( R.string.start_radio, R.drawable.radio ),
+    Radio( CommandStartRadio, R.string.start_radio, R.drawable.radio ),
 
-    Search( R.string.search, R.drawable.search );
-
-    val sessionCommand: SessionCommand
-    get() = when (this) {
-        Download -> CommandToggleDownload
-        Favorites -> CommandToggleLike
-        Repeat -> CommandToggleRepeatMode
-        Shuffle -> CommandToggleShuffle
-        Radio -> CommandStartRadio
-        Search -> CommandSearch
-    }
+    Search( CommandSearch, R.string.search, R.drawable.search );
 
     val pendingIntent: PendingIntent
         @OptIn(UnstableApi::class)

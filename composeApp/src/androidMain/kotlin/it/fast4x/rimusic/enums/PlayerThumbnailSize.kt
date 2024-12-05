@@ -4,26 +4,17 @@ import androidx.annotation.StringRes
 import it.fast4x.rimusic.R
 
 enum class PlayerThumbnailSize(
+    val size: Int,
     @field:StringRes override val textId: Int
 ): TextView {
 
-    Small( R.string.small ),
+    Small( 90, R.string.small ),
 
-    Medium( R.string.medium ),
+    Medium( 55, R.string.medium ),
 
-    Big( R.string.big ),
+    Big( 30, R.string.big ),
 
-    Biggest( R.string.biggest ),
+    Biggest( 20, R.string.biggest ),
 
-    Expanded( R.string.expanded );
-
-    val size: Int
-        get() = when (this) {
-            Small -> 90
-            Medium -> 55
-            Big -> 30
-            Biggest -> 20
-            Expanded -> 0
-        }
-
+    Expanded( 0, R.string.expanded );
 }
