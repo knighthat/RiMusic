@@ -373,7 +373,7 @@ fun BuiltInPlaylistSongs(
 
 
         if (relatedSongsRecommendationResult != null) {
-            for (index in 0..recommendationsNumber.number) {
+            for ( index in 0..recommendationsNumber.toInt() ) {
                 positionsRecommendationList.add((0..songs.size).random())
             }
         }
@@ -502,7 +502,7 @@ fun BuiltInPlaylistSongs(
 
                 HeaderWithIcon(
                     title = when (builtInPlaylist) {
-                        BuiltInPlaylist.Top -> stringResource( R.string.my_playlist_top, maxTopPlaylistItems.number )
+                        BuiltInPlaylist.Top -> stringResource( R.string.my_playlist_top, maxTopPlaylistItems.toInt() )
                         else -> builtInPlaylist.text
                     },
                     iconId = R.drawable.search,
@@ -640,8 +640,8 @@ fun BuiltInPlaylistSongs(
                                         onClick = {
                                             if (songs.isNotEmpty()) {
                                                 val itemsLimited =
-                                                    if (songs.size > maxSongsInQueue.number) songs.shuffled()
-                                                        .take(maxSongsInQueue.number.toInt()) else songs
+                                                    if (songs.size > maxSongsInQueue.toInt()) songs.shuffled()
+                                                        .take(maxSongsInQueue.toInt()) else songs
                                                 binder?.stopRadio()
                                                 binder?.player?.forcePlayFromBeginning(
                                                     itemsLimited.shuffled().map(Song::asMediaItem)
@@ -1184,8 +1184,8 @@ fun BuiltInPlaylistSongs(
                                 searching = false
                                 filter = null
                                 val itemsLimited =
-                                    if (songs.size > maxSongsInQueue.number) songs.take(
-                                        maxSongsInQueue.number.toInt()
+                                    if (songs.size > maxSongsInQueue.toInt()) songs.take(
+                                        maxSongsInQueue.toInt()
                                     ) else songs
                                 binder?.stopRadio()
                                 binder?.player?.forcePlayAtIndex(
