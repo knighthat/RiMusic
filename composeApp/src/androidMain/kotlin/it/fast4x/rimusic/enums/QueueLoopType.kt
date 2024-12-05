@@ -20,6 +20,22 @@ enum class QueueLoopType(
         RepeatAll -> Player.REPEAT_MODE_ALL
     }
 
+    /**
+     * Go through all values of [QueueLoopType] from top to bottom.
+     *
+     * Functions similarly to an iterator, but this is an infinite loop.
+     *
+     * Once pointer reaches the end (last value), [next] will return
+     * back the the first value.
+     */
+    fun next(): QueueLoopType = when( this ) {
+        // Avoid using `else` to make sure each
+        // value has their own next element
+        Default -> RepeatOne
+        RepeatOne -> RepeatAll
+        RepeatAll -> Default
+    }
+
     companion object {
         @JvmStatic
         fun from(value: Int): QueueLoopType {
