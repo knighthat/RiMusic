@@ -9,6 +9,10 @@ interface Drawable {
 
     @get:DrawableRes
     val iconId: Int
+        get() = throw NotImplementedError("""
+            This setting uses [${this::class.simpleName}#icon] directly 
+            or its [${this::class.simpleName}#iconId] hasn't initialized!
+        """.trimIndent())
 
     val icon: Painter
         @Composable
