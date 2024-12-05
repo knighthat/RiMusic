@@ -829,7 +829,7 @@ class PlayerService : InvincibleService(),
         val minTimeForEvent =
             preferences.getEnum(exoPlayerMinTimeForEventKey, ExoPlayerMinTimeForEvent.`20s`)
 
-        if (totalPlayTimeMs > minTimeForEvent.ms) {
+        if ( totalPlayTimeMs > minTimeForEvent.asMillis ) {
             Database.asyncTransaction {
                 try {
                     insert(
@@ -1488,11 +1488,11 @@ class PlayerService : InvincibleService(),
     @UnstableApi
     override fun onIsPlayingChanged(isPlaying: Boolean) {
         val fadeDisabled = preferences.getEnum(playbackFadeAudioDurationKey, DurationInMilliseconds.Disabled) == DurationInMilliseconds.Disabled
-        val duration = preferences.getEnum(playbackFadeAudioDurationKey, DurationInMilliseconds.Disabled).milliSeconds
+        val duration = preferences.getEnum(playbackFadeAudioDurationKey, DurationInMilliseconds.Disabled).asMillis
         if (isPlaying && !fadeDisabled)
             startFadeAnimator(
                 player = binder.player,
-                duration = duration,
+                duration = duration.toInt(),
                 fadeIn = true
             )
 
@@ -2053,7 +2053,7 @@ class PlayerService : InvincibleService(),
 
         fun callPause(onPause: () -> Unit) {
             val fadeDisabled = preferences.getEnum(playbackFadeAudioDurationKey, DurationInMilliseconds.Disabled) == DurationInMilliseconds.Disabled
-            val duration = preferences.getEnum(playbackFadeAudioDurationKey, DurationInMilliseconds.Disabled).milliSeconds
+            val duration = preferences.getEnum(playbackFadeAudioDurationKey, DurationInMilliseconds.Disabled).asMillis
             //println("mediaItem callPause fadeDisabled $fadeDisabled duration $duration")
             if (player.isPlaying) {
                 if (fadeDisabled) {
@@ -2061,7 +2061,7 @@ class PlayerService : InvincibleService(),
                     onPause()
                 } else {
                     //fadeOut
-                    startFadeAnimator(player, duration, false) {
+                    startFadeAnimator(player, duration.toInt(), false) {
                         player.pause()
                         onPause()
                     }
