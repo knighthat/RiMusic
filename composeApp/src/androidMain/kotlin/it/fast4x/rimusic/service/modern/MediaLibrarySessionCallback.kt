@@ -271,7 +271,7 @@ class MediaLibrarySessionCallback @Inject constructor(
                             context.getString(R.string.playlist_top),
                             context.preferences.getEnum(
                                 MaxTopPlaylistItemsKey,
-                                MaxTopPlaylistItems.`10`).number.toString(),
+                                MaxTopPlaylistItems.`10`).name,
                             drawableUri(R.drawable.trending),
                             MediaMetadata.MEDIA_TYPE_PLAYLIST
                         ),
