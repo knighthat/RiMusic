@@ -43,8 +43,7 @@ class ItemSize private constructor(
     @Composable
     private fun Entry( size: HomeItemSize) {
         MenuEntry(
-            size.iconId,
-            stringResource( size.textId ),
+            size.icon,
             size.text,
             onClick = {
                 sizeState.value = size

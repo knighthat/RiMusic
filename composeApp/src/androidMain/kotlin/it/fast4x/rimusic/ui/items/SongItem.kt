@@ -658,7 +658,7 @@ fun SongItem(
                 } else {
                     IconButton(
                         onClick = onDownloadClick,
-                        icon = downloadedStateMedia.icon,
+                        icon = downloadedStateMedia.iconId,
                         color = when(downloadedStateMedia) {
                             DownloadedStateMedia.NOT_CACHED_OR_DOWNLOADED -> colorPalette().textDisabled
                             else -> colorPalette().text
@@ -760,7 +760,7 @@ fun SongItemPlaceholder( thumbnailSizeDp: Dp ) {
 
                 IconButton(
                     onClick = {},
-                    icon = DownloadedStateMedia.NOT_CACHED_OR_DOWNLOADED.icon,
+                    icon = DownloadedStateMedia.NOT_CACHED_OR_DOWNLOADED.iconId,
                     color = colorPalette().textDisabled,
                     modifier = Modifier.size( 20.dp ),
                     enabled = false
