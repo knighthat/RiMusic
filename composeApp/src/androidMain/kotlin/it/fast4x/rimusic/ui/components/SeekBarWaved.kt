@@ -8,7 +8,6 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.rememberTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -217,19 +216,6 @@ private fun wavePath(size: Size, progress: Float): Path {
             lineTo(currentX-5, yFromX(currentX)-5)
            // lineTo(yFromX(currentX),0f)
             //lineTo(0f, yFromX(currentX)-50f)
-            currentX += 1
-        }
-    }
-}
-private fun wavePath2(size: Size, progress: Float): Path {
-    fun yFromX(x: Float) = (x / 150f + progress * 2 * PI.toFloat() + 1) * size.height / 2
-    return Path().apply {
-        moveTo(0f, yFromX(0f))
-        var currentX = 0f
-        while (currentX < size.width) {
-            lineTo(currentX, yFromX(currentX))
-            //lineTo(currentX, yFromX(currentX * PI.toFloat()))
-            //lineTo(currentX, yFromX(currentX * PI.toFloat() * 2))
             currentX += 1
         }
     }

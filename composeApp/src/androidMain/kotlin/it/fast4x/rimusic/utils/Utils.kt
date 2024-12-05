@@ -1,6 +1,5 @@
 package it.fast4x.rimusic.utils
 
-//import it.fast4x.rimusic.BuildConfig
 import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
@@ -31,7 +30,6 @@ import it.fast4x.innertube.requests.playlistPage
 import it.fast4x.innertube.utils.ProxyPreferences
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.cleanPrefix
-import it.fast4x.rimusic.models.Album
 import it.fast4x.rimusic.models.Song
 import it.fast4x.rimusic.models.SongEntity
 import it.fast4x.rimusic.service.LOCAL_KEY_PREFIX
@@ -51,44 +49,8 @@ import java.net.Proxy
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.Calendar
-import java.util.Date
 import java.util.GregorianCalendar
 import kotlin.time.Duration.Companion.minutes
-
-
-fun getDateTimeAsFormattedString(dateAsLongInMs: Long): String? {
-    try {
-        return SimpleDateFormat("dd/MM/yyyy").format(Date(dateAsLongInMs))
-    } catch (e: Exception) {
-        return null // parsing exception
-    }
-}
-
-fun getTimestampFromDate(date: String): Long {
-    return try {
-        SimpleDateFormat("dd-MM-yyyy").parse(date).time
-    } catch (e: Exception) {
-        return 0
-    }
-}
-
-fun songToggleLike( song: Song ) {
-    Database.asyncTransaction {
-        if (songExist(song.asMediaItem.mediaId) == 0)
-            insert(song.asMediaItem, Song::toggleLike)
-        //else {
-            if (songliked(song.asMediaItem.mediaId) == 0)
-                like(
-                    song.asMediaItem.mediaId,
-                    System.currentTimeMillis()
-                )
-            else like(
-                song.asMediaItem.mediaId,
-                null
-            )
-        //}
-    }
-}
 
 fun mediaItemToggleLike( mediaItem: MediaItem ) {
     Database.asyncTransaction {
@@ -125,16 +87,6 @@ fun albumItemToggleBookmarked( albumItem: Innertube.AlbumItem ) {
         //}
     }
 }
-
-val Innertube.AlbumItem.asAlbum: Album
-    get() = Album (
-        id = key,
-        title = info?.name,
-        thumbnailUrl = thumbnail?.url,
-        year = year,
-        authorsText = authors?.joinToString("") { it.name ?: "" },
-        //shareUrl =
-    )
 
 val Innertube.Podcast.EpisodeItem.asMediaItem: MediaItem
     @UnstableApi
@@ -367,27 +319,6 @@ fun formatAsTime(millis: Long): String {
 
     return "${timePart1} ${timePart2}s"
 }
-
-fun formatTimelineSongDurationToTime(millis: Long) =
-    Duration.ofMillis(millis*1000).toMinutes().minutes.toString()
-
-/*
-fun TimeToString(timeMs: Int): String {
-    val mFormatBuilder = StringBuilder()
-    val mFormatter = Formatter(mFormatBuilder, Locale.getDefault())
-    val totalSeconds = timeMs / 1000
-    //  videoDurationInSeconds = totalSeconds % 60;
-    val seconds = totalSeconds % 60
-    val minutes = totalSeconds / 60 % 60
-    val hours = totalSeconds / 3600
-    mFormatBuilder.setLength(0)
-    return if (hours > 0) {
-        mFormatter.format("%d:%02d:%02d", hours, minutes, seconds).toString()
-    } else {
-        mFormatter.format("%02d:%02d", minutes, seconds).toString()
-    }
-}
-*/
 
 @SuppressLint("SimpleDateFormat")
 fun getCalculatedMonths( month: Int): String? {

@@ -1,6 +1,5 @@
 package it.fast4x.rimusic.utils
 
-import android.util.Log
 import it.fast4x.rimusic.enums.OnDeviceFolderSortBy
 import it.fast4x.rimusic.enums.SortOrder
 import it.fast4x.rimusic.models.Folder
@@ -84,19 +83,6 @@ class OnDeviceOrganize {
             }
 
             return currentFolder
-        }
-        fun logFolderStructure(folder: Folder, indent: String = "") {
-            Log.d("FolderStructure", "$indent Folder: ${folder.name}")
-
-            // Log songs in the current folder
-            for (song in folder.songs) {
-                Log.d("FolderStructure", "$indent - Song: ${song.title} - Relative Path: ${song.relativePath}")
-            }
-
-            // Recursively log subfolders
-            for (subFolder in folder.subFolders) {
-                logFolderStructure(subFolder, "$indent    ")
-            }
         }
     }
 }

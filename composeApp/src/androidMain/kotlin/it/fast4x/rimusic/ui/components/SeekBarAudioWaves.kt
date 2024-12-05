@@ -1,6 +1,7 @@
 package it.fast4x.rimusic.ui.components
 
 
+import androidx.annotation.FloatRange
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -21,13 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.util.lerp
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 import kotlin.random.Random
-import androidx.annotation.FloatRange
-import androidx.compose.ui.unit.Dp
 
 private const val waveWidthPercentOfSpaceAvailable = 0.5f
 
@@ -138,14 +138,7 @@ value class ProgressPercentage(
         }
     }
 
-    val isDone: Boolean
-        get() = value == 1f
-
     companion object {
-        fun safeValue(float: Float): ProgressPercentage {
-            if (float.isNaN()) return ProgressPercentage(0f)
-            return ProgressPercentage(float.coerceIn(0f, 1f))
-        }
 
         fun of(
             current: Dp,

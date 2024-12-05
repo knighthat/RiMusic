@@ -65,13 +65,6 @@ abstract class ActionReceiver(private val base: String) : BroadcastReceiver() {
         mutableActions[intent.action]?.onReceive?.let { it(context, intent) }
     }
 
-    context(Context)
-    @JvmName("_register")
-    fun register(
-        @ContextCompat.RegisterReceiverFlags
-        flags: Int = ContextCompat.RECEIVER_NOT_EXPORTED
-    ) = register(this@Context, flags)
-
     fun register(
         context: Context,
         @ContextCompat.RegisterReceiverFlags

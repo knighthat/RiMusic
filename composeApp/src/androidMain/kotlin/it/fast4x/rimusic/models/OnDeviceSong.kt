@@ -16,18 +16,6 @@ data class OnDeviceSong (
     val relativePath: String,
     val totalPlayTimeMs: Long = 0
 ) {
-    val formattedTotalPlayTime: String
-        get() {
-            val seconds = totalPlayTimeMs / 1000
-
-            val hours = seconds / 3600
-
-            return when {
-                hours == 0L -> "${seconds / 60}m"
-                hours < 24L -> "${hours}h"
-                else -> "${hours / 24}d"
-            }
-        }
 
     fun toggleLike(): OnDeviceSong {
         return copy(

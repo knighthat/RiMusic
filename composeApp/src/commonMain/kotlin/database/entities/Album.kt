@@ -16,9 +16,4 @@ data class Album(
     val timestamp: Long? = null,
     val bookmarkedAt: Long? = null
 ) {
-    fun toggleBookmark(): Album {
-        return copy(
-            bookmarkedAt = if (bookmarkedAt == null) System.currentTimeMillis() else null
-        )
-    }
 }

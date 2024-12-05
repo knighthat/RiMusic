@@ -13,7 +13,6 @@ import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.enums.AudioQualityFormat
 import it.fast4x.rimusic.models.Format
 import it.fast4x.rimusic.service.LoginRequiredException
-import it.fast4x.rimusic.service.MyDownloadHelper
 import it.fast4x.rimusic.service.NoInternetException
 import it.fast4x.rimusic.service.TimeoutException
 import it.fast4x.rimusic.service.UnknownException
@@ -150,29 +149,6 @@ internal suspend fun PlayerServiceModern.dataSpecProcess(
         // Rethrow exception if it's not handled
         throw e
     }
-}
-
-@OptIn(UnstableApi::class)
-internal suspend fun MyDownloadHelper.dataSpecProcess(
-    dataSpec: DataSpec,
-    context: Context,
-    metered: Boolean
-): DataSpec {
-    val songUri = dataSpec.uri.toString()
-    val videoId = songUri.substringAfter("watch?v=")
-
-    if( dataSpec.isLocal ||
-        downloadCache.isCached(videoId, dataSpec.position, if (dataSpec.length >= 0) dataSpec.length else 1)
-    ) {
-        println("MyDownloadHelper DataSpecProcess Playing song ${videoId} from cached or local file")
-        return dataSpec.withUri(Uri.parse(dataSpec.uri.toString()))
-    }
-
-    val format = getInnerTubeFormatUrl(videoId, audioQualityFormat)
-
-    println("MyDownloadHelper DataSpecProcess Playing song $videoId from format $format from url=${format?.url}")
-    return dataSpec.withUri(Uri.parse(format?.url))
-
 }
 
 @OptIn(UnstableApi::class)
