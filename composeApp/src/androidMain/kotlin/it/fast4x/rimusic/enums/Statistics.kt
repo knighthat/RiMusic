@@ -8,6 +8,8 @@ enum class StatisticsType(
     @field:DrawableRes override val iconId: Int,
     @field:StringRes override val textId: Int
 ): Drawable, TextView {
+    // Do NOT change the positions
+    // [StatisticsScreen] uses their ordinals for tab indexes
 
     Today( R.drawable.stat_today, R.string.today ),
 
