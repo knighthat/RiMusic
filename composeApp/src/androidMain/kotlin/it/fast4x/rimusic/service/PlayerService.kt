@@ -13,7 +13,6 @@ import android.content.SharedPreferences
 import android.content.pm.ServiceInfo
 import android.content.res.Configuration
 import android.database.SQLException
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.AudioDeviceCallback
 import android.media.AudioDeviceInfo
@@ -47,7 +46,6 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.Timeline
 import androidx.media3.common.audio.SonicAudioProcessor
-import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.database.StandaloneDatabaseProvider
 import androidx.media3.datasource.DataSpec
@@ -69,10 +67,6 @@ import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.upstream.DefaultLoadErrorHandlingPolicy
 import androidx.media3.extractor.DefaultExtractorsFactory
-import androidx.media3.extractor.ExtractorsFactory
-import androidx.media3.extractor.mkv.MatroskaExtractor
-import androidx.media3.extractor.mp4.FragmentedMp4Extractor
-import androidx.media3.extractor.text.DefaultSubtitleParserFactory
 import it.fast4x.innertube.Innertube
 import it.fast4x.innertube.models.NavigationEndpoint
 import it.fast4x.innertube.models.bodies.SearchBody
@@ -93,12 +87,8 @@ import it.fast4x.rimusic.extensions.audiovolume.AudioVolumeObserver
 import it.fast4x.rimusic.extensions.audiovolume.OnAudioVolumeChangedListener
 import it.fast4x.rimusic.extensions.discord.sendDiscordPresence
 import it.fast4x.rimusic.models.Event
-import it.fast4x.rimusic.models.PersistentQueue
-import it.fast4x.rimusic.models.PersistentSong
 import it.fast4x.rimusic.models.QueuedMediaItem
 import it.fast4x.rimusic.models.Song
-import it.fast4x.rimusic.models.SongEntity
-import it.fast4x.rimusic.models.asMediaItem
 import it.fast4x.rimusic.ui.components.themed.SmartMessage
 import it.fast4x.rimusic.ui.widgets.PlayerHorizontalWidget
 import it.fast4x.rimusic.ui.widgets.PlayerVerticalWidget
@@ -106,7 +96,6 @@ import it.fast4x.rimusic.utils.InvincibleService
 import it.fast4x.rimusic.utils.TimerJob
 import it.fast4x.rimusic.utils.YouTubeRadio
 import it.fast4x.rimusic.utils.activityPendingIntent
-import it.fast4x.rimusic.utils.asSong
 import it.fast4x.rimusic.utils.audioQualityFormatKey
 import it.fast4x.rimusic.utils.broadCastPendingIntent
 import it.fast4x.rimusic.utils.closebackgroundPlayerKey
@@ -149,7 +138,6 @@ import it.fast4x.rimusic.utils.skipMediaOnErrorKey
 import it.fast4x.rimusic.utils.skipSilenceKey
 import it.fast4x.rimusic.utils.startFadeAnimator
 import it.fast4x.rimusic.utils.thumbnail
-import it.fast4x.rimusic.utils.timer
 import it.fast4x.rimusic.utils.useVolumeKeysToChangeSongKey
 import it.fast4x.rimusic.utils.volumeNormalizationKey
 import kotlinx.coroutines.CoroutineScope
@@ -161,7 +149,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
@@ -182,10 +169,7 @@ import kotlinx.coroutines.withContext
 import it.fast4x.rimusic.appContext
 import timber.log.Timber
 import java.io.IOException
-import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
 import kotlin.math.roundToInt
-import kotlin.system.exitProcess
 import kotlin.time.Duration.Companion.seconds
 import android.os.Binder as AndroidBinder
 
@@ -962,107 +946,6 @@ class PlayerService : InvincibleService(),
         */
     }
 
-    @ExperimentalCoroutinesApi
-    @FlowPreview
-    @UnstableApi
-    private fun maybeRestoreFromDiskPlayerQueue() {
-        if (!isPersistentQueueEnabled) return
-        //Log.d("mediaItem", "QueuePersistentEnabled Restore Initial")
-
-        runCatching {
-            filesDir.resolve("persistentQueue.data").inputStream().use { fis ->
-                ObjectInputStream(fis).use { oos ->
-                    oos.readObject() as PersistentQueue
-                }
-            }
-        }.onSuccess { queue ->
-            //Log.d("mediaItem", "QueuePersistentEnabled Restored queue $queue")
-            //Log.d("mediaItem", "QueuePersistentEnabled Restored ${queue.songMediaItems.size}")
-            runBlocking(Dispatchers.Main) {
-                player.setMediaItems(
-                    queue.songMediaItems.map { song ->
-                        song.asMediaItem.buildUpon()
-                            .setUri(song.asMediaItem.mediaId)
-                            .setCustomCacheKey(song.asMediaItem.mediaId)
-                            .build().apply {
-                                mediaMetadata.extras?.putBoolean("isFromPersistentQueue", true)
-                            }
-                    },
-                    queue.mediaItemIndex,
-                    queue.position
-                )
-
-                player.prepare()
-
-                isNotificationStarted = true
-                kotlin.runCatching {
-                    startForegroundService(this@PlayerService, intent<PlayerService>())
-                }.onFailure {
-                    Timber.e("maybeRestoreFromDiskPlayerQueue PlayerService startForegroundService ${it.stackTraceToString()}")
-                }
-                runCatching {
-                    //startForeground(NotificationId, notification())
-                    notification()?.let {
-                        ServiceCompat.startForeground(
-                            this@PlayerService,
-                            NotificationId,
-                            it,
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
-                            } else {
-                                0
-                            }
-                        )
-                    }
-                }.onFailure {
-                    Timber.e("maybeRestoreFromDiskPlayerQueue PlayerService startForeground ${it.stackTraceToString()}")
-                }
-            }
-
-        }.onFailure {
-            //it.printStackTrace()
-            Timber.e(it.stackTraceToString())
-        }
-
-        //Log.d("mediaItem", "QueuePersistentEnabled Restored ${player.currentTimeline.mediaItems.size}")
-
-    }
-
-    private fun maybeSaveToDiskPlayerQueue() {
-
-        if (!isPersistentQueueEnabled) return
-        //Log.d("mediaItem", "QueuePersistentEnabled Save ${player.currentTimeline.mediaItems.size}")
-
-        val persistentQueue = PersistentQueue(
-            title = "title",
-            songMediaItems = player.currentTimeline.mediaItems.map {
-                PersistentSong(
-                    id = it.mediaId,
-                    title = it.mediaMetadata.title.toString(),
-                    durationText = it.mediaMetadata.extras?.getString("durationText").toString(),
-                    thumbnailUrl = it.mediaMetadata.artworkUri.toString()
-                )
-            },
-            mediaItemIndex = player.currentMediaItemIndex,
-            position = player.currentPosition
-        )
-
-        runCatching {
-            filesDir.resolve("persistentQueue.data").outputStream().use { fos ->
-                ObjectOutputStream(fos).use { oos ->
-                    oos.writeObject(persistentQueue)
-                }
-            }
-        }.onFailure {
-            //it.printStackTrace()
-            Timber.e(it.stackTraceToString())
-
-        }.onSuccess {
-            Log.d("mediaItem", "QueuePersistentEnabled Saved $persistentQueue")
-        }
-
-    }
-
     private fun maybeSavePlayerQueue() {
         if (!isPersistentQueueEnabled) return
         /*
@@ -1730,20 +1613,6 @@ class PlayerService : InvincibleService(),
     )
 
 
-    private fun getExtractorsFactory(): ExtractorsFactory = ExtractorsFactory {
-        arrayOf(
-            MatroskaExtractor(
-                DefaultSubtitleParserFactory()
-            ),
-            FragmentedMp4Extractor(
-                DefaultSubtitleParserFactory()
-            ),
-            androidx.media3.extractor.mp4.Mp4Extractor(
-                DefaultSubtitleParserFactory()
-            ),
-        )
-    }
-
     private fun createRendersFactory() = object : DefaultRenderersFactory(this) {
         override fun buildAudioSink(
             context: Context,
@@ -1817,47 +1686,12 @@ class PlayerService : InvincibleService(),
         val mediaSession
             get() = this@PlayerService.mediaSession
 
-        val sleepTimerMillisLeft: StateFlow<Long?>?
-            get() = timerJob?.millisLeft
-
         private var radioJob: Job? = null
 
         var isLoadingRadio by mutableStateOf(false)
             private set
 
         //var mediaItems = mutableListOf<MediaItem>()
-
-        fun setBitmapListener(listener: ((Bitmap?) -> Unit)?) {
-            bitmapProvider.listener = listener
-        }
-
-        fun startSleepTimer(delayMillis: Long) {
-            timerJob?.cancel()
-
-
-
-            timerJob = coroutineScope.timer(delayMillis) {
-                val notification = NotificationCompat
-                    .Builder(this@PlayerService, SleepTimerNotificationChannelId)
-                    .setContentTitle(getString(R.string.sleep_timer_ended))
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setAutoCancel(true)
-                    .setOnlyAlertOnce(true)
-                    .setShowWhen(true)
-                    .setSmallIcon(R.drawable.app_icon)
-                    .build()
-
-                notificationManager?.notify(SleepTimerNotificationId, notification)
-
-                stopSelf()
-                exitProcess(0)
-            }
-        }
-
-        fun cancelSleepTimer() {
-            timerJob?.cancel()
-            timerJob = null
-        }
 
         @UnstableApi
         fun setupRadio(endpoint: NavigationEndpoint.Endpoint.Watch?) =
@@ -1866,81 +1700,6 @@ class PlayerService : InvincibleService(),
         @UnstableApi
         fun playRadio(endpoint: NavigationEndpoint.Endpoint.Watch?) =
             startRadio(endpoint = endpoint, justAdd = false)
-
-        @UnstableApi
-        fun getRadioMediaItems(endpoint: NavigationEndpoint.Endpoint.Watch?): List<MediaItem> {
-            YouTubeRadio(
-                endpoint?.videoId,
-                endpoint?.playlistId,
-                endpoint?.playlistSetVideoId,
-                endpoint?.params,
-                false,
-                applicationContext
-            ).let {
-                var mediaItems = listOf<MediaItem>()
-                runBlocking {
-                    mediaItems = it.process()
-                    return@runBlocking mediaItems
-                }
-                return mediaItems
-            }
-        }
-
-        @UnstableApi
-        fun getRadioSongs(endpoint: NavigationEndpoint.Endpoint.Watch?): List<Song> {
-            YouTubeRadio(
-                endpoint?.videoId,
-                endpoint?.playlistId,
-                endpoint?.playlistSetVideoId,
-                endpoint?.params,
-                false,
-                applicationContext
-            ).let {
-                var songs = listOf<Song>()
-                runBlocking {
-                    songs = it.process().map(MediaItem::asSong)
-                    return@runBlocking songs
-                }
-                return songs
-            }
-        }
-
-        @UnstableApi
-        fun setRadioMediaItems(endpoint: NavigationEndpoint.Endpoint.Watch?) {
-            radioJob?.cancel()
-            radio = null
-            YouTubeRadio(
-                endpoint?.videoId,
-                endpoint?.playlistId,
-                endpoint?.playlistSetVideoId,
-                endpoint?.params,
-                false,
-                applicationContext
-            ).let {
-                isLoadingRadio = true
-                coroutineScope.launch(Dispatchers.Main) {
-                    player.clearMediaItems()
-                    player.addMediaItems(it.process())
-                    //Log.d("mediaItem", "binder ${it.process()}")
-                }
-                radio = it
-                isLoadingRadio = false
-                //Log.d("mediaItem", "binder $mediaItems")
-                //return mediaItems
-                /*
-                isLoadingRadio = true
-                radioJob = coroutineScope.launch(Dispatchers.Main) {
-                    if (justAdd) {
-                        player.addMediaItems(it.process().drop(1))
-                    } else {
-                        player.forcePlayFromBeginning(it.process())
-                    }
-                    radio = it
-                    isLoadingRadio = false
-                }
-                 */
-            }
-        }
 
 
         @UnstableApi
@@ -1992,15 +1751,6 @@ class PlayerService : InvincibleService(),
                     fromMusicShelfRendererContent = Innertube.SongItem.Companion::from
                 )?.getOrNull()?.items?.firstOrNull()?.info?.endpoint?.let { playRadio(it) }
             }
-        }
-
-        /**
-         * This method should ONLY be called when the application (sc. activity) is in the foreground!
-         */
-        fun restartForegroundOrStop() {
-            player.pause()
-            isInvincibilityEnabled = false
-            stopSelf()
         }
 
         @ExperimentalCoroutinesApi
@@ -2068,9 +1818,6 @@ class PlayerService : InvincibleService(),
                 }
             }
         }
-
-        fun isCached(song: SongEntity) =
-            song.contentLength?.let { cache.isCached(song.song.id, 0L, it) } ?: false
 
     }
 
@@ -2296,7 +2043,6 @@ class PlayerService : InvincibleService(),
         const val SleepTimerNotificationChannelId = "sleep_timer_channel_id"
 
         val PlayerErrorsToReload = arrayOf(416,4003)
-        val PlayerErrorsToSkip = arrayOf(2000)
 
     }
 

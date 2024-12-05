@@ -857,19 +857,6 @@ interface Database {
             "ORDER BY A.bookmarkedAt DESC")
     fun artistsWithSongsSavedByRowIdDesc(): Flow<List<Artist>>
 
-    fun artistsWithSongsSaved(sortBy: ArtistSortBy, sortOrder: SortOrder): Flow<List<Artist>> {
-        return when (sortBy) {
-            ArtistSortBy.Name -> when (sortOrder) {
-                SortOrder.Ascending -> artistsWithSongsSavedByNameAsc()
-                SortOrder.Descending -> artistsWithSongsSavedByNameDesc()
-            }
-            ArtistSortBy.DateAdded -> when (sortOrder) {
-                SortOrder.Ascending -> artistsWithSongsSavedByRowIdAsc()
-                SortOrder.Descending -> artistsWithSongsSavedByRowIdDesc()
-            }
-        }
-    }
-
     @Query("SELECT * FROM Album WHERE id = :id")
     fun album(id: String): Flow<Album?>
 
@@ -1158,35 +1145,6 @@ interface Database {
             "ORDER BY totalDuration DESC" )
     @RewriteQueriesToDropUnusedColumns
     fun albumsWithSongsSavedByTotalDurationDesc(): Flow<List<Album>>
-
-    fun albumsWithSongsSaved(sortBy: AlbumSortBy, sortOrder: SortOrder): Flow<List<Album>> {
-        return when (sortBy) {
-            AlbumSortBy.Title -> when (sortOrder) {
-                SortOrder.Ascending -> albumsWithSongsSavedByTitleAsc()
-                SortOrder.Descending -> albumsWithSongsSavedByTitleDesc()
-            }
-            AlbumSortBy.Year -> when (sortOrder) {
-                SortOrder.Ascending -> albumsWithSongsSavedByYearAsc()
-                SortOrder.Descending -> albumsWithSongsSavedByYearDesc()
-            }
-            AlbumSortBy.DateAdded -> when (sortOrder) {
-                SortOrder.Ascending -> albumsWithSongsSavedByRowIdAsc()
-                SortOrder.Descending -> albumsWithSongsSavedByRowIdDesc()
-            }
-            AlbumSortBy.Artist -> when (sortOrder) {
-                SortOrder.Ascending -> albumsWithSongsSavedByArtistAsc()
-                SortOrder.Descending -> albumsWithSongsSavedByArtistDesc()
-            }
-            AlbumSortBy.Songs -> when (sortOrder) {
-                SortOrder.Ascending -> albumsWithSongsSavedBySongsCountAsc()
-                SortOrder.Descending -> albumsWithSongsSavedBySongsCountDesc()
-            }
-            AlbumSortBy.Duration -> when (sortOrder) {
-                SortOrder.Ascending -> albumsWithSongsSavedByTotalDurationAsc()
-                SortOrder.Descending -> albumsWithSongsSavedByTotalDurationDesc()
-            }
-        }
-    }
 
     @Query("UPDATE Song SET totalPlayTimeMs = 0 WHERE id = :id")
     fun resetTotalPlayTimeMs(id: String)

@@ -3,10 +3,7 @@ package it.fast4x.rimusic.utils
 import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
-import java.util.Date
-import java.util.Locale
 import kotlin.system.exitProcess
 
 class CaptureCrash (private val LOG_PATH: String) : Thread.UncaughtExceptionHandler {
@@ -53,8 +50,4 @@ class CaptureCrash (private val LOG_PATH: String) : Thread.UncaughtExceptionHand
         printWriter.print("\n")
     }
 
-    fun getCurrentDate(): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return sdf.format(Date())
-    }
 }
