@@ -215,7 +215,6 @@ import it.fast4x.rimusic.utils.queueTypeKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.resize
 import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.setQueueLoopState
 import it.fast4x.rimusic.utils.shouldBePlaying
 import it.fast4x.rimusic.utils.showButtonPlayerAddToPlaylistKey
 import it.fast4x.rimusic.utils.showButtonPlayerArrowKey
@@ -1563,7 +1562,7 @@ fun Player(
                                 icon = queueLoopType.iconId,
                                 color = colorPalette().accent,
                                 onClick = {
-                                    queueLoopType = setQueueLoopState(queueLoopType)
+                                    queueLoopType = queueLoopType.next()
                                     if (effectRotationEnabled) isRotated = !isRotated
                                 },
                                 modifier = Modifier

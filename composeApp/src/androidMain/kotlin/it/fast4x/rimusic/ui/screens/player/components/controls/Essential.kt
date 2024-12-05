@@ -84,7 +84,6 @@ import it.fast4x.rimusic.utils.queueLoopTypeKey
 import it.fast4x.rimusic.utils.rememberPreference
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.utils.setLikeState
-import it.fast4x.rimusic.utils.setQueueLoopState
 import it.fast4x.rimusic.utils.showthumbnailKey
 import it.fast4x.rimusic.utils.textCopyToClipboard
 import it.fast4x.rimusic.utils.textoutlineKey
@@ -557,7 +556,7 @@ fun ControlsEssential(
         icon = queueLoopType.iconId,
         color = colorPalette().text,
         onClick = {
-            queueLoopType = setQueueLoopState(queueLoopType)
+            queueLoopType = queueLoopType.next()
         },
         modifier = Modifier
             //.padding(10.dp)
