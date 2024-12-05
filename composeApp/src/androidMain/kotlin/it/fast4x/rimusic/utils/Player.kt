@@ -19,7 +19,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.ArrayDeque
 
 fun Player.isNowPlaying(mediaId: String): Boolean {
     return mediaId == currentMediaItem?.mediaId
@@ -109,9 +108,6 @@ fun Player.forceSeekToPrevious() {
     }
 }
 
-fun Player.forceSeekToNext() =
-    if (hasNextMediaItem()) seekToNext() else seekTo(0, C.TIME_UNSET)
-
 fun Player.playNext() {
     seekToNextMediaItem()
     //seekToNext()
@@ -195,13 +191,6 @@ fun Player.findNextMediaItemById(mediaId: String): MediaItem? {
 }
 */
 
-fun Player.findNextMediaItemById(mediaId: String): MediaItem? = runCatching {
-    for (i in currentMediaItemIndex until mediaItemCount) {
-        if (getMediaItemAt(i).mediaId == mediaId) return getMediaItemAt(i)
-    }
-    return null
-}.getOrNull()
-
 fun Player.findMediaItemIndexById(mediaId: String): Int {
     for (i in currentMediaItemIndex until mediaItemCount) {
         if (getMediaItemAt(i).mediaId == mediaId) {
@@ -272,28 +261,6 @@ val Player.mediaItems: List<MediaItem>
         override fun get(index: Int): MediaItem = getMediaItemAt(index)
     }
 
-fun Player.getCurrentQueueIndex(): Int {
-    if (currentTimeline.isEmpty) {
-        return -1
-    }
-    var index = 0
-    var currentMediaItemIndex = currentMediaItemIndex
-    while (currentMediaItemIndex != C.INDEX_UNSET) {
-        currentMediaItemIndex = currentTimeline.getPreviousWindowIndex(currentMediaItemIndex, REPEAT_MODE_OFF, shuffleModeEnabled)
-        if (currentMediaItemIndex != C.INDEX_UNSET) {
-            index++
-        }
-    }
-    return index
-}
-
-fun Player.togglePlayPause() {
-    if (!playWhenReady && playbackState == Player.STATE_IDLE) {
-        prepare()
-    }
-    playWhenReady = !playWhenReady
-}
-
 fun Player.toggleRepeatMode() {
     repeatMode = when (repeatMode) {
         REPEAT_MODE_OFF -> REPEAT_MODE_ALL
@@ -307,33 +274,3 @@ fun Player.toggleShuffleMode() {
     shuffleModeEnabled = !shuffleModeEnabled
 }
 
-fun Player.getQueueWindows(): List<Timeline.Window> {
-    val timeline = currentTimeline
-    if (timeline.isEmpty) {
-        return emptyList()
-    }
-    val queue = ArrayDeque<Timeline.Window>()
-    val queueSize = timeline.windowCount
-
-    val currentMediaItemIndex: Int = currentMediaItemIndex
-    queue.add(timeline.getWindow(currentMediaItemIndex, Timeline.Window()))
-
-    var firstMediaItemIndex = currentMediaItemIndex
-    var lastMediaItemIndex = currentMediaItemIndex
-    val shuffleModeEnabled = shuffleModeEnabled
-    while ((firstMediaItemIndex != C.INDEX_UNSET || lastMediaItemIndex != C.INDEX_UNSET) && queue.size < queueSize) {
-        if (lastMediaItemIndex != C.INDEX_UNSET) {
-            lastMediaItemIndex = timeline.getNextWindowIndex(lastMediaItemIndex, REPEAT_MODE_OFF, shuffleModeEnabled)
-            if (lastMediaItemIndex != C.INDEX_UNSET) {
-                queue.add(timeline.getWindow(lastMediaItemIndex, Timeline.Window()))
-            }
-        }
-        if (firstMediaItemIndex != C.INDEX_UNSET && queue.size < queueSize) {
-            firstMediaItemIndex = timeline.getPreviousWindowIndex(firstMediaItemIndex, REPEAT_MODE_OFF, shuffleModeEnabled)
-            if (firstMediaItemIndex != C.INDEX_UNSET) {
-                queue.addFirst(timeline.getWindow(firstMediaItemIndex, Timeline.Window()))
-            }
-        }
-    }
-    return queue.toList()
-}

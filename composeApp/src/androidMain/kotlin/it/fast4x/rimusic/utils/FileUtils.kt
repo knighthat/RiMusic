@@ -2,8 +2,6 @@ package it.fast4x.rimusic.utils
 
 import android.content.Context
 import android.net.Uri
-import android.os.Build
-import androidx.annotation.RequiresApi
 import it.fast4x.rimusic.R
 import it.fast4x.rimusic.enums.LogType
 import it.fast4x.rimusic.enums.PopupType
@@ -13,35 +11,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.StandardCopyOption
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun moveDir(src: Path, dest: Path): Boolean {
-    if (src.toFile().isDirectory) {
-        for (file in src.toFile().listFiles()!!) {
-            moveDir(file.toPath(), dest.resolve(src.relativize(file.toPath())))
-        }
-    }
-    return try {
-        Files.move(src, dest, StandardCopyOption.REPLACE_EXISTING)
-        true
-    } catch (e: IOException) {
-        Timber.e(e)
-        false
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun copyDir(src: Path, dest: Path) {
-    val sources = Files.walk(src).toList()
-    for (source in sources) {
-        Files.copy(source, dest.resolve(src.relativize(source)),
-            StandardCopyOption.REPLACE_EXISTING
-        )
-    }
-}
 
 fun saveImageToInternalStorage(context: Context, imageUri: Uri, dirPath: String, thumbnailName: String): Uri? {
     try {

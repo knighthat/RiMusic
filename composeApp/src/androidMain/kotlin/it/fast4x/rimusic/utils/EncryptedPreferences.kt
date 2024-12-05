@@ -124,16 +124,6 @@ fun rememberEncryptedPreference(key: String, defaultValue: String): MutableState
     }
 }
 
-@Composable
-inline fun <reified T : Enum<T>> rememberEncryptedPreference(key: String, defaultValue: T): MutableState<T> {
-    val context = LocalContext.current
-    return remember {
-        mutableStateEncryptedPreferenceOf(context.encryptedPreferences.getEnum(key, defaultValue)) {
-            context.encryptedPreferences.edit { putEnum(key, it) }
-        }
-    }
-}
-
 inline fun <T> mutableStateEncryptedPreferenceOf(
     value: T,
     crossinline onStructuralInequality: (newValue: T) -> Unit

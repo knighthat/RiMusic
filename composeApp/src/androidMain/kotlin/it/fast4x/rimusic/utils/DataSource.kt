@@ -7,7 +7,6 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.DefaultDataSource
-import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.datasource.HttpDataSource.InvalidResponseCodeException
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import it.fast4x.innertube.utils.ProxyPreferences
@@ -59,21 +58,6 @@ class CatchingDataSourceFactory(private val parent: DataSource.Factory) : DataSo
 
     override fun createDataSource() = Source(parent.createDataSource())
 }
-
-@OptIn(UnstableApi::class)
-fun DataSource.Factory.handleRangeErrors(): DataSource.Factory = RangeHandlerDataSourceFactory(this)
-
-@OptIn(UnstableApi::class)
-fun DataSource.Factory.handleCatchingErrors(): DataSource.Factory = CatchingDataSourceFactory(this)
-
-val Context.defaultDataSourceFactory
-    @OptIn(UnstableApi::class)
-    get() = DefaultDataSource.Factory(
-        this,
-        DefaultHttpDataSource.Factory().setConnectTimeoutMs(16000)
-            .setReadTimeoutMs(8000)
-            .setUserAgent("Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0")
-    )
 
 val Context.okHttpDataSourceFactory
     @OptIn(UnstableApi::class)

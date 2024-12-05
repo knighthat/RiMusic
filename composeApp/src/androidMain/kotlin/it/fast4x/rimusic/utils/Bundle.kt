@@ -235,25 +235,16 @@ class SongBundleAccessor(val extras: Bundle = Bundle()) : BundleAccessor {
     var isFromPersistentQueue by extras.boolean
 }
 
-inline val Bundle.songBundle get() = SongBundleAccessor(this)
-
 class ActivityIntentBundleAccessor(val extras: Bundle = Bundle()) : BundleAccessor {
-    companion object {
-        fun bundle(block: ActivityIntentBundleAccessor.() -> Unit) = ActivityIntentBundleAccessor().apply(block).extras
-    }
 
     var query by extras.string(SearchManager.QUERY)
     var text by extras.string(Intent.EXTRA_TEXT)
-    var mediaFocus by extras.string(MediaStore.EXTRA_MEDIA_FOCUS)
 
     var album by extras.string(MediaStore.EXTRA_MEDIA_ALBUM)
     var artist by extras.string(MediaStore.EXTRA_MEDIA_ARTIST)
-    var genre by extras.string("android.intent.extra.genre")
     var playlist by extras.string("android.intent.extra.playlist")
     var title by extras.string(MediaStore.EXTRA_MEDIA_TITLE)
 }
-
-inline val Bundle.activityIntentBundle get() = ActivityIntentBundleAccessor(this)
 
 @Retention(AnnotationRetention.SOURCE)
 @Target(
@@ -290,5 +281,3 @@ class EqualizerIntentBundleAccessor(val extras: Bundle = Bundle()) : BundleAcces
         @ContentType
         set
 }
-
-inline val Bundle.equalizerIntentBundle get() = EqualizerIntentBundleAccessor(this)

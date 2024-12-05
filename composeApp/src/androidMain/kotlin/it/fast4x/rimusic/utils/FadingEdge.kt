@@ -103,16 +103,6 @@ fun Modifier.fadingEdge(
         }
     }
 
-fun Modifier.fadingEdge(
-    horizontal: Dp? = null,
-    vertical: Dp? = null,
-) = fadingEdge(
-    left = horizontal,
-    right = horizontal,
-    top = vertical,
-    bottom = vertical
-)
-
 fun Modifier.VerticalfadingEdge2(fade: Float) = this
     .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
     .drawWithContent {

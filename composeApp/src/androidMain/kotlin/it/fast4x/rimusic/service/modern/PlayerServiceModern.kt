@@ -45,7 +45,6 @@ import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_IDLE
 import androidx.media3.common.Timeline
 import androidx.media3.common.audio.SonicAudioProcessor
-import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.database.StandaloneDatabaseProvider
 import androidx.media3.datasource.DataSpec
@@ -79,11 +78,7 @@ import androidx.media3.session.MediaStyleNotificationHelper
 import androidx.media3.session.SessionToken
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.MoreExecutors
-import it.fast4x.innertube.Innertube
 import it.fast4x.innertube.models.NavigationEndpoint
-import it.fast4x.innertube.models.bodies.SearchBody
-import it.fast4x.innertube.requests.searchPage
-import it.fast4x.innertube.utils.from
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.MainActivity
 import it.fast4x.rimusic.R
@@ -101,11 +96,8 @@ import it.fast4x.rimusic.extensions.audiovolume.AudioVolumeObserver
 import it.fast4x.rimusic.extensions.audiovolume.OnAudioVolumeChangedListener
 import it.fast4x.rimusic.extensions.discord.sendDiscordPresence
 import it.fast4x.rimusic.models.Event
-import it.fast4x.rimusic.models.PersistentQueue
-import it.fast4x.rimusic.models.PersistentSong
 import it.fast4x.rimusic.models.QueuedMediaItem
 import it.fast4x.rimusic.models.Song
-import it.fast4x.rimusic.models.asMediaItem
 import it.fast4x.rimusic.service.BitmapProvider
 import it.fast4x.rimusic.service.MyDownloadHelper
 import it.fast4x.rimusic.service.MyDownloadService
@@ -119,7 +111,6 @@ import it.fast4x.rimusic.utils.activityPendingIntent
 import it.fast4x.rimusic.utils.audioQualityFormatKey
 import it.fast4x.rimusic.utils.autoLoadSongsInQueueKey
 import it.fast4x.rimusic.utils.closebackgroundPlayerKey
-import it.fast4x.rimusic.utils.collect
 import it.fast4x.rimusic.utils.discordPersonalAccessTokenKey
 import it.fast4x.rimusic.utils.discoverKey
 import it.fast4x.rimusic.utils.enableWallpaperKey
@@ -190,8 +181,6 @@ import kotlinx.coroutines.withContext
 import me.knighthat.appContext
 import timber.log.Timber
 import java.io.IOException
-import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
@@ -248,11 +237,6 @@ class PlayerServiceModern : MediaLibraryService(),
     private val currentSong = currentMediaItem.flatMapLatest { mediaItem ->
         Database.song(mediaItem?.mediaId)
     }.stateIn(coroutineScope, SharingStarted.Lazily, null)
-
-    @kotlin.OptIn(ExperimentalCoroutinesApi::class)
-    private val currentFormat = currentMediaItem.flatMapLatest { mediaItem ->
-        mediaItem?.mediaId?.let { Database.format(it) }!!
-    }
 
     var currentSongStateDownload = MutableStateFlow(Download.STATE_STOPPED)
 
@@ -497,17 +481,19 @@ class PlayerServiceModern : MediaLibraryService(),
         )
 
         // Ensure that song is updated
-        currentSong.debounce(1000).collect(coroutineScope) { song ->
-            println("PlayerServiceModern onCreate currentSong $song")
-            updateDownloadedState()
-            println("PlayerServiceModern onCreate currentSongIsDownloaded ${currentSongStateDownload.value}")
+        coroutineScope.launch {
+            currentSong.debounce(1000).collect { song ->
+                println("PlayerServiceModern onCreate currentSong $song")
+                updateDownloadedState()
+                println("PlayerServiceModern onCreate currentSongIsDownloaded ${currentSongStateDownload.value}")
 
-            updateDefaultNotification()
-            withContext(Dispatchers.Main) {
-                if (song != null) {
-                    updateDiscordPresence()
+                updateDefaultNotification()
+                withContext(Dispatchers.Main) {
+                    if (song != null) {
+                        updateDiscordPresence()
+                    }
+                    updateWidgets()
                 }
-                updateWidgets()
             }
         }
 
@@ -1419,84 +1405,6 @@ class PlayerServiceModern : MediaLibraryService(),
 
     }
 
-    @ExperimentalCoroutinesApi
-    @FlowPreview
-    @UnstableApi
-    private fun maybeRestoreFromDiskPlayerQueue() {
-        //if (!isPersistentQueueEnabled) return
-        //Log.d("mediaItem", "QueuePersistentEnabled Restore Initial")
-
-        runCatching {
-            filesDir.resolve("persistentQueue.data").inputStream().use { fis ->
-                ObjectInputStream(fis).use { oos ->
-                    oos.readObject() as PersistentQueue
-                }
-            }
-        }.onSuccess { queue ->
-            //Log.d("mediaItem", "QueuePersistentEnabled Restored queue $queue")
-            //Log.d("mediaItem", "QueuePersistentEnabled Restored ${queue.songMediaItems.size}")
-            runBlocking(Dispatchers.Main) {
-                player.setMediaItems(
-                    queue.songMediaItems.map { song ->
-                        song.asMediaItem.buildUpon()
-                            .setUri(song.asMediaItem.mediaId)
-                            .setCustomCacheKey(song.asMediaItem.mediaId)
-                            .build().apply {
-                                mediaMetadata.extras?.putBoolean("isFromPersistentQueue", true)
-                            }
-                    },
-                    queue.mediaItemIndex,
-                    queue.position
-                )
-
-                player.prepare()
-
-            }
-
-        }.onFailure {
-            //it.printStackTrace()
-            Timber.e(it.stackTraceToString())
-        }
-
-        //Log.d("mediaItem", "QueuePersistentEnabled Restored ${player.currentTimeline.mediaItems.size}")
-
-    }
-
-    private fun maybeSaveToDiskPlayerQueue() {
-
-        //if (!isPersistentQueueEnabled) return
-        //Log.d("mediaItem", "QueuePersistentEnabled Save ${player.currentTimeline.mediaItems.size}")
-
-        val persistentQueue = PersistentQueue(
-            title = "title",
-            songMediaItems = player.currentTimeline.mediaItems.map {
-                PersistentSong(
-                    id = it.mediaId,
-                    title = it.mediaMetadata.title.toString(),
-                    durationText = it.mediaMetadata.extras?.getString("durationText").toString(),
-                    thumbnailUrl = it.mediaMetadata.artworkUri.toString()
-                )
-            },
-            mediaItemIndex = player.currentMediaItemIndex,
-            position = player.currentPosition
-        )
-
-        runCatching {
-            filesDir.resolve("persistentQueue.data").outputStream().use { fos ->
-                ObjectOutputStream(fos).use { oos ->
-                    oos.writeObject(persistentQueue)
-                }
-            }
-        }.onFailure {
-            //it.printStackTrace()
-            Timber.e(it.stackTraceToString())
-
-        }.onSuccess {
-            Log.d("mediaItem", "QueuePersistentEnabled Saved $persistentQueue")
-        }
-
-    }
-
     fun updateDownloadedState() {
         if (currentSong.value == null) return
         val mediaId = currentSong.value!!.id
@@ -1823,13 +1731,11 @@ class PlayerServiceModern : MediaLibraryService(),
 
     companion object {
         const val NotificationId = 1001
-        const val NotificationChannelId = "default_channel_id"
 
         const val SleepTimerNotificationId = 1002
         const val SleepTimerNotificationChannelId = "sleep_timer_channel_id"
 
         val PlayerErrorsToReload = arrayOf(416, 4003)
-        val PlayerErrorsToSkip = arrayOf(2000)
 
         const val ROOT = "root"
         const val SONG = "song"
