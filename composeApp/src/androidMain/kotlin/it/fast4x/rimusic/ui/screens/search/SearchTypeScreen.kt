@@ -54,7 +54,7 @@ fun SearchTypeScreen(
     val initialTextInput = ""
 
     val (tabIndex, onTabChanged) = remember {
-        mutableIntStateOf(searchType.index)
+        mutableIntStateOf( searchType.ordinal )
     }
 
     val (textFieldValue, onTextFieldValueChanged) = rememberSaveable(
