@@ -571,7 +571,7 @@ class PlayerServiceModern : MediaLibraryService(),
         val minTimeForEvent =
             preferences.getEnum(exoPlayerMinTimeForEventKey, ExoPlayerMinTimeForEvent.`20s`)
 
-        if (totalPlayTimeMs > minTimeForEvent.ms) {
+        if ( totalPlayTimeMs > minTimeForEvent.asMillis ) {
             Database.asyncTransaction {
                 try {
                     insert(
@@ -735,11 +735,11 @@ class PlayerServiceModern : MediaLibraryService(),
         val duration = preferences.getEnum(
             playbackFadeAudioDurationKey,
             DurationInMilliseconds.Disabled
-        ).milliSeconds
+        ).asMillis
         if (isPlaying && !fadeDisabled)
             startFadeAnimator(
                 player = binder.player,
-                duration = duration,
+                duration = duration.toInt(),
                 fadeIn = true
             )
 

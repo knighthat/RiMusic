@@ -468,7 +468,7 @@ fun HomeSongs(
                     try {
                         songs.song.durationText?.let {
                             durationTextToMillis(it)
-                        }!! < excludeSongWithDurationLimit.minutesInMilliSeconds
+                        }!! < excludeSongWithDurationLimit.asMillis
                     } catch (e: Exception) {
                         false
                     }
