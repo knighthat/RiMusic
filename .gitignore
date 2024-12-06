@@ -11,7 +11,7 @@
 **build/
 
 ###      BINS
-*/bin/
+**bin/
 
 ###      ANDROID
 **APK keystore/
