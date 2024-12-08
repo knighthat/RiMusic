@@ -24,7 +24,9 @@ android {
     }
 
     buildTypes {
-        create("kbuild") {
+        create("full") {
+        }
+        create( "minified" ) {
         }
     }
 
