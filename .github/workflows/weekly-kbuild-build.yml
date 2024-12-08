@@ -114,7 +114,7 @@ jobs:
         tag_name: "weekly-kbuild"
         body: |
           <div align="center">
-            <img src="https://raw.githubusercontent.com/knighthat/RiMusic/refs/heads/master/assets/design/latest/app_logo.svg" width="300" height="100" />
+            <img src="https://raw.githubusercontent.com/knighthat/RiMusic/refs/heads/kbuild/assets/design/latest/app_logo.svg" width="300" height="100" />
             <p><b>RiMusic</b> KBuild</p>
             <p>Custom build by @knighthat</p>
           </div>
