@@ -112,9 +112,9 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import dev.chrisbanes.haze.HazeDefaults
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.haze
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.hazeChild
 import it.fast4x.rimusic.Database
 import it.fast4x.rimusic.LocalPlayerServiceBinder
@@ -1798,8 +1798,14 @@ fun Player(
         val topPadding by rememberPreference(topPaddingKey, true)
 
         if (isLandscape) {
+            val hazeStyle = HazeStyle(
+                backgroundColor = Color.Transparent,
+                tint = HazeTint( Color.Black.copy(0.5f) ),
+                blurRadius = 8.dp
+            )
+
          Box(
-             modifier = Modifier.haze(state = hazeState, style = HazeDefaults.style(backgroundColor = Color.Transparent, tint = Color.Black.copy(0.5f),blurRadius = 8.dp))
+             modifier = Modifier.hazeChild( hazeState, hazeStyle )
          ){
              if (playerBackgroundColors == PlayerBackgroundColors.BlurredCoverColor && playerType == PlayerType.Modern && !showthumbnail) {
                  val fling = PagerDefaults.flingBehavior(
@@ -2336,8 +2342,14 @@ fun Player(
             }
          }
         } else {
+            val hazeStyle = HazeStyle(
+                backgroundColor = Color.Transparent,
+                tint = HazeTint( Color.Black.copy(0.5f) ),
+                blurRadius = 8.dp
+            )
+
            Box(
-               modifier = Modifier.haze(state = hazeState, style = HazeDefaults.style(backgroundColor = Color.Transparent, tint = Color.Black.copy(0.5f),blurRadius = 8.dp))
+               modifier = Modifier.hazeChild( hazeState, hazeStyle )
            ) {
                if (playerBackgroundColors == PlayerBackgroundColors.BlurredCoverColor && playerType == PlayerType.Modern && !showthumbnail) {
                     val fling = PagerDefaults.flingBehavior(
