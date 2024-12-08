@@ -80,4 +80,7 @@
 # Keep classes with @JsonAdapter annotation
 -keep,allowobfuscation,allowoptimization @com.google.gson.annotations.JsonAdapter class *
 
+# Disable code obfuscation
+-dontobfuscate
+
 ##---------------End: proguard configuration for Gson  ----------

@@ -32,7 +32,7 @@ jobs:
       # Output of "October 2 2024" will be "20241002"
       run: echo "::set-output name=date::$(date +'%Y%m%d')"
 
-  build-apk:
+  build-full-variant:
     needs: setup
     runs-on: ubuntu-latest
 
@@ -47,16 +47,39 @@ jobs:
         cache: gradle
 
     - name: Build with Gradle
-      run: ./gradlew assembleKbuild
+      run: ./gradlew assembleFull
 
     - name: Upload built artifact for next job
       uses: actions/upload-artifact@v4.4.1
       with:
-        name: unsigned-apks
-        path: composeApp/build/outputs/apk/full/kbuild/RiMusic-*-unsigned.apk
+        name: unsigned-full-apk
+        path: composeApp/build/outputs/apk/full/RiMusic-kbuild-full-unsigned.apk
+
+  build-minified-variant:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.2.1
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4.4.0
+        with:
+          java-version: "21"
+          distribution: "corretto"
+          cache: gradle
+
+      - name: Build with Gradle
+        run: ./gradlew assembleMinified
+
+      - name: Upload built artifact for next job
+        uses: actions/upload-artifact@v4.4.1
+        with:
+          name: unsigned-minified-apk
+          path: composeApp/build/outputs/apk/minified/RiMusic-kbuild-minified-unsigned.apk
 
   sign-apk:
-    needs: build-apk
+    needs: [build-full-variant, build-minified-variant]
     runs-on: ubuntu-latest
 
     steps:
@@ -66,13 +89,14 @@ jobs:
     - name: Retrieve APK
       uses: actions/download-artifact@v4.1.8
       with:
-        name: unsigned-apks
         path: unsigned
 
     - name: Sign APK
       uses: Tlaster/android-sign@v1.2.2
       with:
-        releaseDirectory: unsigned
+        releaseDirectory: |
+          unsigned/unsigned-minified-apk
+          unsigned/unsigned-full-apk
 
         signingKeyBase64: "${{ secrets.KEYSTORE_IN_BASE64 }}"
         keyStorePassword: "${{ secrets.KEYSTORE_PASSWD }}"
@@ -97,7 +121,7 @@ jobs:
         path: build/kbuild/signed/RiMusic-*.apk
 
   upload-to-release:
-    needs: [setup, build-apk, sign-apk]
+    needs: sign-apk
     runs-on: ubuntu-latest
 
     steps:
@@ -162,6 +186,15 @@ jobs:
                   <a href="https://developer.android.com/tools/apksigner#options-verify" target="_blank" rel="noopener noreferrer">apksigner</a> from AndroidSDK
                 </li>
               </ol>
+            </blockquote>
+          </details>
+          <details>
+          <summary>Q3: What's the difference between <quote>full</quote> and <quote>minified</quote>?</summary>
+            <blockquote>
+              The difference lies in their sizes.<br>
+              "minified" version has its unused code/resources removed before compiling.<br>
+              But it isn't perfect, some users experience instability on minified version, so I also
+              include "full" version to help those to continue using the app
             </blockquote>
           </details>
 
