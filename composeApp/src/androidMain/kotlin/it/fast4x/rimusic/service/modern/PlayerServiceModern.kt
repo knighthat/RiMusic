@@ -23,7 +23,6 @@ import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.media.audiofx.AudioEffect
 import android.media.audiofx.LoudnessEnhancer
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.OptIn
@@ -76,7 +75,6 @@ import androidx.media3.session.MediaNotification
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaStyleNotificationHelper
 import androidx.media3.session.SessionToken
-import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.MoreExecutors
 import it.fast4x.innertube.models.NavigationEndpoint
 import it.fast4x.rimusic.Database
@@ -111,6 +109,7 @@ import it.fast4x.rimusic.utils.YouTubeRadio
 import it.fast4x.rimusic.utils.activityPendingIntent
 import it.fast4x.rimusic.utils.audioQualityFormatKey
 import it.fast4x.rimusic.utils.autoLoadSongsInQueueKey
+import it.fast4x.rimusic.utils.broadCastPendingIntent
 import it.fast4x.rimusic.utils.closebackgroundPlayerKey
 import it.fast4x.rimusic.utils.discordPersonalAccessTokenKey
 import it.fast4x.rimusic.utils.discoverKey
@@ -1147,7 +1146,7 @@ class PlayerServiceModern : MediaLibraryService(),
                             player.repeatMode,
                             player.shuffleModeEnabled
                         ),
-                        it.displayName,
+                        appContext().resources.getString( it.textId ),
                         it.pendingIntent
                     )
                 }
@@ -1165,7 +1164,7 @@ class PlayerServiceModern : MediaLibraryService(),
                             player.repeatMode,
                             player.shuffleModeEnabled
                         ),
-                        it.displayName,
+                        appContext().resources.getString( it.textId ),
                         it.pendingIntent
                     )
                 }
@@ -1183,7 +1182,7 @@ class PlayerServiceModern : MediaLibraryService(),
                             player.repeatMode,
                             player.shuffleModeEnabled
                         ),
-                        it.displayName,
+                        appContext().resources.getString( it.textId ),
                         it.pendingIntent
                     )
                 }
@@ -1617,18 +1616,6 @@ class PlayerServiceModern : MediaLibraryService(),
             radio = null
         }
 
-        fun playFromSearch(query: String) {
-            coroutineScope.launch {
-                Innertube.searchPage(
-                    body = SearchBody(
-                        query = query,
-                        params = Innertube.SearchFilter.Song.value
-                    ),
-                    fromMusicShelfRendererContent = Innertube.SongItem.Companion::from
-                )?.getOrNull()?.items?.firstOrNull()?.info?.endpoint?.let { playRadio(it) }
-            }
-        }
-
         @UnstableApi
         fun setupRadio(endpoint: NavigationEndpoint.Endpoint.Watch?, filterArtist: String = "") =
             startRadio(endpoint = endpoint, justAdd = true, filterArtist = filterArtist)
@@ -1645,14 +1632,14 @@ class PlayerServiceModern : MediaLibraryService(),
             val duration = preferences.getEnum(
                 playbackFadeAudioDurationKey,
                 DurationInMilliseconds.Disabled
-            ).milliSeconds
+            ).asMillis
             if (player.isPlaying) {
                 if (fadeDisabled) {
                     player.pause()
                     onPause()
                 } else {
                     //fadeOut
-                    startFadeAnimator(player, duration, false) {
+                    startFadeAnimator(player, duration.toInt(), false) {
                         player.pause()
                         onPause()
                     }
@@ -1677,7 +1664,9 @@ class PlayerServiceModern : MediaLibraryService(),
                         setLikeState(it.likedAt)
                     )
                 }.also {
-                    currentSong.debounce(1000).collect(coroutineScope) { updateDefaultNotification() }
+                    coroutineScope.launch {
+                        currentSong.debounce(1000).collect{ updateDefaultNotification() }
+                    }
                 }
             }
         }
@@ -1743,6 +1732,7 @@ class PlayerServiceModern : MediaLibraryService(),
 
     companion object {
         const val NotificationId = 1001
+        const val NotificationChannelId = "default_channel_id"
 
         const val SleepTimerNotificationId = 1002
         const val SleepTimerNotificationChannelId = "sleep_timer_channel_id"
