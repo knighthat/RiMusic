@@ -71,7 +71,6 @@ import it.fast4x.rimusic.utils.expandedplayerKey
 import it.fast4x.rimusic.utils.expandedplayertoggleKey
 import it.fast4x.rimusic.utils.fadingedgeKey
 import it.fast4x.rimusic.utils.iconLikeTypeKey
-import it.fast4x.rimusic.utils.isAtLeastAndroid13
 import it.fast4x.rimusic.utils.isAtLeastAndroid7
 import it.fast4x.rimusic.utils.isLandscape
 import it.fast4x.rimusic.utils.isShowingThumbnailInLockscreenKey
@@ -756,7 +755,7 @@ fun AppearanceSettings(
                         title = stringResource(R.string.cover_thumbnail_animation_type),
                         selectedValue = coverThumbnailAnimation,
                         onValueSelected = { coverThumbnailAnimation = it },
-                        valueText = { it.textName },
+                        valueText = { it.text },
                         modifier = Modifier.padding(start = 25.dp)
                     )
                 }
