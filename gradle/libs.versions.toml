@@ -47,7 +47,7 @@ mediaPlayerKMP = "2.0.4"
 navigationKMP = "2.7.0-alpha07" # Do NOT update to "2.8.0-dev1920", it breaks scrolling text
 vlcj = "4.8.3"
 kotlinxCoroutinesSwing = "1.9.0"
-hilt = "2.51.1"
+hilt = "2.53"
 
 [libraries]
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junitJupiterApi" }
