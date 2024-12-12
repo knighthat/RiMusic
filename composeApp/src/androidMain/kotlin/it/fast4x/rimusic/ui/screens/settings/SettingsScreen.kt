@@ -57,6 +57,7 @@ import it.fast4x.rimusic.utils.semiBold
 import me.knighthat.Skeleton
 import me.knighthat.colorPalette
 import me.knighthat.component.IDialog
+import me.knighthat.component.NumberInputDialog
 import me.knighthat.typography
 
 @ExperimentalMaterialApi
@@ -479,21 +480,22 @@ fun SliderSettingsEntry(
     usePadding: Boolean = true
 ) = Column(modifier = modifier) {
 
-    val manualEnterDialog = object: IDialog {
-
+    val manualEnterDialog = object: NumberInputDialog {
         var valueFloat: Float by remember( state ) { mutableFloatStateOf( state ) }
 
+        override val minValue: Double = range.start.toDouble()
+        override val maxValue: Double = range.endInclusive.toDouble()
         override val dialogTitle: String
             @Composable
             get() = stringResource( R.string.enter_the_value )
 
-        override var isActive: Boolean by rememberSaveable { mutableStateOf(false) }
         override var value: String by remember( valueFloat ) {
             mutableStateOf( "%.1f".format( valueFloat ).replace(",", ".") )
         }
+        override var isActive: Boolean by rememberSaveable { mutableStateOf(false) }
 
-        override fun onSet( newValue: String ) {
-            this.valueFloat = newValue.toFloatOrNull() ?: return
+        override fun onSet( newValue: Double ) {
+            this.valueFloat = newValue.toFloat()
             onSlide( this.valueFloat )
             onSlideComplete()
 

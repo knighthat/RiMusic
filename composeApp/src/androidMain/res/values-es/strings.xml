@@ -820,4 +820,6 @@
     <string name="wallpaper">Fondo de pantalla</string>
     <string name="enable_wallpaper">Habilitar fondo de pantalla</string>
     <string name="set_cover_thumbnail_as_wallpaper">Establecer miniatura de la portada como fondo de pantalla</string>
+    <string name="not_a_number">Not a number</string>
+    <string name="number_out_of_range">Must be a number between %f and %f</string>
 </resources>

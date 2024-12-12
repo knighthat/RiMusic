@@ -820,4 +820,6 @@
     <string name="wallpaper">Sfondo</string>
     <string name="enable_wallpaper">Abilita sfondo</string>
     <string name="set_cover_thumbnail_as_wallpaper">Imposta la miniatura della copertina come sfondo</string>
+    <string name="not_a_number">Not a number</string>
+    <string name="number_out_of_range">Must be a number between %f and %f</string>
 </resources>

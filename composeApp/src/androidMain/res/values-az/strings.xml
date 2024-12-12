@@ -820,4 +820,6 @@
     <string name="wallpaper">Divar kağızı</string>
     <string name="enable_wallpaper">Divar kağızın aktiv et</string>
     <string name="set_cover_thumbnail_as_wallpaper">Cild miniatürün divar kağızı kimi yerləşdir</string>
+    <string name="not_a_number">Not a number</string>
+    <string name="number_out_of_range">Must be a number between %f and %f</string>
 </resources>

@@ -820,4 +820,6 @@
     <string name="wallpaper">Taustakuva</string>
     <string name="enable_wallpaper">Käytä taustakuvaa</string>
     <string name="set_cover_thumbnail_as_wallpaper">Aseta kansikuva taustakuvaksi</string>
+    <string name="not_a_number">Not a number</string>
+    <string name="number_out_of_range">Must be a number between %f and %f</string>
 </resources>

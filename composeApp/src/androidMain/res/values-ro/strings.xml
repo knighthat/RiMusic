@@ -820,4 +820,6 @@
     <string name="wallpaper">Imagine de fundal</string>
     <string name="enable_wallpaper">Activează imaginea de fundal</string>
     <string name="set_cover_thumbnail_as_wallpaper">Setează coperta ca fundal</string>
+    <string name="not_a_number">Not a number</string>
+    <string name="number_out_of_range">Must be a number between %f and %f</string>
 </resources>

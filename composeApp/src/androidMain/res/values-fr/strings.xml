@@ -822,4 +822,6 @@
     <string name="wallpaper">Fond d\'écran</string>
     <string name="enable_wallpaper">Activer le fond d\'écran</string>
     <string name="set_cover_thumbnail_as_wallpaper">Définir la miniature de pochette comme fond d\'écran</string>
+    <string name="not_a_number">Not a number</string>
+    <string name="number_out_of_range">Must be a number between %f and %f</string>
 </resources>
