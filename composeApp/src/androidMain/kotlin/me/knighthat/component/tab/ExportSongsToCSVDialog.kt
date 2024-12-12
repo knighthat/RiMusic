@@ -17,7 +17,7 @@ import it.fast4x.rimusic.R
 import it.fast4x.rimusic.enums.PopupType
 import it.fast4x.rimusic.ui.components.themed.SmartMessage
 import me.knighthat.appContext
-import me.knighthat.component.IDialog
+import me.knighthat.component.TextInputDialog
 import me.knighthat.component.tab.toolbar.Descriptive
 import me.knighthat.component.tab.toolbar.MenuIcon
 import java.text.SimpleDateFormat
@@ -28,7 +28,7 @@ class ExportSongsToCSVDialog private constructor(
     private val valueState: MutableState<String>,
     private val activeState: MutableState<Boolean>,
     private val launcher: ManagedActivityResultLauncher<String, Uri?>
-): IDialog, Descriptive, MenuIcon {
+): TextInputDialog, Descriptive, MenuIcon {
     
     companion object {
         @UnstableApi
@@ -93,6 +93,7 @@ class ExportSongsToCSVDialog private constructor(
 
     override val messageId: Int = R.string.export_playlist
     override val iconId: Int = R.drawable.export
+    override val allowEmpty: Boolean = true
     override val dialogTitle: String
         @Composable
         get() = stringResource( R.string.enter_the_playlist_name )

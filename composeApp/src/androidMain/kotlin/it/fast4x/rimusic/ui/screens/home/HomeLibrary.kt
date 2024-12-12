@@ -5,19 +5,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -34,51 +23,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.util.UnstableApi
 import it.fast4x.compose.persist.persistList
-import it.fast4x.rimusic.Database
-import it.fast4x.rimusic.MONTHLY_PREFIX
-import it.fast4x.rimusic.PINNED_PREFIX
-import it.fast4x.rimusic.PIPED_PREFIX
+import it.fast4x.rimusic.*
 import it.fast4x.rimusic.R
-import it.fast4x.rimusic.enums.NavigationBarPosition
-import it.fast4x.rimusic.enums.PlaylistSortBy
-import it.fast4x.rimusic.enums.PlaylistsType
-import it.fast4x.rimusic.enums.UiType
-import it.fast4x.rimusic.models.Playlist
-import it.fast4x.rimusic.models.PlaylistPreview
-import it.fast4x.rimusic.models.Song
-import it.fast4x.rimusic.models.SongPlaylistMap
+import it.fast4x.rimusic.enums.*
+import it.fast4x.rimusic.models.*
 import it.fast4x.rimusic.ui.components.ButtonsRow
 import it.fast4x.rimusic.ui.components.themed.FloatingActionsContainerWithScrollToTop
 import it.fast4x.rimusic.ui.components.themed.HeaderInfo
 import it.fast4x.rimusic.ui.components.themed.MultiFloatingActionsContainer
 import it.fast4x.rimusic.ui.items.PlaylistItem
 import it.fast4x.rimusic.ui.styling.Dimensions
-import it.fast4x.rimusic.utils.CheckMonthlyPlaylist
-import it.fast4x.rimusic.utils.ImportPipedPlaylists
-import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.createPipedPlaylist
-import it.fast4x.rimusic.utils.disableScrollingTextKey
-import it.fast4x.rimusic.utils.enableCreateMonthlyPlaylistsKey
-import it.fast4x.rimusic.utils.getPipedSession
-import it.fast4x.rimusic.utils.isPipedEnabledKey
-import it.fast4x.rimusic.utils.playlistSortByKey
-import it.fast4x.rimusic.utils.playlistSortOrderKey
-import it.fast4x.rimusic.utils.playlistTypeKey
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.showFloatingIconKey
-import it.fast4x.rimusic.utils.showMonthlyPlaylistsKey
-import it.fast4x.rimusic.utils.showPinnedPlaylistsKey
-import it.fast4x.rimusic.utils.showPipedPlaylistsKey
+import it.fast4x.rimusic.utils.*
 import kotlinx.coroutines.flow.map
 import me.knighthat.colorPalette
-import me.knighthat.component.IDialog
 import me.knighthat.component.Search
+import me.knighthat.component.TextInputDialog
 import me.knighthat.component.header.TabToolBar
 import me.knighthat.component.screen.playlistSync
-import me.knighthat.component.tab.ImportSongsFromCSV
-import me.knighthat.component.tab.ItemSize
-import me.knighthat.component.tab.Sort
-import me.knighthat.component.tab.TabHeader
+import me.knighthat.component.tab.*
 import me.knighthat.component.tab.toolbar.Descriptive
 import me.knighthat.component.tab.toolbar.MenuIcon
 import me.knighthat.component.tab.toolbar.SongsShuffle
@@ -135,7 +97,7 @@ fun HomeLibrary(
         }.map { it.map( Song::asMediaItem ) }
     }
     //<editor-fold desc="New playlist dialog">
-    val newPlaylistDialog = object: IDialog, Descriptive, MenuIcon {
+    val newPlaylistDialog = object: TextInputDialog, Descriptive, MenuIcon {
 
         override val messageId: Int = R.string.create_new_playlist
         override val iconId: Int = R.drawable.add_in_playlist
@@ -151,6 +113,8 @@ fun HomeLibrary(
                 newPlaylistToggleState.value = value
                 field = value
             }
+        override val allowEmpty: Boolean = false
+
         // TODO: Add a random name generator
         override var value: String = ""
 

@@ -1,57 +1,30 @@
 ﻿package me.knighthat.component
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicText
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.media3.common.MediaItem
 import androidx.navigation.NavController
-import it.fast4x.rimusic.Database
-import it.fast4x.rimusic.MONTHLY_PREFIX
-import it.fast4x.rimusic.PINNED_PREFIX
+import it.fast4x.rimusic.*
 import it.fast4x.rimusic.R
-import it.fast4x.rimusic.enums.MenuStyle
-import it.fast4x.rimusic.enums.NavRoutes
-import it.fast4x.rimusic.enums.PlaylistSortBy
-import it.fast4x.rimusic.enums.PopupType
-import it.fast4x.rimusic.enums.SortOrder
+import it.fast4x.rimusic.enums.*
 import it.fast4x.rimusic.models.Playlist
 import it.fast4x.rimusic.models.PlaylistPreview
 import it.fast4x.rimusic.models.SongPlaylistMap
 import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.MenuState
-import it.fast4x.rimusic.ui.components.themed.IconButton
-import it.fast4x.rimusic.ui.components.themed.Menu
-import it.fast4x.rimusic.ui.components.themed.MenuEntry
-import it.fast4x.rimusic.ui.components.themed.SecondaryTextButton
-import it.fast4x.rimusic.ui.components.themed.SmartMessage
-import it.fast4x.rimusic.utils.menuStyleKey
-import it.fast4x.rimusic.utils.playlistSortByKey
-import it.fast4x.rimusic.utils.playlistSortOrderKey
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.semiBold
+import it.fast4x.rimusic.ui.components.themed.*
+import it.fast4x.rimusic.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import me.knighthat.appContext
 import me.knighthat.colorPalette
-import me.knighthat.component.tab.toolbar.Button
-import me.knighthat.component.tab.toolbar.Descriptive
-import me.knighthat.component.tab.toolbar.Menu
-import me.knighthat.component.tab.toolbar.MenuIcon
+import me.knighthat.component.tab.toolbar.*
 import me.knighthat.typography
 
 class PlaylistsMenu private constructor(
@@ -178,11 +151,13 @@ class PlaylistsMenu private constructor(
                     !it.playlist.name.startsWith(MONTHLY_PREFIX, 0, true)
         }
 
-        val newPlaylistButton = object : IDialog, Button {
+        val newPlaylistButton = object : TextInputDialog, Button {
 
+            override val allowEmpty: Boolean = false
             override val dialogTitle: String
                 @Composable
                 get() = stringResource( R.string.enter_the_playlist_name )
+
             override var isActive: Boolean by rememberSaveable { mutableStateOf( false ) }
             // TODO: Add a random name generator
             override var value: String = ""
