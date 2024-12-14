@@ -2,31 +2,13 @@ package it.fast4x.rimusic.ui.screens.settings
 
 import android.content.Context
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -44,19 +26,12 @@ import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
 import it.fast4x.rimusic.R
 import it.fast4x.rimusic.enums.ValidationType
-import it.fast4x.rimusic.ui.components.themed.DialogColorPicker
-import it.fast4x.rimusic.ui.components.themed.InputTextDialog
-import it.fast4x.rimusic.ui.components.themed.Slider
-import it.fast4x.rimusic.ui.components.themed.SmartMessage
-import it.fast4x.rimusic.ui.components.themed.StringListDialog
-import it.fast4x.rimusic.ui.components.themed.Switch
-import it.fast4x.rimusic.ui.components.themed.ValueSelectorDialog
+import it.fast4x.rimusic.ui.components.themed.*
 import it.fast4x.rimusic.utils.color
 import it.fast4x.rimusic.utils.secondary
 import it.fast4x.rimusic.utils.semiBold
 import me.knighthat.Skeleton
 import me.knighthat.colorPalette
-import me.knighthat.component.IDialog
 import me.knighthat.component.NumberInputDialog
 import me.knighthat.typography
 
@@ -481,7 +456,6 @@ fun SliderSettingsEntry(
 ) = Column(modifier = modifier) {
 
     val manualEnterDialog = object: NumberInputDialog {
-        var valueFloat: Float by remember( state ) { mutableFloatStateOf( state ) }
 
         override val minValue: Double = range.start.toDouble()
         override val maxValue: Double = range.endInclusive.toDouble()
@@ -489,14 +463,14 @@ fun SliderSettingsEntry(
             @Composable
             get() = stringResource( R.string.enter_the_value )
 
-        override var value: String by remember( valueFloat ) {
-            mutableStateOf( "%.1f".format( valueFloat ).replace(",", ".") )
+        override var value: Double by rememberSaveable( state ) {
+            mutableDoubleStateOf( state.toDouble() )
         }
         override var isActive: Boolean by rememberSaveable { mutableStateOf(false) }
 
         override fun onSet( newValue: Double ) {
-            this.valueFloat = newValue.toFloat()
-            onSlide( this.valueFloat )
+            this.value = newValue
+            onSlide( this.value.toFloat() )
             onSlideComplete()
 
             onDismiss()
@@ -515,7 +489,7 @@ fun SliderSettingsEntry(
     Slider(
         state = state,
         setState = { value: Float ->
-            manualEnterDialog.valueFloat = value
+            manualEnterDialog.value = value.toDouble()
             onSlide(value)
         },
         onSlideComplete = onSlideComplete,

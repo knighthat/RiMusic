@@ -30,21 +30,19 @@ interface NumberInputDialog: IDialog {
     val maxValue: Double
         get() = Double.MAX_VALUE
 
-    fun onSet(newValue: Double)
+    var value: Double
 
-    @Deprecated(
-        message = "Not used in [NumberInputDialog], please use onSet(Double) instead!",
-        replaceWith = ReplaceWith("onSet(Double)")
-    )
-    override fun onSet(newValue: String) {
-    }
+    /**
+     * What happens when user hits "Confirm" button
+     */
+    fun onSet( newValue: Double )
 
     @Composable
     override fun Render() {
         if(!isActive) return
 
         var textField by remember {
-            mutableStateOf( TextFieldValue(this.value) )
+            mutableStateOf( TextFieldValue(this.value.toString()) )
         }
         var isError by rememberSaveable { mutableStateOf(false) }
         var errorMessageId by rememberSaveable {
@@ -101,7 +99,9 @@ interface NumberInputDialog: IDialog {
                                 isError = false
 
                             textField = it
-                            this@NumberInputDialog.value = it.text
+
+                            if( textField.text.matches(ONLY_NUMERICAL_CHARS_REGEX) )
+                                this@NumberInputDialog.value = it.text.toDouble()
                         }
                     )
                 }

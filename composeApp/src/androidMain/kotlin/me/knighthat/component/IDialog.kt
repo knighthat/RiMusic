@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import it.fast4x.rimusic.R
 import it.fast4x.rimusic.ui.components.themed.DialogTextButton
-import it.fast4x.rimusic.ui.components.themed.InputTextDialog
 import it.fast4x.rimusic.utils.semiBold
 import me.knighthat.colorPalette
 import me.knighthat.component.tab.toolbar.Dialog
@@ -87,15 +86,9 @@ interface IDialog: Dialog {
         }
     }
 
-    var value: String
     val placeholder: String
         @Composable
         get() = ""
-
-    /**
-     * What happens when user hits "Confirm" button
-     */
-    fun onSet( newValue: String )
 
     /**
      * Triggered when user interacts with back button
@@ -104,17 +97,4 @@ interface IDialog: Dialog {
      * By default, this will turn off the dialog
      */
     fun onDismiss() { isActive = false }
-
-    @Composable
-    override fun Render() {
-        if( !isActive ) return
-
-        InputTextDialog(
-            onDismiss = ::onDismiss,
-            title = dialogTitle,
-            value = value,
-            placeholder = placeholder,
-            setValue = ::onSet
-        )
-    }
 }

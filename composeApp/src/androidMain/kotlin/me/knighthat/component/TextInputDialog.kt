@@ -22,6 +22,13 @@ interface TextInputDialog: IDialog {
 
     val allowEmpty: Boolean
 
+    var value: String
+
+    /**
+     * What happens when user hits "Confirm" button
+     */
+    fun onSet( newValue: String )
+
     @Composable
     override fun Render() {
         if( !isActive ) return
