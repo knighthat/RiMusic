@@ -7,18 +7,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -29,15 +18,12 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.*
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -49,7 +35,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
@@ -66,111 +51,27 @@ import it.fast4x.innertube.models.bodies.BrowseBody
 import it.fast4x.innertube.models.bodies.NextBody
 import it.fast4x.innertube.requests.playlistPage
 import it.fast4x.innertube.requests.relatedSongs
-import it.fast4x.rimusic.Database
-import it.fast4x.rimusic.EXPLICIT_PREFIX
-import it.fast4x.rimusic.LocalPlayerServiceBinder
-import it.fast4x.rimusic.MONTHLY_PREFIX
-import it.fast4x.rimusic.PINNED_PREFIX
-import it.fast4x.rimusic.PIPED_PREFIX
+import it.fast4x.rimusic.*
 import it.fast4x.rimusic.R
-import it.fast4x.rimusic.cleanPrefix
-import it.fast4x.rimusic.enums.NavigationBarPosition
-import it.fast4x.rimusic.enums.PlaylistSongSortBy
-import it.fast4x.rimusic.enums.PopupType
-import it.fast4x.rimusic.enums.RecommendationsNumber
-import it.fast4x.rimusic.enums.ThumbnailRoundness
-import it.fast4x.rimusic.enums.UiType
+import it.fast4x.rimusic.enums.*
 import it.fast4x.rimusic.models.PlaylistPreview
 import it.fast4x.rimusic.models.SongEntity
 import it.fast4x.rimusic.models.SongPlaylistMap
-import it.fast4x.rimusic.service.isLocal
 import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.SwipeableQueueItem
-import it.fast4x.rimusic.ui.components.themed.FloatingActionsContainerWithScrollToTop
-import it.fast4x.rimusic.ui.components.themed.HeaderIconButton
-import it.fast4x.rimusic.ui.components.themed.HeaderWithIcon
-import it.fast4x.rimusic.ui.components.themed.IconButton
-import it.fast4x.rimusic.ui.components.themed.IconInfo
-import it.fast4x.rimusic.ui.components.themed.InPlaylistMediaItemMenu
-import it.fast4x.rimusic.ui.components.themed.NowPlayingSongIndicator
-import it.fast4x.rimusic.ui.components.themed.Playlist
-import it.fast4x.rimusic.ui.components.themed.SmartMessage
+import it.fast4x.rimusic.ui.components.navigation.header.TabToolBar
+import it.fast4x.rimusic.ui.components.tab.ExportSongsToCSVDialog
+import it.fast4x.rimusic.ui.components.tab.LocateComponent
+import it.fast4x.rimusic.ui.components.tab.toolbar.*
+import it.fast4x.rimusic.ui.components.tab.toolbar.Button
+import it.fast4x.rimusic.ui.components.themed.*
 import it.fast4x.rimusic.ui.items.SongItem
-import it.fast4x.rimusic.ui.styling.Dimensions
-import it.fast4x.rimusic.ui.styling.onOverlay
-import it.fast4x.rimusic.ui.styling.overlay
-import it.fast4x.rimusic.ui.styling.px
-import it.fast4x.rimusic.utils.addNext
-import it.fast4x.rimusic.utils.addToPipedPlaylist
-import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.autosyncKey
-import it.fast4x.rimusic.utils.center
-import it.fast4x.rimusic.utils.checkFileExists
-import it.fast4x.rimusic.utils.color
-import it.fast4x.rimusic.utils.completed
-import it.fast4x.rimusic.utils.deleteFileIfExists
-import it.fast4x.rimusic.utils.deletePipedPlaylist
-import it.fast4x.rimusic.utils.disableScrollingTextKey
-import it.fast4x.rimusic.utils.durationTextToMillis
-import it.fast4x.rimusic.utils.enqueue
-import it.fast4x.rimusic.utils.forcePlay
-import it.fast4x.rimusic.utils.forcePlayAtIndex
-import it.fast4x.rimusic.utils.forcePlayFromBeginning
-import it.fast4x.rimusic.utils.formatAsTime
-import it.fast4x.rimusic.utils.getDownloadState
-import it.fast4x.rimusic.utils.getPipedSession
-import it.fast4x.rimusic.utils.getTitleMonthlyPlaylist
-import it.fast4x.rimusic.utils.isDownloadedSong
-import it.fast4x.rimusic.utils.isLandscape
-import it.fast4x.rimusic.utils.isNowPlaying
-import it.fast4x.rimusic.utils.isPipedEnabledKey
-import it.fast4x.rimusic.utils.isRecommendationEnabledKey
-import it.fast4x.rimusic.utils.manageDownload
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
-import it.fast4x.rimusic.utils.recommendationsNumberKey
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.removeFromPipedPlaylist
-import it.fast4x.rimusic.utils.saveImageToInternalStorage
-import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showFloatingIconKey
-import it.fast4x.rimusic.utils.syncSongsInPipedPlaylist
-import it.fast4x.rimusic.utils.thumbnailRoundnessKey
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import it.fast4x.rimusic.ui.styling.*
+import it.fast4x.rimusic.utils.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
-import it.fast4x.rimusic.appContext
-import it.fast4x.rimusic.colorPalette
-import it.fast4x.rimusic.ui.components.themed.Enqueue
-import it.fast4x.rimusic.ui.components.themed.ItemSelector
-import it.fast4x.rimusic.ui.components.themed.LikeSongs
-import it.fast4x.rimusic.ui.components.themed.ListenOnYouTube
-import it.fast4x.rimusic.ui.components.themed.PlayNext
-import it.fast4x.rimusic.ui.components.themed.PlaylistsMenu
-import it.fast4x.rimusic.ui.components.themed.ResetThumbnail
-import it.fast4x.rimusic.ui.components.themed.Search
-import it.fast4x.rimusic.ui.components.themed.Synchronize
-import it.fast4x.rimusic.ui.components.themed.ThumbnailPicker
-import it.fast4x.rimusic.ui.components.navigation.header.TabToolBar
-import it.fast4x.rimusic.utils.DeletePlaylist
-import it.fast4x.rimusic.utils.PlaylistSongsSort
-import it.fast4x.rimusic.utils.PositionLock
-import it.fast4x.rimusic.utils.RenameDialog
-import it.fast4x.rimusic.utils.Reposition
-import it.fast4x.rimusic.utils.pin
-import it.fast4x.rimusic.ui.components.tab.ExportSongsToCSVDialog
-import it.fast4x.rimusic.ui.components.tab.LocateComponent
-import it.fast4x.rimusic.ui.components.tab.toolbar.Button
-import it.fast4x.rimusic.ui.components.tab.toolbar.DelAllDownloadedDialog
-import it.fast4x.rimusic.ui.components.tab.toolbar.Dialog
-import it.fast4x.rimusic.ui.components.tab.toolbar.DownloadAllDialog
-import it.fast4x.rimusic.ui.components.tab.toolbar.SongsShuffle
-import it.fast4x.rimusic.thumbnailShape
-import it.fast4x.rimusic.typography
 import timber.log.Timber
 import java.util.UUID
 
@@ -269,7 +170,17 @@ fun LocalPlaylistSongs(
     val itemSelector = ItemSelector.init()
     LaunchedEffect( itemSelector.isActive ) {
         // Clears selectedItems when check boxes are disabled
-        if( !itemSelector.isActive ) selectedItems.clear()
+        if( !itemSelector.isActive )
+            selectedItems.clear()
+        else
+            // Setting this field to true means disable it
+            positionLock.isFirstIcon = true
+    }
+    // Either position lock or item selector can be turned on at a time
+    LaunchedEffect( positionLock.isFirstIcon ) {
+        if( !positionLock.isFirstIcon )
+            // Open to move position
+            itemSelector.isActive = false
     }
 
     val playNext = PlayNext {
@@ -740,24 +651,16 @@ fun LocalPlaylistSongs(
                                 reorderingState = reorderingState,
                                 index = index
                             )
-                            .zIndex(2f)
                     ) {
 
-
-                        val isLocal by remember { derivedStateOf { song.asMediaItem.isLocal } }
-                        downloadAllDialog.state = getDownloadState( song.asMediaItem.mediaId )
-                        val isDownloaded =
-                            if (!isLocal) isDownloadedSong(song.asMediaItem.mediaId) else true
-                        val positionInPlaylist: Int = index
-
+                        // Drag anchor
                         if ( !positionLock.isLocked() ) {
                             Box(
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .zIndex(3f)
-                                    .align(Alignment.TopEnd)
-                                    .offset(x = -15.dp)
-
+                                modifier = Modifier.padding( end = 16.dp ) // Accommodate horizontal padding of SongItem
+                                    .size( 24.dp )
+                                    .zIndex(2f)
+                                    .align( Alignment.CenterEnd ),
+                                contentAlignment = Alignment.Center
                             ) {
 
                                 IconButton(
@@ -789,7 +692,7 @@ fun LocalPlaylistSongs(
                                         coroutineScope = coroutineScope,
                                         pipedSession = pipedSession.toApiSession(),
                                         id = UUID.fromString(playlistPreview?.playlist?.browseId),
-                                        positionInPlaylist
+                                        index
                                     )
                                 }
                                 coroutineScope.launch {
@@ -805,80 +708,10 @@ fun LocalPlaylistSongs(
                             onSwipeToRight = {
                                 binder?.player?.addNext(song.asMediaItem)
                             },
-                            modifier = Modifier.zIndex(2f)
                         ) {
                             SongItem(
                                 song = song.song,
-                                onDownloadClick = {
-                                    binder?.cache?.removeResource(song.asMediaItem.mediaId)
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        Database.deleteFormat( song.asMediaItem.mediaId )
-                                    }
-
-                                    if (!isLocal) {
-                                        manageDownload(
-                                            context = context,
-                                            mediaItem = song.asMediaItem,
-                                            downloadState = isDownloaded
-                                        )
-                                    }
-                                },
-                                downloadState = downloadAllDialog.state,
-                                thumbnailSizePx = thumbnailSizePx,
-                                thumbnailSizeDp = thumbnailSizeDp,
-                                trailingContent = {
-                                    // It must watch for [selectedItems.size] for changes
-                                    // Otherwise, state will stay the same
-                                    val checkedState = remember( selectedItems.size ) {
-                                        mutableStateOf( song in selectedItems )
-                                    }
-
-                                    if ( itemSelector.isActive )
-                                        Checkbox(
-                                            checked = checkedState.value,
-                                            onCheckedChange = {
-                                                checkedState.value = it
-                                                if ( it )
-                                                    selectedItems.add( song )
-                                                else
-                                                    selectedItems.remove( song )
-                                            },
-                                            colors = CheckboxDefaults.colors(
-                                                checkedColor = colorPalette().accent,
-                                                uncheckedColor = colorPalette().text
-                                            ),
-                                            modifier = Modifier.scale(0.7f)
-                                        )
-                                    else checkedState.value = false
-                                },
-                                onThumbnailContent = {
-                                    if (sort.sortBy == PlaylistSongSortBy.PlayTime) {
-                                        BasicText(
-                                            text = song.song.formattedTotalPlayTime,
-                                            style = typography().xxs.semiBold.center.color(
-                                                colorPalette().onOverlay
-                                            ),
-                                            maxLines = 2,
-                                            overflow = TextOverflow.Ellipsis,
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .background(
-                                                    brush = Brush.verticalGradient(
-                                                        colors = listOf(
-                                                            Color.Transparent,
-                                                            colorPalette().overlay
-                                                        )
-                                                    ),
-                                                    shape = thumbnailShape()
-                                                )
-                                                .padding(horizontal = 8.dp, vertical = 4.dp)
-                                                .align(Alignment.BottomCenter)
-                                        )
-                                    }
-
-
-                                        NowPlayingSongIndicator(song.asMediaItem.mediaId, binder?.player)
-                                },
+                                navController = navController,
                                 modifier = Modifier
                                     .combinedClickable(
                                         onLongClick = {
@@ -910,14 +743,68 @@ fun LocalPlaylistSongs(
                                             search.onItemSelected()
                                         }
                                     )
-                                    .background(color = colorPalette().background0)
-                                    .zIndex(2f),
-                                disableScrollingText = disableScrollingText,
-                                isNowPlaying = binder?.player?.isNowPlaying(song.song.id) ?: false
+                                    .background(color = colorPalette().background0),
+                                trailingContent = {
+                                    // It must watch for [selectedItems.size] for changes
+                                    // Otherwise, state will stay the same
+                                    val checkedState = remember( selectedItems.size ) {
+                                        mutableStateOf( song in selectedItems )
+                                    }
+
+                                    if( itemSelector.isActive || !positionLock.isLocked() )
+                                        // Create a fake box to store drag anchor and checkbox
+                                        Box( Modifier.width( 24.dp ) ) {
+
+                                            if( itemSelector.isActive )
+                                                Checkbox(
+                                                    checked = checkedState.value,
+                                                    onCheckedChange = {
+                                                        checkedState.value = it
+                                                        if ( it )
+                                                            selectedItems.add( song )
+                                                        else
+                                                            selectedItems.remove( song )
+                                                    },
+                                                    colors = CheckboxDefaults.colors(
+                                                        checkedColor = colorPalette().accent,
+                                                        uncheckedColor = colorPalette().text
+                                                    ),
+                                                    modifier = Modifier.scale( .7f )
+                                                                       .size( 24.dp )
+                                                                       .padding( all = 0.dp )
+                                                )
+                                        }
+                                    else if( !itemSelector.isActive )
+                                        checkedState.value = false
+                                },
+                                thumbnailOverlay = {
+                                    if (sort.sortBy == PlaylistSongSortBy.PlayTime) {
+                                        BasicText(
+                                            text = song.song.formattedTotalPlayTime,
+                                            style = typography().xxs.semiBold.center.color(
+                                                colorPalette().onOverlay
+                                            ),
+                                            maxLines = 2,
+                                            overflow = TextOverflow.Ellipsis,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .background(
+                                                    brush = Brush.verticalGradient(
+                                                        colors = listOf(
+                                                            Color.Transparent,
+                                                            colorPalette().overlay
+                                                        )
+                                                    ),
+                                                    shape = thumbnailShape()
+                                                )
+                                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                                                .align(Alignment.BottomCenter)
+                                        )
+                                    }
+                                }
                             )
                         }
                     }
-
                 }
 
                 item(

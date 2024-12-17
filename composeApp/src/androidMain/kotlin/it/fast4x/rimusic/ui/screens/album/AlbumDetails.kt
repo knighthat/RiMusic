@@ -3,28 +3,8 @@ package it.fast4x.rimusic.ui.screens.album
 import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -34,7 +14,6 @@ import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -62,78 +41,22 @@ import it.fast4x.compose.persist.persist
 import it.fast4x.compose.persist.persistList
 import it.fast4x.innertube.Innertube
 import it.fast4x.innertube.models.NavigationEndpoint
-import it.fast4x.rimusic.Database
-import it.fast4x.rimusic.EXPLICIT_PREFIX
-import it.fast4x.rimusic.LocalPlayerServiceBinder
-import it.fast4x.rimusic.MODIFIED_PREFIX
+import it.fast4x.rimusic.*
 import it.fast4x.rimusic.R
-import it.fast4x.rimusic.cleanPrefix
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.enums.UiType
-import it.fast4x.rimusic.models.Album
-import it.fast4x.rimusic.models.Info
-import it.fast4x.rimusic.models.Playlist
-import it.fast4x.rimusic.models.Song
-import it.fast4x.rimusic.models.SongPlaylistMap
-import it.fast4x.rimusic.service.isLocal
+import it.fast4x.rimusic.models.*
 import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.ShimmerHost
 import it.fast4x.rimusic.ui.components.SwipeablePlaylistItem
-import it.fast4x.rimusic.ui.components.themed.AlbumsItemMenu
-import it.fast4x.rimusic.ui.components.themed.AutoResizeText
-import it.fast4x.rimusic.ui.components.themed.ConfirmationDialog
-import it.fast4x.rimusic.ui.components.themed.FontSizeRange
-import it.fast4x.rimusic.ui.components.themed.HeaderIconButton
-import it.fast4x.rimusic.ui.components.themed.IconButton
-import it.fast4x.rimusic.ui.components.themed.InputTextDialog
-import it.fast4x.rimusic.ui.components.themed.ItemsList
-import it.fast4x.rimusic.ui.components.themed.LayoutWithAdaptiveThumbnail
-import it.fast4x.rimusic.ui.components.themed.MultiFloatingActionsContainer
-import it.fast4x.rimusic.ui.components.themed.NonQueuedMediaItemMenu
-import it.fast4x.rimusic.ui.components.themed.NowPlayingSongIndicator
-import it.fast4x.rimusic.ui.components.themed.SelectorDialog
-import it.fast4x.rimusic.ui.components.themed.SmartMessage
-import it.fast4x.rimusic.ui.items.AlbumItem
-import it.fast4x.rimusic.ui.items.AlbumItemPlaceholder
-import it.fast4x.rimusic.ui.items.SongItem
-import it.fast4x.rimusic.ui.items.SongItemPlaceholder
+import it.fast4x.rimusic.ui.components.themed.*
+import it.fast4x.rimusic.ui.items.*
 import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.px
-import it.fast4x.rimusic.utils.addNext
-import it.fast4x.rimusic.utils.align
-import it.fast4x.rimusic.utils.asMediaItem
-import it.fast4x.rimusic.utils.center
-import it.fast4x.rimusic.utils.color
-import it.fast4x.rimusic.utils.conditional
-import it.fast4x.rimusic.utils.disableScrollingTextKey
-import it.fast4x.rimusic.utils.durationTextToMillis
-import it.fast4x.rimusic.utils.enqueue
-import it.fast4x.rimusic.utils.fadingEdge
-import it.fast4x.rimusic.utils.forcePlayAtIndex
-import it.fast4x.rimusic.utils.forcePlayFromBeginning
-import it.fast4x.rimusic.utils.formatAsTime
-import it.fast4x.rimusic.utils.getDownloadState
-import it.fast4x.rimusic.utils.getHttpClient
-import it.fast4x.rimusic.utils.isDownloadedSong
-import it.fast4x.rimusic.utils.isLandscape
-import it.fast4x.rimusic.utils.isNowPlaying
-import it.fast4x.rimusic.utils.languageDestination
-import it.fast4x.rimusic.utils.manageDownload
-import it.fast4x.rimusic.utils.medium
-import it.fast4x.rimusic.utils.parentalControlEnabledKey
-import it.fast4x.rimusic.utils.rememberPreference
-import it.fast4x.rimusic.utils.resize
-import it.fast4x.rimusic.utils.secondary
-import it.fast4x.rimusic.utils.semiBold
-import it.fast4x.rimusic.utils.showFloatingIconKey
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import it.fast4x.rimusic.utils.*
+import kotlinx.coroutines.*
 import me.bush.translator.Language
 import me.bush.translator.Translator
-import it.fast4x.rimusic.colorPalette
-import it.fast4x.rimusic.typography
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -882,55 +805,14 @@ fun AlbumDetails(
                             binder?.player?.addNext(song.asMediaItem)
                         }
                     ) {
-                        val isLocal by remember { derivedStateOf { song.asMediaItem.isLocal } }
                         downloadState = getDownloadState(song.asMediaItem.mediaId)
-                        val isDownloaded =
-                            if (!isLocal) isDownloadedSong(song.asMediaItem.mediaId) else true
                         val checkedState = rememberSaveable { mutableStateOf(false) }
                         var forceRecompose by remember { mutableStateOf(false) }
+
                         SongItem(
-                            mediaItem = song.asMediaItem,
-                            downloadState = downloadState,
-                            onDownloadClick = {
-                                binder?.cache?.removeResource(song.asMediaItem.mediaId)
-                                Database.asyncTransaction {
-                                    deleteFormat( song.asMediaItem.mediaId )
-                                }
-
-                                if (!isLocal)
-                                    manageDownload(
-                                        context = context,
-                                        mediaItem = song.asMediaItem,
-                                        downloadState = isDownloaded
-                                    )
-                            },
-                            thumbnailSizeDp = thumbnailSizeDp,
-                            thumbnailContent = {
-                                /*
-                            AsyncImage(
-                                model = song.thumbnailUrl,
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .clip(LocalAppearance.current.thumbnailShape)
-                                    .fillMaxSize()
-                            )
-                             */
-                                BasicText(
-                                    text = "${index + 1}",
-                                    style = typography().s.semiBold.center.color(
-                                        colorPalette()
-.textDisabled),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier
-                                        .width(thumbnailSizeDp)
-                                        .align(Alignment.Center)
-                                )
-
-
-                                    NowPlayingSongIndicator(song.asMediaItem.mediaId, binder?.player)
-                            },
+                            song = song,
+                            navController = navController,
+                            showThumbnail = false,
                             modifier = Modifier
                                 .combinedClickable(
                                     onLongClick = {
@@ -968,19 +850,31 @@ fun AlbumDetails(
                                         },
                                         colors = CheckboxDefaults.colors(
                                             checkedColor = colorPalette()
-.accent,
+                                                .accent,
                                             uncheckedColor = colorPalette()
-.text
+                                                .text
                                         ),
                                         modifier = Modifier
                                             .scale(0.7f)
                                     )
                                 else checkedState.value = false
                             },
-                            //mediaId = song.asMediaItem.mediaId
-                            disableScrollingText = disableScrollingText,
-                            isNowPlaying = binder?.player?.isNowPlaying(song.id) ?: false,
-                            forceRecompose = forceRecompose
+                            thumbnailOverlay = {
+                                BasicText(
+                                    text = "${index + 1}",
+                                    style = typography().s
+                                                        .semiBold
+                                                        .center
+                                                        .color(
+                                                            colorPalette()
+                                                            .textDisabled
+                                                        ),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.width( thumbnailSizeDp )
+                                                       .align( Alignment.Center )
+                                )
+                            }
                         )
                     }
                 }
