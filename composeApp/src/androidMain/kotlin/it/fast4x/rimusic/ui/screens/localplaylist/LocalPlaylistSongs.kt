@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.scale
@@ -38,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.offline.Download
 import androidx.navigation.NavController
 import com.github.doyaaaaaken.kotlincsv.client.KotlinCsvExperimental
 import it.fast4x.compose.persist.persist
@@ -54,9 +54,7 @@ import it.fast4x.innertube.requests.relatedSongs
 import it.fast4x.rimusic.*
 import it.fast4x.rimusic.R
 import it.fast4x.rimusic.enums.*
-import it.fast4x.rimusic.models.PlaylistPreview
-import it.fast4x.rimusic.models.SongEntity
-import it.fast4x.rimusic.models.SongPlaylistMap
+import it.fast4x.rimusic.models.*
 import it.fast4x.rimusic.ui.components.LocalMenuState
 import it.fast4x.rimusic.ui.components.SwipeableQueueItem
 import it.fast4x.rimusic.ui.components.navigation.header.TabToolBar
@@ -178,9 +176,12 @@ fun LocalPlaylistSongs(
     }
     // Either position lock or item selector can be turned on at a time
     LaunchedEffect( positionLock.isFirstIcon ) {
-        if( !positionLock.isFirstIcon )
+        if( !positionLock.isFirstIcon ) {
             // Open to move position
             itemSelector.isActive = false
+            // Disable smart recommendation, it breaks the index
+            isRecommendationEnabled = false
+        }
     }
 
     val playNext = PlayNext {
@@ -304,29 +305,109 @@ fun LocalPlaylistSongs(
 
     val locator = LocateComponent.init( lazyListState, ::getMediaItems )
 
+    //<editor-fold defaultstate="collapsed" desc="Smart recommendation">
+    val recommendationsNumber by rememberPreference( recommendationsNumberKey, RecommendationsNumber.`5` )
+    var relatedSongs by rememberSaveable {
+        // SongEntity before Int in case random position is equal
+        mutableStateOf( emptyMap <SongEntity, Int>() )
+    }
+
+    LaunchedEffect( isRecommendationEnabled ) {
+        if( !isRecommendationEnabled ) {
+            // Clear the map when this feature is turned off
+            items = items.toMutableList().apply {
+                removeAll( relatedSongs.keys )
+            }
+            relatedSongs = emptyMap()
+            return@LaunchedEffect
+        }
+
+        /*
+            This process will be run before [items]
+               most of the time.
+            When it does, an exception will
+               be thrown because [items] is not ready yet.
+            To make sure that it is ready to use, a
+               delay is set to suspend the thread.
+        */
+        while( items.isEmpty() )
+            delay( 100L )
+
+        val requestBody = NextBody( videoId =  items.random().song.id )
+        Innertube.relatedSongs( requestBody )?.onSuccess { response ->
+            val fetchedSongs = mutableMapOf<SongEntity, Int>()
+
+            response?.songs
+                ?.map { songItem ->
+
+                    // Do NOT use [Utils#Innertube.SongItem.asSong]
+                    // It doesn't have explicit prefix
+                    val song = with( songItem ) {
+                        val prefix = if( explicit ) EXPLICIT_PREFIX else ""
+
+                        Song(
+                            // Song's ID & title must not be "null". If they are,
+                            // Something is wrong with Innertube.
+                            id = "$prefix${info!!.endpoint!!.videoId!!}",
+                            title = info!!.name!!,
+                            artistsText = authors?.joinToString { author -> author.name ?: "" },
+                            durationText = durationText,
+                            thumbnailUrl = thumbnail?.url
+                        )
+                    }
+
+                    SongEntity(
+                        song = song,
+                        // [albumTitle] is optional in this context,
+                        // but it doesn't hurt to reduce nullable variables
+                        albumTitle = songItem.album?.name
+                    )
+                }
+                ?.forEach {
+                    // Skip songs that are already in the playlist by comparing their IDs.
+                    if( it.song.id in items.map{ e -> e.song.id }
+                        || fetchedSongs.size >= recommendationsNumber.toInt()
+                    ) return@forEach
+
+                    val insertPosition = (0..items.size).random()
+                    fetchedSongs[it] = insertPosition
+                }
+
+            relatedSongs = fetchedSongs
+
+            // Enable position lock
+            positionLock.isFirstIcon = true
+        }
+    }
+    //</editor-fold>
     LaunchedEffect( sort.sortOrder, sort.sortBy ) {
         Database.songsPlaylist( playlistId, sort.sortBy, sort.sortOrder )
                 .flowOn( Dispatchers.IO )
                 .distinctUntilChanged()
                 .collect { items = it }
     }
-    LaunchedEffect( items, search.input, parentalControlEnabled ) {
-        items
-            .distinctBy { it.song.id }
-            .filter {
-                if( parentalControlEnabled )
-                    !it.song.title.startsWith(EXPLICIT_PREFIX)
-                else
-                    true
-            }.filter {
-                // Without cleaning, user can search explicit songs with "e:"
-                // I kinda want this to be a feature, but it seems unnecessary
-                val containsName = it.song.cleanTitle().contains(search.input, true)
-                val containsArtist = it.song.artistsText?.contains(search.input, true) ?: false
-                val containsAlbum = it.albumTitle?.contains(search.input, true) ?: false
+    LaunchedEffect( items, relatedSongs, search.input, parentalControlEnabled ) {
+        items.toMutableList()
+             .apply {
+                 relatedSongs.forEach { (song, index) ->
+                     add( index, song )
+                 }
+             }
+             .distinctBy { it.song.id }
+             .filter {
+                 if( parentalControlEnabled )
+                     !it.song.title.startsWith(EXPLICIT_PREFIX)
+                 else
+                     true
+             }.filter {
+                 // Without cleaning, user can search explicit songs with "e:"
+                 // I kinda want this to be a feature, but it seems unnecessary
+                 val containsName = it.song.cleanTitle().contains(search.input, true)
+                 val containsArtist = it.song.artistsText?.contains(search.input, true) ?: false
+                 val containsAlbum = it.albumTitle?.contains(search.input, true) ?: false
 
-                containsName || containsArtist || containsAlbum
-            }.let { itemsOnDisplay = it }
+                 containsName || containsArtist || containsAlbum
+             }.let { itemsOnDisplay = it }
     }
     LaunchedEffect(Unit) {
         Database.singlePlaylistPreview( playlistId )
@@ -350,34 +431,7 @@ fun LocalPlaylistSongs(
         }
     }
 
-    //**** SMART RECOMMENDATION
-    val recommendationsNumber by rememberPreference(
-        recommendationsNumberKey,
-        RecommendationsNumber.`5`
-    )
-    var relatedSongsRecommendationResult by persist<Result<Innertube.RelatedSongs?>?>(tag = "home/relatedSongsResult")
-    var songBaseRecommendation by persist<SongEntity?>("home/songBaseRecommendation")
-    var positionsRecommendationList = arrayListOf<Int>()
     var autosync by rememberPreference(autosyncKey, false)
-
-    if (isRecommendationEnabled) {
-        LaunchedEffect(Unit, isRecommendationEnabled) {
-            Database.songsPlaylist(playlistId, sort.sortBy, sort.sortOrder).distinctUntilChanged()
-                .collect { songs ->
-                    val song = songs.firstOrNull()
-                    if (relatedSongsRecommendationResult == null || songBaseRecommendation?.song?.id != song?.song?.id) {
-                        relatedSongsRecommendationResult =
-                            Innertube.relatedSongs(NextBody(videoId = (song?.song?.id ?: "HZnNt9nnEhw")))
-                    }
-                    songBaseRecommendation = song
-                }
-        }
-        if (relatedSongsRecommendationResult != null) {
-            for( index in 0..recommendationsNumber.toInt() ) {
-                positionsRecommendationList.add((0..items.size).random())
-            }
-        }
-    }
 
     val thumbnailRoundness by rememberPreference(
         thumbnailRoundnessKey,
@@ -518,7 +572,7 @@ fun LocalPlaylistSongs(
                             if (isRecommendationEnabled) {
                                 Spacer(modifier = Modifier.height(5.dp))
                                 IconInfo(
-                                    title = positionsRecommendationList.distinct().size.toString(),
+                                    title = relatedSongs.keys.size.toString(),
                                     icon = painterResource(R.drawable.smart_shuffle)
                                 )
                             }
@@ -617,33 +671,6 @@ fun LocalPlaylistSongs(
                     contentType = { _, song -> song },
                 ) { index, song ->
 
-                    if (index in positionsRecommendationList.distinct()) {
-                        val songRecommended =
-                            relatedSongsRecommendationResult?.getOrNull()?.songs?.shuffled()
-                                ?.lastOrNull()
-                        songRecommended?.asMediaItem?.let {
-                            SongItem(
-                                song = it,
-                                isRecommended = true,
-                                thumbnailSizeDp = thumbnailSizeDp,
-                                thumbnailSizePx = thumbnailSizePx,
-                                onDownloadClick = {},
-                                downloadState = Download.STATE_STOPPED,
-                                trailingContent = {},
-                                onThumbnailContent = {},
-                                modifier = Modifier
-                                    .combinedClickable (
-                                        onClick = {
-                                            binder?.stopRadio()
-                                            binder?.player?.forcePlay(it)
-                                        }
-                                    ),
-                                disableScrollingText = disableScrollingText,
-                                isNowPlaying = binder?.player?.isNowPlaying(it.mediaId) ?: false
-                            )
-                        }
-                    }
-
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -712,6 +739,7 @@ fun LocalPlaylistSongs(
                             SongItem(
                                 song = song.song,
                                 navController = navController,
+                                isRecommended = song in relatedSongs,
                                 modifier = Modifier
                                     .combinedClickable(
                                         onLongClick = {
