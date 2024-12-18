@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -867,8 +868,6 @@ fun SongItem(
             else
                 thumbnailOverlay()
 
-            // Choose [rememberSaveable] so it won't be recompose
-            // when screen rotates or when tab has changed
             val likedAt by remember {
                 Database.likedAt( song.id )
             }.collectAsState( initial = null, context = Dispatchers.IO )
@@ -895,6 +894,9 @@ fun SongItem(
                 if( isRecommended )
                     object: SongIndicator {
                         override val iconId: Int = R.drawable.smart_shuffle
+                        override val color: Color
+                            @Composable
+                            get() = colorPalette().accent
                     }.ToolBarButton()
 
                 val showInPlaylistIndicator by rememberPreference( playlistindicatorKey,false )
