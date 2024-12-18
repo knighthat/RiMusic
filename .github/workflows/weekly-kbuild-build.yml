@@ -30,7 +30,7 @@ jobs:
     - name: Get date
       id: date
       # Output of "October 2 2024" will be "20241002"
-      run: echo "::set-output name=date::$(date +'%Y%m%d')"
+      run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
 
   build-full-variant:
     needs: setup
@@ -121,7 +121,7 @@ jobs:
         path: build/kbuild/signed/RiMusic-*.apk
 
   upload-to-release:
-    needs: sign-apk
+    needs: [sign-apk, setup]
     runs-on: ubuntu-latest
 
     steps:
