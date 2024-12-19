@@ -29,17 +29,22 @@ import me.knighthat.util.Repository
 
 object NewUpdateAvailableDialog: Dialog {
 
+    private var isCanceled: Boolean by mutableStateOf( false )
+
     override val dialogTitle: String
         @Composable
         get() = stringResource( R.string.update_available )
 
     override var isActive: Boolean by mutableStateOf( false )
 
-    fun onDismiss() { isActive = false }
+    fun onDismiss() {
+        isCanceled = true
+        isActive = false
+    }
 
     @Composable
     override fun Render() {
-        if( !isActive ) return
+        if( isCanceled || !isActive ) return
 
         val uriHandler = LocalUriHandler.current
 
