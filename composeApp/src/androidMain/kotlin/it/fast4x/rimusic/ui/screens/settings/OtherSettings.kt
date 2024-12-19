@@ -53,6 +53,7 @@ import it.fast4x.rimusic.ui.styling.Dimensions
 import it.fast4x.rimusic.ui.styling.LocalAppearance
 import it.fast4x.rimusic.utils.*
 import kotlinx.coroutines.launch
+import me.knighthat.updater.Updater
 import timber.log.Timber
 import java.io.File
 import java.net.Proxy
@@ -182,31 +183,7 @@ fun OtherSettings() {
                 }
             )
 
-        EnumValueSelectorSettingsEntry(
-            title = stringResource(R.string.enable_check_for_update),
-            selectedValue = checkUpdateState,
-            onValueSelected = { checkUpdateState = it },
-            valueText = { it.text }
-        )
-        SettingsDescription(text = stringResource(R.string.when_enabled_a_new_version_is_checked_and_notified_during_startup))
-        AnimatedVisibility(visible = checkUpdateState != CheckUpdateState.Disabled) {
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                SettingsDescription(
-                    text = stringResource(R.string.check_update),
-                    important = true,
-                    modifier = Modifier.weight(1f)
-                )
-
-                SecondaryTextButton(
-                    text = stringResource(R.string.info_check_update_now),
-                    onClick = { checkUpdateNow = true },
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 24.dp)
-                )
-            }
-        }
-
+        Updater.SettingEntry()
 
         // rememberEncryptedPreference only works correct with API 24 and up
 
