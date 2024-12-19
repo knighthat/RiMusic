@@ -169,20 +169,6 @@ fun OtherSettings() {
 
         SettingsEntryGroupText(title = stringResource(R.string.check_update))
 
-        var checkUpdateNow by remember { mutableStateOf(false) }
-        if (checkUpdateNow)
-            CheckAvailableNewVersion(
-                onDismiss = { checkUpdateNow = false },
-                updateAvailable = {
-                    if (!it)
-                        SmartMessage(
-                            context.resources.getString(R.string.info_no_update_available),
-                            type = PopupType.Info,
-                            context = context
-                        )
-                }
-            )
-
         Updater.SettingEntry()
 
         // rememberEncryptedPreference only works correct with API 24 and up

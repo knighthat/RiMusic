@@ -10,11 +10,7 @@ import android.os.Build
 import android.provider.MediaStore
 import android.text.format.DateUtils
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
@@ -34,16 +30,11 @@ import it.fast4x.rimusic.models.Song
 import it.fast4x.rimusic.models.SongEntity
 import it.fast4x.rimusic.service.LOCAL_KEY_PREFIX
 import it.fast4x.rimusic.service.isLocal
-import it.fast4x.rimusic.ui.components.themed.NewVersionDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Response
+import okhttp3.*
 import org.json.JSONException
-import java.io.File
 import java.net.InetSocketAddress
 import java.net.Proxy
 import java.text.SimpleDateFormat
@@ -372,56 +363,6 @@ suspend fun Result<Innertube.PlaylistOrAlbumPage>.completed(
     val itemsPage = songsPage.completed(maxDepth).getOrThrow()
     page.copy(songsPage = itemsPage)
 }.also { it.exceptionOrNull()?.printStackTrace() }
-
-@Composable
-fun CheckAvailableNewVersion(
-    onDismiss: () -> Unit,
-    updateAvailable: (Boolean) -> Unit
-) {
-    var updatedProductName = ""
-    var updatedVersionName = ""
-    var updatedVersionCode = 0
-    val file = File(LocalContext.current.filesDir, "RiMusicUpdatedVersionCode.ver")
-    if (file.exists()) {
-        val dataText = file.readText().substring(0, file.readText().length - 1).split("-")
-        updatedVersionCode =
-            try {
-                dataText.first().toInt()
-            } catch (e: Exception) {
-                0
-            }
-        updatedVersionName = if(dataText.size == 3) dataText[1] else ""
-        updatedProductName =  if(dataText.size == 3) dataText[2] else ""
-    }
-
-    if (updatedVersionCode > getVersionCode()) {
-        //if (updatedVersionCode > BuildConfig.VERSION_CODE)
-        NewVersionDialog(
-            updatedVersionName = updatedVersionName,
-            updatedVersionCode = updatedVersionCode,
-            updatedProductName = updatedProductName,
-            onDismiss = onDismiss
-        )
-        updateAvailable(true)
-    } else {
-        updateAvailable(false)
-        onDismiss()
-    }
-}
-
-@Composable
-fun isAvailableUpdate(): String {
-    var newVersion = ""
-    val file = File(LocalContext.current.filesDir, "RiMusicUpdatedVersion.ver")
-    if (file.exists()) {
-        newVersion = file.readText().substring(0, file.readText().length - 1)
-        //Log.d("updatedVersion","${file.readText().length.toString()} ${file.readText().substring(0,file.readText().length-1)}")
-        //Log.d("updatedVersion","${file.readText().length} ${newVersion.length}")
-    } else newVersion = ""
-
-    return if (newVersion == getVersionName() || newVersion == "") "" else newVersion
-    //return if (newVersion == BuildConfig.VERSION_NAME || newVersion == "") "" else newVersion
-}
 
 @Composable
 fun checkInternetConnection(): Boolean {
