@@ -38,6 +38,7 @@ import it.fast4x.rimusic.ui.components.navigation.nav.AbstractNavigationBar
 import it.fast4x.rimusic.ui.components.navigation.nav.HorizontalNavigationBar
 import it.fast4x.rimusic.ui.components.navigation.nav.VerticalNavigationBar
 import it.fast4x.rimusic.utils.transition
+import me.knighthat.updater.NewUpdateAvailableDialog
 
 // THIS IS THE SCAFFOLD
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,5 +137,7 @@ fun Skeleton(
                 content = { miniPlayer?.invoke() }
             )
         }
+
+        NewUpdateAvailableDialog.Render()
     }
 }

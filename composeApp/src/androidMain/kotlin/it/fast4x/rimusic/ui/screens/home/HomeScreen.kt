@@ -178,7 +178,7 @@ fun HomeScreen(
 
     var checkUpdateState by rememberPreference( checkUpdateStateKey, CheckUpdateState.Ask )
     when( checkUpdateState ) {
-        CheckUpdateState.Enabled -> Updater.CheckForUpdate()
+        CheckUpdateState.Enabled -> Updater.checkForUpdate()
         CheckUpdateState.Ask     -> {
 
             var ask2Check4Update by remember { mutableStateOf( true ) }
