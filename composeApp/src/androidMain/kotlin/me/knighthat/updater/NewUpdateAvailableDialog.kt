@@ -65,14 +65,17 @@ object NewUpdateAvailableDialog: Dialog {
             // Title
             DialogText(
                 text = dialogTitle,
-                style = typography().s.bold.copy( color = colorPalette().text )
+                style = typography().s.bold.copy( color = colorPalette().text ),
+                spacerHeight = 30.dp
             )
 
             // Update information
-            val size = "(${Updater.build.size} bytes)"
             DialogText(
-                text = stringResource( R.string.app_update_dialog_new, size ),
-                style = typography().xs.semiBold.copy( color = colorPalette().text )
+                text = stringResource(
+                    R.string.app_update_dialog_new,
+                    Updater.build.readableSize()
+                ),
+                style = typography().xs.semiBold.copy( color = colorPalette().text ),
             )
 
             // Available actions
