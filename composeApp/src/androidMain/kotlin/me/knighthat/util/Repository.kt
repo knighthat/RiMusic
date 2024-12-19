@@ -11,5 +11,6 @@ object Repository {
     const val REPO_PATH = "$OWNER_PATH/RiMusic"
     const val REPO_URL = "$GITHUB$REPO_PATH"
 
-    const val TAG_PATH = "$REPO_PATH/releases/tags/weekly-kbuild"
+    const val RELEASE_PATH = "$REPO_PATH/releases/tag/weekly-kbuild"
+    const val API_RELEASE_PATH = "$REPO_PATH/releases/tags/weekly-kbuild"
 }
