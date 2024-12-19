@@ -1,6 +1,9 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 plugins {
@@ -124,6 +127,15 @@ android {
         targetSdk = 35
         versionCode = 75
         versionName = "0.6.64"
+
+        /*
+                UNIVERSAL VARIABLES
+         */
+
+        // yyyyMMdd is the date format from 'weekly-kbuild-build.yml'
+        val dateFormat = SimpleDateFormat( "yyyyMMdd", Locale.US )
+        val currentDate = dateFormat.format( Date() )
+        buildConfigField( "String", "BUILD_DATE", "\"$currentDate\"" )
     }
 
     splits {
@@ -139,6 +151,7 @@ android {
         debug {
             applicationIdSuffix = ".debug"
             manifestPlaceholders["appName"] = "RiMusic-Debug"
+            versionNameSuffix = "-kbm"
         }
 
         create( "full" ) {
@@ -191,7 +204,6 @@ android {
     androidResources {
         generateLocaleConfig = true
     }
-
 }
 
 
