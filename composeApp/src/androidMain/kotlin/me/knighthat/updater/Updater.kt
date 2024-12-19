@@ -11,7 +11,9 @@ import androidx.compose.ui.unit.dp
 import it.fast4x.rimusic.*
 import it.fast4x.rimusic.R
 import it.fast4x.rimusic.enums.CheckUpdateState
+import it.fast4x.rimusic.enums.PopupType
 import it.fast4x.rimusic.ui.components.themed.SecondaryTextButton
+import it.fast4x.rimusic.ui.components.themed.SmartMessage
 import it.fast4x.rimusic.ui.screens.settings.EnumValueSelectorSettingsEntry
 import it.fast4x.rimusic.ui.screens.settings.SettingsDescription
 import it.fast4x.rimusic.utils.checkUpdateStateKey
@@ -23,6 +25,8 @@ import kotlinx.serialization.json.Json
 import me.knighthat.util.Repository
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import timber.log.Timber
+import java.net.UnknownHostException
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -84,13 +88,26 @@ object Updater {
     }
 
     fun checkForUpdate() {
-        if( !::upstreamBuildDate.isInitialized )
-            runBlocking( Dispatchers.IO ) { fetchUpdate() }
+        try {
+            if(!::upstreamBuildDate.isInitialized)
+                runBlocking(Dispatchers.IO) { fetchUpdate() }
 
-        val localBuildDate = BuildConfig.BUILD_DATE.toUInt()
-        val canBeUpdated = localBuildDate < upstreamBuildDate.first
+            val localBuildDate = BuildConfig.BUILD_DATE.toUInt()
+            val canBeUpdated = localBuildDate < upstreamBuildDate.first
 
-        NewUpdateAvailableDialog.isActive = canBeUpdated
+            NewUpdateAvailableDialog.isActive = canBeUpdated
+        } catch( e: UnknownHostException ) {
+            Timber.e( e.message )
+            Timber.e( "Check internet connectivity!" )
+
+            SmartMessage(
+                context = appContext(),
+                message = appContext().resources.getString( R.string.error_no_internet ),
+                type = PopupType.Error
+            )
+        } catch( e: Exception ) {
+            Timber.e( e, "[Updater#checkForUpdate] has failed!")
+        }
     }
 
     @Composable
@@ -115,7 +132,15 @@ object Updater {
                 SecondaryTextButton(
                     text = stringResource( R.string.info_check_update_now ),
                     onClick = {
-                        runBlocking( Dispatchers.IO ) { fetchUpdate() }       // Force fetch new update
+                        try {
+                            runBlocking( Dispatchers.IO ) { fetchUpdate() }       // Force fetch new update
+                        } catch( e: UnknownHostException ) {
+                            SmartMessage(
+                                context = appContext(),
+                                message = appContext().resources.getString( R.string.error_no_internet ),
+                                type = PopupType.Error
+                            )
+                        }
                         checkForUpdate()
                     },
                     modifier = Modifier.padding( end = 24.dp )
