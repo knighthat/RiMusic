@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import me.knighthat.util.Repository
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.time.LocalDate
@@ -17,11 +18,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 
 object Updater {
-
-    const val TAG_PATH = "/knighthat/RiMusic/releases/tags/weekly-kbuild"
-    const val REPO_API = "https://api.github.com/repos"
-    const val GITHUB = "https://github.com"
-    const val TAG_URL = "https://api.github.com/repos/knighthat/RiMusic/releases/tags/weekly-kbuild"
 
     private val JSON = Json {
         ignoreUnknownKeys = true
@@ -62,7 +58,8 @@ object Updater {
     suspend fun fetchUpdate() = withContext( Dispatchers.IO ) {
         val client = OkHttpClient()
 
-        val request = Request.Builder().url( TAG_URL ).build()
+        val tagUrl = "${Repository.GITHUB_API}/repos${Repository.TAG_PATH}"
+        val request = Request.Builder().url( tagUrl ).build()
         val response = client.newCall( request ).execute()
 
         if( response.isSuccessful ) {
