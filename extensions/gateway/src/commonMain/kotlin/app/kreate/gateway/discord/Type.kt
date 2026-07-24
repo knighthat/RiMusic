@@ -1,4 +1,4 @@
-package me.knighthat.discord
+package app.kreate.gateway.discord
 
 import kizzy.gateway.entities.presence.Activity
 

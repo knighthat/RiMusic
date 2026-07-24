@@ -10,6 +10,8 @@ import androidx.media3.common.util.UnstableApi
 import app.kreate.database.Database
 import app.kreate.database.models.Album
 import app.kreate.database.models.Artist
+import app.kreate.gateway.discord.DiscordRpc
+import app.kreate.gateway.discord.ListeningActivity
 import app.kreate.gateway.innertube.YouTubeConstants
 import app.kreate.util.cleanPrefix
 import co.touchlab.kermit.Logger
@@ -19,8 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import me.knighthat.discord.Discord
-import me.knighthat.discord.ListeningActivity
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -28,7 +28,7 @@ import org.koin.core.component.inject
 class PlayerEventUpdateDiscord : Player.Listener, KoinComponent {
 
     private val player: Player by inject()
-    private val discord: Discord by inject()
+    private val discord: DiscordRpc by inject()
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val logger = Logger.withTag(this::class.java.simpleName)
 

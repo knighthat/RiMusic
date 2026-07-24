@@ -43,6 +43,7 @@ import app.kreate.android.themed.common.component.settings.entry
 import app.kreate.android.themed.common.component.settings.header
 import app.kreate.components.settings.SettingComponents
 import app.kreate.compose.R
+import app.kreate.gateway.discord.DiscordRpc
 import app.kreate.preferences.Preferences
 import app.kreate.utils.Toaster
 import it.fast4x.rimusic.colorPalette
@@ -53,14 +54,13 @@ import it.fast4x.rimusic.thumbnailShape
 import it.fast4x.rimusic.ui.components.CustomModalBottomSheet
 import it.fast4x.rimusic.ui.styling.Dimensions
 import kotlinx.coroutines.launch
-import me.knighthat.discord.Discord
 import org.koin.compose.koinInject
 
 @ExperimentalMaterial3Api
 @Composable
 fun AccountSettings(
     paddingValues: PaddingValues,
-    discord: Discord = koinInject()
+    discord: DiscordRpc = koinInject()
 ) {
     val context = LocalContext.current
     val scrollState = rememberLazyListState()

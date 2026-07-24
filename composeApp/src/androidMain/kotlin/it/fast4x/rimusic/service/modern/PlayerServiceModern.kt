@@ -47,6 +47,7 @@ import app.kreate.database.models.Event
 import app.kreate.di.CacheType
 import app.kreate.di.InternalPrefKey
 import app.kreate.di.Storage
+import app.kreate.gateway.discord.DiscordRpc
 import app.kreate.player.Player
 import app.kreate.player.PlayerListener
 import app.kreate.preferences.Preferences
@@ -84,7 +85,6 @@ import kotlinx.coroutines.plus
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
-import me.knighthat.discord.Discord
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.java.KoinJavaComponent.inject
@@ -106,7 +106,7 @@ class PlayerServiceModern:
     KoinComponent
 {
     private val cache: Cache by inject(CacheType.CACHE)
-    private val discord: Discord by inject()
+    private val discord: DiscordRpc by inject()
     private val player: Player by inject()
     private val volumeObserver: VolumeObserver by inject()
     private val logger = Logger.withTag( this::class.java.simpleName )

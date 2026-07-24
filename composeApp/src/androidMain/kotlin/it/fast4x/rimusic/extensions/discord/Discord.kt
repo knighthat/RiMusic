@@ -19,18 +19,18 @@ import androidx.compose.ui.viewinterop.AndroidView
 import app.kreate.UserAgents
 import app.kreate.android.LocalPlayerAwareWindowInsets
 import app.kreate.compose.R
+import app.kreate.gateway.discord.DiscordRpc
 import app.kreate.preferences.Preferences
 import app.kreate.util.IS_DEBUG
 import app.kreate.utils.Toaster
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import me.knighthat.discord.Discord
 
 @SuppressLint("SetJavaScriptEnabled")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiscordLoginAndGetToken( discord: Discord, onDone: () -> Unit ) {
+fun DiscordLoginAndGetToken( discord: DiscordRpc, onDone: () -> Unit ) {
     var webView: WebView? = null
 
     // This section is ripped from Metrolist - Full credit to their team

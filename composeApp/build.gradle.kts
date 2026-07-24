@@ -100,7 +100,6 @@ kotlin {
 
             implementation(projects.kugou)
             implementation(projects.lrclib)
-            implementation( projects.discord )
 
             implementation(libs.navigation.kmp)
 

@@ -39,13 +39,23 @@ kotlin {
     // common to share sources between related targets.
     // See: https://kotlinlang.org/docs/multiplatform-hierarchy.html
     sourceSets {
-        commonMain.dependencies {
-            implementation( projects.resources )
-            implementation( projects.preferences )
-            implementation( libs.kotlin.stdlib )
-            implementation( libs.koin.core )
-            implementation( libs.kermit )
-            implementation( libs.bundles.ktor )
+        commonMain {
+            dependencies {
+                implementation( projects.resources )
+                implementation( projects.preferences )
+                implementation( libs.kotlin.stdlib )
+                implementation( libs.koin.core )
+                implementation( libs.kermit )
+                implementation( libs.bundles.ktor )
+            }
+            kotlin {
+                // Instead of registering kizzy as a submodule, this method includes
+                // the kizzy's src folders as part of its src folder.
+                // This allows cleaner looking module tree, avoiding confusion
+                val kizzyDir = "$rootDir/modules/kizzy"
+                srcDir( "$kizzyDir/gateway/src/main/java" )
+                srcDir( "$kizzyDir/domain/src/main/java/com/my/kizzy/domain/interfaces" )
+            }
         }
         commonTest.dependencies {
             implementation( libs.kotlin.test )

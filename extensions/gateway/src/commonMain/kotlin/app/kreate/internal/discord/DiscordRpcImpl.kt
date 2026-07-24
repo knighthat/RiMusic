@@ -1,8 +1,12 @@
-package me.knighthat.discord
+package app.kreate.internal.discord
 
-import android.content.Context
+import app.kreate.exceptions.SessionNotAvailableException
 import app.kreate.gateway.ImageHostingService
 import app.kreate.gateway.discord.DiscordApi
+import app.kreate.gateway.discord.DiscordRpc
+import app.kreate.gateway.discord.ListeningActivity
+import app.kreate.gateway.discord.Type
+import app.kreate.logging.DiscordLogger
 import app.kreate.utils.ImageProcessor
 import app.kreate.utils.guessMimetype
 import app.kreate.utils.isLocalFile
@@ -16,22 +20,17 @@ import kizzy.gateway.entities.presence.Activity
 import kizzy.gateway.entities.presence.Assets
 import kizzy.gateway.entities.presence.Presence
 import kizzy.gateway.entities.presence.Timestamps
-import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.io.IOException
-import me.knighthat.exception.SessionNotAvailableException
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.concurrent.atomics.AtomicBoolean
 import kotlin.concurrent.atomics.AtomicReference
 import kotlin.concurrent.atomics.ExperimentalAtomicApi
 import kotlin.concurrent.atomics.fetchAndUpdate
@@ -39,34 +38,50 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
 
-@ExperimentalAtomicApi
-class DiscordImpl : Discord, KoinComponent {
+@OptIn(ExperimentalAtomicApi::class)
+internal class DiscordRpcImpl(scope: CoroutineScope) : DiscordRpc {
 
     companion object {
-        private const val LOGGING_TAG = "DiscordRPC"
-        private const val APPLICATION_ID = "1370148610158759966"
-        private const val MAX_DIMENSION = 1024                           // Per Discord's guidelines
+
+        private const val MAX_DIMENSION = 1024                              // Per Discord's guidelines
         private const val MAX_FILE_SIZE_BYTES = 2L * 1024 * 1024     // 2 MB in bytes
         private const val KREATE_IMAGE_URL = "https://i.ibb.co/v4CzX3kT/discord-rpc-kreate.jpg"
 
         private val cachedExternalUrls = ConcurrentHashMap<String, String>()
-        private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob() + CoroutineName(LOGGING_TAG))
     }
 
-    private val context: Context by inject()
-    private val logger = Logger.withTag( LOGGING_TAG )
-    private val lock = Mutex()
+    private val logger = Logger.withTag( "DiscordRpcImpl" )
+    private val token = MutableStateFlow<String?>(null)
+    private val session = AtomicReference<DiscordWebSocket?>(null)
     private val smallImage by lazy(::getAppLogoUrl)
-    private val _session = AtomicReference<DiscordWebSocket?>(null)
-    private val _token = MutableStateFlow<String?>(null)
-    private val _isActive = AtomicBoolean(false)
+    private val _previousPresence = AtomicReference<Presence?>(null)
+    private val _state = AtomicReference<State>(State.BROWSING)
 
-    @Volatile
-    private var previousPresence: Presence? = null
-    @Volatile
-    private var state: State = State.BROWSING
+    /**
+     * Thread-safe lock prevent multiple activities from being sent at the same time
+     */
+    private val lock = Mutex()
 
-    init { onTokenChanged() }
+    init {
+        token.onEach { token ->
+            logout()
+
+            logger.v { "Starting new session..." }
+            if( token.isNullOrBlank() ) {
+                logger.e { "Cannot start session with null or empty token" }
+                return@onEach
+            }
+
+            try {
+                session.fetchAndUpdate { DiscordWebSocketImpl(token, DiscordLogger()) }
+                    ?.connect()
+            } catch( e: Exception ) {
+                logger.e( e ) { "Session closed unexpectedly!" }
+            }
+        }.launchIn( scope )
+    }
+
+    private fun getToken() = requireNotNull( token.value ) { "Token is not set" }
 
     //<editor-fold defaultstate="collapsed" desc="External image handler">
     private suspend fun uploadLocalArtwork( artworkUri: Uri ): Result<String> =
@@ -91,7 +106,7 @@ class DiscordImpl : Discord, KoinComponent {
                 "Failed to read data from \"$uploadableUri\""
             }
             ImageHostingService.uploadToLitterBox( mimetype, fileData )
-                               .getOrThrow()
+                .getOrThrow()
         }.onSuccess {
             logger.d { "Local artwork uploaded successfully" }
         }.onFailure { err ->
@@ -128,7 +143,7 @@ class DiscordImpl : Discord, KoinComponent {
             else
                 artworkUri
 
-        return DiscordApi.getExternalImageUrl( artworkUri, _token.value!! )
+        return DiscordApi.getExternalImageUrl( artworkUri, getToken() )
                          .onSuccess { cachedExternalUrls[artworkCacheKey] = it }
                          .getOrDefault( smallImage )
     }
@@ -137,33 +152,10 @@ class DiscordImpl : Discord, KoinComponent {
      * This function shouldn't be called anywhere other than initialization of [smallImage]
      */
     private fun getAppLogoUrl(): String? = runBlocking {
-        DiscordApi.getExternalImageUrl( KREATE_IMAGE_URL, _token.value!! )
-                  .getOrNull()
+        DiscordApi.getExternalImageUrl( KREATE_IMAGE_URL, getToken() )
+            .getOrNull()
     }
     //</editor-fold>
-
-    private fun onTokenChanged() = scope.launch {
-        _token.collectLatest { token ->
-            logout()
-
-            logger.v { "Starting new session..." }
-            if( token.isNullOrBlank() ) {
-                logger.e { "Cannot start session with null or empty token" }
-                return@collectLatest
-            }
-
-            try {
-                val session = lock.withLock {
-                    DiscordWebSocketImpl(token, DiscordLogger)
-                        .also( _session::store )
-                }
-
-                session.connect()
-            } catch( e: Exception ) {
-                logger.e( e ) { "Session closed unexpectedly!" }
-            }
-        }
-    }
 
     private suspend fun makeAssets( largeImage: String?, smallImage: String? ): Assets {
         val largeImage = getImageUrl( largeImage )
@@ -176,29 +168,23 @@ class DiscordImpl : Discord, KoinComponent {
     }
 
     override fun login( token: String ) {
-        val isSimilarToken = _token.value == token
-        if( isSimilarToken && _isActive.load() ) {
+        if( getToken() == token && session.load()?.isActive == true ) {
             logger.w { "Not log in with the same token." }
             return
         }
 
-        _token.value = token
+        this.token.update { token }
     }
 
     override suspend fun logout(): Boolean {
         logger.v { "Closing connection to Discord" }
 
         try {
-            // Obtaining the lock here does 2 main things:
-            // - Prevent new update from being sent to Discord
-            // - Wait for all update to finish before disconnecting
-            val existingConnection = lock.withLock {
-                _session.fetchAndUpdate { null }
-                        ?.also(DiscordWebSocket::close )
-            }
+            val existingConnection = session.exchange( null )
+            existingConnection?.close()
 
-            previousPresence = null
-            state = State.BROWSING
+            _previousPresence.store( null )
+            _state.store( State.BROWSING )
 
             return existingConnection != null
         } catch( e: Exception ) {
@@ -217,7 +203,7 @@ class DiscordImpl : Discord, KoinComponent {
                  * to start setting up other parts such as uploading artwork,
                  * making [Activity], etc. These don't need websocket connection to work.
                  */
-                val session = _session.load() ?: throw SessionNotAvailableException()
+                val session = session.load() ?: throw SessionNotAvailableException()
                 val assets = makeAssets( song.thumbnailUrl, song.artistThumbnailUrl )
                 val activity = Activity(
                     name = "Kreate",
@@ -226,7 +212,7 @@ class DiscordImpl : Discord, KoinComponent {
                     type = Type.LISTENING,
                     timestamps = Timestamps(song.timeStart + song.duration, song.timeStart),
                     assets = assets,
-                    applicationId = APPLICATION_ID,
+                    applicationId = DiscordApi.APPLICATION_ID,
                     url = "https://github.com/knighthat/Kreate"
                 )
                 val presence = Presence(listOf(activity), false)
@@ -234,7 +220,7 @@ class DiscordImpl : Discord, KoinComponent {
                 // Update listening state can be triggered due to many factors:
                 // changing song, seeking to new position, skipping, etc.
                 // So we only check whether the request is duplicated.
-                if( presence == previousPresence ) {
+                if( presence == _previousPresence.load() ) {
                     logger.w { "Duplicate listening activity detected. Skipping..." }
                     return@withLock
                 }
@@ -242,8 +228,8 @@ class DiscordImpl : Discord, KoinComponent {
                 // Now, before sending this request away, we must validate session.
                 if( session.isWebSocketConnected() ) {
                     session.sendActivity( presence )
-                    state = State.PLAYING       // Only update state if activity sent successfully
-                    previousPresence = presence
+                    _state.store( State.PLAYING )        // Only update state if activity sent successfully
+                    _previousPresence.store( presence )
                 } else
                     throw SessionNotAvailableException()
             }
@@ -264,7 +250,7 @@ class DiscordImpl : Discord, KoinComponent {
                  * to start setting up other parts such as uploading artwork,
                  * making [Activity], etc. These don't need websocket connection to work.
                  */
-                val session = _session.load() ?: throw SessionNotAvailableException()
+                val session = session.load() ?: throw SessionNotAvailableException()
                 val assets = makeAssets( song.thumbnailUrl, song.artistThumbnailUrl )
                 val activity = Activity(
                     name = "Kreate",
@@ -273,13 +259,13 @@ class DiscordImpl : Discord, KoinComponent {
                     type = Type.LISTENING,
                     timestamps = Timestamps(null, song.timeStart),
                     assets = assets,
-                    applicationId = APPLICATION_ID,
+                    applicationId = DiscordApi.APPLICATION_ID,
                     url = "https://github.com/knighthat/Kreate"
                 )
                 val presence = Presence(listOf(activity), true, System.currentTimeMillis())
 
                 // For pausing, only enact if it's not previously
-                val previousState = previousPresence?.activities?.firstOrNull()?.state
+                val previousState = _previousPresence.load()?.activities?.firstOrNull()?.state
                 if( previousState == "Pausing" ) {
                     logger.w { "Duplicate pausing activity detected. Skipping..." }
                     return@withLock
@@ -288,8 +274,8 @@ class DiscordImpl : Discord, KoinComponent {
                 // Now, before sending this request away, we must validate session.
                 if( session.isWebSocketConnected() ) {
                     session.sendActivity( presence )
-                    state = State.PAUSING       // Only update state if activity sent successfully
-                    previousPresence = presence
+                    _state.store( State.PAUSING )       // Only update state if activity sent successfully
+                    _previousPresence.store( presence )
                 } else
                     throw SessionNotAvailableException()
             }
@@ -310,7 +296,7 @@ class DiscordImpl : Discord, KoinComponent {
                  * to start setting up other parts such as uploading artwork,
                  * making [Activity], etc. These don't need websocket connection to work.
                  */
-                val session = _session.load() ?: throw SessionNotAvailableException()
+                val session = session.load() ?: throw SessionNotAvailableException()
                 val assets = Assets(
                     largeImage = smallImage,
                     smallImage = null
@@ -323,13 +309,13 @@ class DiscordImpl : Discord, KoinComponent {
                     type = Type.LISTENING,
                     timestamps = Timestamps(null, now),
                     assets = assets,
-                    applicationId = APPLICATION_ID
+                    applicationId = DiscordApi.APPLICATION_ID
                 )
                 val presence = Presence(listOf(activity), true, now)
 
                 // Similarly to pausing, resetting presence requires
                 // user not in the state already.
-                val previousState = previousPresence?.activities?.firstOrNull()?.state
+                val previousState = _previousPresence.load()?.activities?.firstOrNull()?.state
                 if( previousState == "Browsing") {
                     logger.w { "Duplicate browsing activity detected. Skipping..." }
                     return@withLock
@@ -338,8 +324,8 @@ class DiscordImpl : Discord, KoinComponent {
                 // Now, before sending this request away, we must validate session.
                 if( session.isWebSocketConnected() ) {
                     session.sendActivity( presence )
-                    state = State.BROWSING       // Only update state if activity sent successfully
-                    previousPresence = presence
+                    _state.store( State.BROWSING )      // Only update state if activity sent successfully
+                    _previousPresence.store( presence )
                 } else
                     throw SessionNotAvailableException()
             }
