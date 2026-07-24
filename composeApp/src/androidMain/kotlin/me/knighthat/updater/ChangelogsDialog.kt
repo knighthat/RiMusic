@@ -28,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.kreate.android.themed.common.component.dialog.Dialog
 import app.kreate.compose.R
-import app.kreate.util.IS_DEBUG
+import app.kreate.utils.IS_DEBUG
 import it.fast4x.rimusic.ui.styling.LocalAppearance
 import it.fast4x.rimusic.utils.bold
 import kotlinx.coroutines.launch

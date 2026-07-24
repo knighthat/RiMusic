@@ -35,8 +35,8 @@ import app.kreate.components.settings.NumberPickerEntry
 import app.kreate.components.settings.SettingComponents
 import app.kreate.compose.R
 import app.kreate.preferences.Preferences
-import app.kreate.util.getRuntimeLogDir
 import app.kreate.utils.Toaster
+import app.kreate.utils.getRuntimeLogDir
 import co.touchlab.kermit.Logger
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.utils.textCopyToClipboard

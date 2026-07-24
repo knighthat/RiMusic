@@ -53,7 +53,7 @@ import app.kreate.compose.R
 import app.kreate.constant.Type
 import app.kreate.player.Player
 import app.kreate.preferences.Preferences
-import app.kreate.util.scrollingText
+import app.kreate.utils.scrollingText
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.ColorPaletteMode
 import it.fast4x.rimusic.enums.NavRoutes

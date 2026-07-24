@@ -5,7 +5,7 @@ import app.kreate.android.enums.DohServer
 import app.kreate.compose.R
 import app.kreate.gateway.innertube.YouTubeConstants
 import app.kreate.logging.OkHttpLogger
-import app.kreate.util.IS_DEBUG
+import app.kreate.utils.IS_DEBUG
 import app.kreate.utils.Toaster
 import co.touchlab.kermit.Logger
 import io.github.siddharthjaswal.logpose.LogPoseConfig

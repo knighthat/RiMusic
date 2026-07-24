@@ -73,9 +73,9 @@ import app.kreate.player.Player
 import app.kreate.player.PlayerListener
 import app.kreate.preferences.Preferences
 import app.kreate.preferences.QUEUE_LOOP_TYPE
-import app.kreate.util.cleanPrefix
-import app.kreate.util.scrollingText
 import app.kreate.utils.Toaster
+import app.kreate.utils.cleanPrefix
+import app.kreate.utils.scrollingText
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.ColorPaletteMode
 import it.fast4x.rimusic.enums.ColorPaletteName

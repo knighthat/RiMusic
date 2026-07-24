@@ -41,7 +41,7 @@ import app.kreate.gateway.innertube.YouTube
 import app.kreate.gateway.innertube.models.InnertubeSong
 import app.kreate.player.Player
 import app.kreate.preferences.Preferences
-import app.kreate.util.cleanPrefix
+import app.kreate.utils.cleanPrefix
 import co.touchlab.kermit.Logger
 import com.google.common.collect.ImmutableList
 import com.google.common.util.concurrent.Futures

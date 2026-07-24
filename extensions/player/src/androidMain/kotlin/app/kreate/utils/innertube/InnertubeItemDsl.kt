@@ -8,7 +8,7 @@ import androidx.media3.common.MediaMetadata
 import app.kreate.gateway.innertube.models.InnertubeSong
 import app.kreate.gateway.innertube.models.InnertubeVideo
 import app.kreate.player.MediaItem
-import app.kreate.util.toDuration
+import app.kreate.utils.toDuration
 
 
 const val EXPLICIT_BUNDLE_TAG = "explicit"

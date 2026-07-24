@@ -55,8 +55,8 @@ import app.kreate.components.settings.SETTING_DIALOG_LIST_HEIGHT
 import app.kreate.components.settings.SettingComponents
 import app.kreate.compose.R
 import app.kreate.preferences.Preferences
-import app.kreate.util.isDocumentTree
 import app.kreate.utils.Toaster
+import app.kreate.utils.isDocumentTree
 import co.touchlab.kermit.Logger
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.NavigationBarPosition

@@ -90,7 +90,7 @@ import app.kreate.gateway.innertube.models.InnertubeRankedArtist
 import app.kreate.gateway.innertube.models.InnertubeSong
 import app.kreate.player.Player
 import app.kreate.preferences.Preferences
-import app.kreate.util.scrollingText
+import app.kreate.utils.scrollingText
 import co.touchlab.kermit.Logger
 import it.fast4x.compose.persist.persist
 import it.fast4x.rimusic.colorPalette

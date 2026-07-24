@@ -5,9 +5,9 @@ import android.content.Context
 import android.os.Build
 import androidx.core.net.toUri
 import app.kreate.resources.R
-import app.kreate.util.FLAVOR_ARCH
-import app.kreate.util.IS_DEBUG
-import app.kreate.util.VERSION_NAME
+import app.kreate.utils.FLAVOR_ARCH
+import app.kreate.utils.IS_DEBUG
+import app.kreate.utils.VERSION_NAME
 import me.knighthat.utils.TimeDateUtils
 import java.io.File
 import java.io.PrintWriter

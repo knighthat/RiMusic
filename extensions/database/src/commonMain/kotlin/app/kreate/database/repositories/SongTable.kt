@@ -4,7 +4,7 @@ import app.kreate.constant.SongSortBy
 import app.kreate.constant.SortOrder
 import app.kreate.database.models.Song
 import app.kreate.database.table.DatabaseTable
-import app.kreate.util.MODIFIED_PREFIX
+import app.kreate.utils.MODIFIED_PREFIX
 import kotlinx.coroutines.flow.Flow
 
 

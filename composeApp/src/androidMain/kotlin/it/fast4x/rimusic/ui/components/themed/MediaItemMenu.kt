@@ -79,10 +79,10 @@ import app.kreate.database.models.Song
 import app.kreate.di.CacheType
 import app.kreate.player.Player
 import app.kreate.player.timer.SleepTimer
-import app.kreate.util.MODIFIED_PREFIX
-import app.kreate.util.cleanPrefix
-import app.kreate.util.readableText
+import app.kreate.utils.MODIFIED_PREFIX
 import app.kreate.utils.Toaster
+import app.kreate.utils.cleanPrefix
+import app.kreate.utils.readableText
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.MenuStyle
 import it.fast4x.rimusic.enums.NavRoutes

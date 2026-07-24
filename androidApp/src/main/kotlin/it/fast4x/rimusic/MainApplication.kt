@@ -19,10 +19,10 @@ import app.kreate.logging.CoilLogger
 import app.kreate.logging.KoinBufferedLogger
 import app.kreate.logging.TimberToKermitLogger
 import app.kreate.logging.setupLogging
-import app.kreate.util.setDebugMode
-import app.kreate.util.setFlavorArch
-import app.kreate.util.setFlavorEnv
-import app.kreate.util.setVersionName
+import app.kreate.utils.setDebugMode
+import app.kreate.utils.setFlavorArch
+import app.kreate.utils.setFlavorEnv
+import app.kreate.utils.setVersionName
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader

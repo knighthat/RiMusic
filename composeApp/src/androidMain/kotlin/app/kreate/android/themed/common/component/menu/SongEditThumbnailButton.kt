@@ -3,7 +3,7 @@ package app.kreate.android.themed.common.component.menu
 import androidx.media3.common.MediaItem
 import app.kreate.android.themed.common.component.BottomMenu
 import app.kreate.database.Database
-import app.kreate.util.MODIFIED_PREFIX
+import app.kreate.utils.MODIFIED_PREFIX
 
 
 class SongEditThumbnailButton : EditThumbnailDialog<MediaItem>() {

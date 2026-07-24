@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import app.kreate.util.cleanPrefix
+import app.kreate.utils.cleanPrefix
 
 
 @Immutable

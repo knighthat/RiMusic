@@ -40,14 +40,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavController
-import app.kreate.compose.R
 import app.kreate.android.themed.rimusic.component.playlist.PlaylistItem
+import app.kreate.compose.R
 import app.kreate.constant.PlaylistSortBy
 import app.kreate.constant.SortOrder
 import app.kreate.database.Database
 import app.kreate.database.models.Playlist
 import app.kreate.database.models.PlaylistPreview
-import app.kreate.util.cleanPrefix
+import app.kreate.utils.cleanPrefix
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.MenuStyle
 import it.fast4x.rimusic.enums.NavRoutes

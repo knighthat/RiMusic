@@ -23,7 +23,7 @@ import app.kreate.database.models.Album
 import app.kreate.database.models.Song
 import app.kreate.di.THUMBNAIL_SIZE
 import app.kreate.gateway.innertube.models.InnertubeAlbum
-import app.kreate.util.toDuration
+import app.kreate.utils.toDuration
 import it.fast4x.rimusic.service.modern.isLocal
 
 const val EXPLICIT_BUNDLE_TAG = "is_explicit"

@@ -71,7 +71,7 @@ import app.kreate.gateway.innertube.models.InnertubeArtist
 import app.kreate.gateway.innertube.models.InnertubeSong
 import app.kreate.internal.innertube.models.share
 import app.kreate.player.Player
-import app.kreate.util.scrollingText
+import app.kreate.utils.scrollingText
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.typography

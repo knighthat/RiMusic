@@ -3,7 +3,7 @@ package app.kreate.di
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import app.kreate.internal.database.AbstractRoomDatabase
-import app.kreate.util.getConfigDir
+import app.kreate.utils.getConfigDir
 import org.koin.core.scope.Scope
 
 

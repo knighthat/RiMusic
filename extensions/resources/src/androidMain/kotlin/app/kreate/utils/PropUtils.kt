@@ -1,6 +1,5 @@
 package app.kreate.utils
 
-import app.kreate.util.MODIFIED_PREFIX
 import org.jetbrains.annotations.Contract
 
 object PropUtils {

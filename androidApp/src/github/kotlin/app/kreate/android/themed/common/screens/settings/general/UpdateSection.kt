@@ -18,7 +18,7 @@ import app.kreate.components.settings.EnumEntry
 import app.kreate.components.settings.SettingComponents
 import app.kreate.compose.R
 import app.kreate.preferences.Preferences
-import app.kreate.util.VERSION_NAME
+import app.kreate.utils.VERSION_NAME
 import it.fast4x.rimusic.enums.CheckUpdateState
 import it.fast4x.rimusic.ui.components.themed.SecondaryTextButton
 import me.knighthat.updater.ChangelogsDialog

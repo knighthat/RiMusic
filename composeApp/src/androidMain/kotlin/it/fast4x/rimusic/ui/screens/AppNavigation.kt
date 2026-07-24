@@ -57,8 +57,8 @@ import app.kreate.compose.R
 import app.kreate.database.Database
 import app.kreate.database.models.SearchQuery
 import app.kreate.preferences.Preferences
-import app.kreate.util.VERSION_NAME
 import app.kreate.utils.Toaster
+import app.kreate.utils.VERSION_NAME
 import it.fast4x.rimusic.enums.HomeScreenTabs
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.enums.StatisticsType

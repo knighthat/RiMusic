@@ -11,8 +11,8 @@ import app.kreate.database.models.Song
 import app.kreate.database.repositories.SongTable
 import app.kreate.di.THUMBNAIL_SIZE
 import app.kreate.preferences.Preferences
-import app.kreate.util.thumbnail
-import app.kreate.util.toDuration
+import app.kreate.utils.thumbnail
+import app.kreate.utils.toDuration
 import co.touchlab.kermit.Logger
 import coil3.imageLoader
 import coil3.request.ImageRequest

@@ -21,7 +21,7 @@ import app.kreate.android.LocalPlayerAwareWindowInsets
 import app.kreate.compose.R
 import app.kreate.gateway.discord.DiscordRpc
 import app.kreate.preferences.Preferences
-import app.kreate.util.IS_DEBUG
+import app.kreate.utils.IS_DEBUG
 import app.kreate.utils.Toaster
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.Dispatchers

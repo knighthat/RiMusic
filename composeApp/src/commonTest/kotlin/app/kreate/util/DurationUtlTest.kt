@@ -1,5 +1,7 @@
 package app.kreate.util
 
+import app.kreate.utils.readableText
+import app.kreate.utils.toDuration
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration

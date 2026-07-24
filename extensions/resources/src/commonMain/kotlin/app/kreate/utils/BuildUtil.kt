@@ -1,4 +1,4 @@
-package app.kreate.util
+package app.kreate.utils
 
 
 private var isDebug: Boolean? = null

@@ -1,4 +1,4 @@
-package app.kreate.util
+package app.kreate.utils
 
 
 fun String?.thumbnail(size: Int): String? =

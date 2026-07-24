@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import app.kreate.component.ConfirmDialog
 import app.kreate.components.settings.SettingComponents.Action
-import app.kreate.util.awaitFrame
+import app.kreate.utils.awaitFrame
 import it.fast4x.rimusic.ui.styling.LocalAppearance
 import kreate.resources.generated.resources.Res
 import kreate.resources.generated.resources.error_empty_input

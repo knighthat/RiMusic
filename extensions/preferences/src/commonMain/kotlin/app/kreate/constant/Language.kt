@@ -1,8 +1,8 @@
 package app.kreate.constant
 
 import androidx.compose.runtime.Composable
-import app.kreate.util.getSystemCountryCode
-import app.kreate.util.getSystemLanguageCode
+import app.kreate.utils.getSystemCountryCode
+import app.kreate.utils.getSystemLanguageCode
 import kreate.resources.generated.resources.Res
 import kreate.resources.generated.resources.locale_system
 import org.jetbrains.compose.resources.stringResource

@@ -2,8 +2,8 @@ package app.kreate.logging
 
 
 import app.kreate.preferences.Preferences
-import app.kreate.util.IS_DEBUG
-import app.kreate.util.getRuntimeLogDir
+import app.kreate.utils.IS_DEBUG
+import app.kreate.utils.getRuntimeLogDir
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import co.touchlab.kermit.io.RollingFileLogWriter

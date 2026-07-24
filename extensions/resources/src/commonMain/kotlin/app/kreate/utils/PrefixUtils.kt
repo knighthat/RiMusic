@@ -1,4 +1,4 @@
-package app.kreate.util
+package app.kreate.utils
 
 const val MODIFIED_PREFIX = "modified:"
 

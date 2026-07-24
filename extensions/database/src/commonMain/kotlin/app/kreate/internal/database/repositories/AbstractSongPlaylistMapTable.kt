@@ -8,8 +8,8 @@ import app.kreate.constant.SortOrder
 import app.kreate.database.models.Song
 import app.kreate.database.models.SongPlaylistMap
 import app.kreate.database.repositories.SongPlaylistMapTable
-import app.kreate.util.MODIFIED_PREFIX
-import app.kreate.util.toDuration
+import app.kreate.utils.MODIFIED_PREFIX
+import app.kreate.utils.toDuration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn

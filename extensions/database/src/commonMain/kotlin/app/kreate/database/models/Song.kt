@@ -4,8 +4,8 @@ import androidx.compose.runtime.Immutable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import app.kreate.util.cleanPrefix
-import app.kreate.util.toDuration
+import app.kreate.utils.cleanPrefix
+import app.kreate.utils.toDuration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 

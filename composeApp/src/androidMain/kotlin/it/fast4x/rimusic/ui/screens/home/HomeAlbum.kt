@@ -57,7 +57,7 @@ import app.kreate.database.models.Song
 import app.kreate.database.repositories.AlbumTable
 import app.kreate.player.Player
 import app.kreate.preferences.Preferences
-import app.kreate.util.MODIFIED_PREFIX
+import app.kreate.utils.MODIFIED_PREFIX
 import it.fast4x.compose.persist.persistList
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.AlbumsType

@@ -1,7 +1,7 @@
 package me.knighthat.utils.csv
 
 import app.kreate.database.models.Song
-import app.kreate.util.toDuration
+import app.kreate.utils.toDuration
 import com.github.doyaaaaaken.kotlincsv.client.ICsvFileWriter
 
 data class SongCSV(

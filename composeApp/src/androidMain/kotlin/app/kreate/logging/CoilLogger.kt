@@ -1,6 +1,6 @@
 package app.kreate.logging
 
-import app.kreate.util.IS_DEBUG
+import app.kreate.utils.IS_DEBUG
 import co.touchlab.kermit.Severity
 import coil3.request.NullRequestDataException
 import coil3.util.Logger

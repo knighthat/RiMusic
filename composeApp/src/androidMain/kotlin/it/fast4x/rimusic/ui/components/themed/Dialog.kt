@@ -96,7 +96,7 @@ import app.kreate.database.Database
 import app.kreate.gateway.innertube.YouTube
 import app.kreate.player.Player
 import app.kreate.preferences.Preferences
-import app.kreate.util.cleanPrefix
+import app.kreate.utils.cleanPrefix
 import co.touchlab.kermit.Logger
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.ColorPaletteMode

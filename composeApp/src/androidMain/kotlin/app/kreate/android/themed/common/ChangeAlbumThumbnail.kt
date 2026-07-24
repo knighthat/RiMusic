@@ -2,7 +2,7 @@ package app.kreate.android.themed.common
 
 import android.content.Context
 import app.kreate.database.Database
-import app.kreate.util.MODIFIED_PREFIX
+import app.kreate.utils.MODIFIED_PREFIX
 
 
 class ChangeAlbumThumbnail(

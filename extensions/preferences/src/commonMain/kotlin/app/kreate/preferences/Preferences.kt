@@ -23,10 +23,10 @@ import app.kreate.di.InternalPrefKey
 import app.kreate.di.InternalPreferences
 import app.kreate.di.PrefType
 import app.kreate.di.Storage
-import app.kreate.util.getSystemCountryCode
-import app.kreate.util.priomap.Priority
-import app.kreate.util.priomap.PriorityKey
-import app.kreate.util.priomap.createPrioritySortedMap
+import app.kreate.utils.getSystemCountryCode
+import app.kreate.utils.priomap.Priority
+import app.kreate.utils.priomap.PriorityKey
+import app.kreate.utils.priomap.createPrioritySortedMap
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.Severity
 import it.fast4x.rimusic.enums.AlbumSwipeAction

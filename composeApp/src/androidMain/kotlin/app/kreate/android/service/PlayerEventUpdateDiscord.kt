@@ -13,7 +13,7 @@ import app.kreate.database.models.Artist
 import app.kreate.gateway.discord.DiscordRpc
 import app.kreate.gateway.discord.ListeningActivity
 import app.kreate.gateway.innertube.YouTubeConstants
-import app.kreate.util.cleanPrefix
+import app.kreate.utils.cleanPrefix
 import co.touchlab.kermit.Logger
 import it.fast4x.rimusic.utils.resize
 import kotlinx.coroutines.CoroutineScope

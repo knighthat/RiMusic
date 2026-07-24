@@ -7,7 +7,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.graphics.applyCanvas
 import app.kreate.android.coil3.ImageFactory
-import app.kreate.util.thumbnail
+import app.kreate.utils.thumbnail
 import co.touchlab.kermit.Logger
 import coil3.imageLoader
 import coil3.request.Disposable

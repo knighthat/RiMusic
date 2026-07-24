@@ -27,7 +27,7 @@ import app.kreate.android.utils.innertube.toArtist
 import app.kreate.database.models.Artist
 import app.kreate.gateway.innertube.models.InnertubeArtist
 import app.kreate.preferences.Preferences
-import app.kreate.util.scrollingText
+import app.kreate.utils.scrollingText
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.ui.styling.Appearance
 import it.fast4x.rimusic.ui.styling.ColorPalette

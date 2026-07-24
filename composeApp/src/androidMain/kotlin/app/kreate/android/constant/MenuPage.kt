@@ -31,8 +31,8 @@ import app.kreate.database.Database
 import app.kreate.database.mapIgnore
 import app.kreate.database.models.Playlist
 import app.kreate.database.models.PlaylistPreview
-import app.kreate.util.cleanPrefix
 import app.kreate.utils.Toaster
+import app.kreate.utils.cleanPrefix
 import it.fast4x.rimusic.enums.NavRoutes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import app.kreate.compose.R
-import app.kreate.util.thumbnail
+import app.kreate.utils.thumbnail
 import coil3.Image
 import coil3.compose.AsyncImagePainter.State
 import coil3.imageLoader

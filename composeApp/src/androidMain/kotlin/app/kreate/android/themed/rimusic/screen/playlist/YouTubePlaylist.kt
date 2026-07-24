@@ -62,8 +62,8 @@ import app.kreate.database.models.Song
 import app.kreate.di.CacheType
 import app.kreate.internal.innertube.models.share
 import app.kreate.player.Player
-import app.kreate.util.scrollingText
 import app.kreate.utils.Toaster
+import app.kreate.utils.scrollingText
 import co.touchlab.kermit.Logger
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.UiType

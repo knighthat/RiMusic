@@ -59,8 +59,8 @@ import app.kreate.database.mapIgnore
 import app.kreate.database.models.Playlist
 import app.kreate.player.Player
 import app.kreate.player.timer.SleepTimer
-import app.kreate.util.MODIFIED_PREFIX
-import app.kreate.util.readableText
+import app.kreate.utils.MODIFIED_PREFIX
+import app.kreate.utils.readableText
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.models.Info

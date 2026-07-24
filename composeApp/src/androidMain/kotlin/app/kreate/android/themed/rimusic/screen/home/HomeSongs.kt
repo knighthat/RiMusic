@@ -51,7 +51,7 @@ import app.kreate.database.ext.FormatWithSong
 import app.kreate.database.models.Song
 import app.kreate.di.CacheType
 import app.kreate.player.Player
-import app.kreate.util.toDuration
+import app.kreate.utils.toDuration
 import it.fast4x.compose.persist.persistList
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.BuiltInPlaylist

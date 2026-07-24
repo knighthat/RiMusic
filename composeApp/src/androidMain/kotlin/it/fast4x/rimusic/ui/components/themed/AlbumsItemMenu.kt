@@ -50,7 +50,7 @@ import app.kreate.database.Database
 import app.kreate.database.models.Album
 import app.kreate.database.models.Playlist
 import app.kreate.database.models.PlaylistPreview
-import app.kreate.util.cleanPrefix
+import app.kreate.utils.cleanPrefix
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.enums.MenuStyle
 import it.fast4x.rimusic.enums.NavRoutes

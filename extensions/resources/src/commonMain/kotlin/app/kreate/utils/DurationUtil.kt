@@ -1,4 +1,4 @@
-package app.kreate.util
+package app.kreate.utils
 
 import java.util.StringJoiner
 import kotlin.time.Duration

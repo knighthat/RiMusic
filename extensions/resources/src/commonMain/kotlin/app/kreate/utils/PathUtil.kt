@@ -1,10 +1,8 @@
-package app.kreate.util
+package app.kreate.utils
 
 import okio.FileSystem
 import okio.IOException
 import okio.Path
-import okio.SYSTEM
-import java.io.File
 
 
 private val fileSystem: FileSystem

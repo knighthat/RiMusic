@@ -97,8 +97,8 @@ import app.kreate.database.models.Lyrics
 import app.kreate.gateway.innertube.YouTube
 import app.kreate.player.Player
 import app.kreate.preferences.Preferences
-import app.kreate.util.cleanPrefix
 import app.kreate.utils.Toaster
+import app.kreate.utils.cleanPrefix
 import co.touchlab.kermit.Logger
 import it.fast4x.kugou.KuGou
 import it.fast4x.lrclib.LrcLib

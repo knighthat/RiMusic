@@ -6,7 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import app.kreate.util.IS_DEBUG
+import app.kreate.utils.IS_DEBUG
 import it.fast4x.rimusic.enums.CheckUpdateState
 import java.io.File
 

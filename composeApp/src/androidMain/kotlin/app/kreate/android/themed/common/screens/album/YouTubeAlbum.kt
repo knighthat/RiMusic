@@ -73,8 +73,8 @@ import app.kreate.gateway.innertube.models.InnertubeSong
 import app.kreate.gateway.innertube.models.Section
 import app.kreate.internal.innertube.models.share
 import app.kreate.player.Player
-import app.kreate.util.MODIFIED_PREFIX
-import app.kreate.util.scrollingText
+import app.kreate.utils.MODIFIED_PREFIX
+import app.kreate.utils.scrollingText
 import co.touchlab.kermit.Logger
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.typography

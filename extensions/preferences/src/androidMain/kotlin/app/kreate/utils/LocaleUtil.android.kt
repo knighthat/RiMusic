@@ -1,4 +1,4 @@
-package app.kreate.util
+package app.kreate.utils
 
 import android.content.Context
 import android.content.res.Resources

@@ -20,7 +20,7 @@ import app.kreate.di.PrefType
 import app.kreate.di.Storage
 import app.kreate.gateway.innertube.YouTube
 import app.kreate.preferences.Preferences
-import app.kreate.util.IS_DEBUG
+import app.kreate.utils.IS_DEBUG
 import app.kreate.utils.Toaster
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.DelicateCoroutinesApi

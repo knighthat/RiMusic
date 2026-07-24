@@ -1,10 +1,9 @@
 package app.kreate.di
 
-import app.kreate.util.getCacheDir
+import app.kreate.utils.getCacheDir
 import coil3.BitmapImage
 import coil3.PlatformContext
 import coil3.disk.DiskCache
-import coil3.disk.directory
 import coil3.memory.MemoryCache
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.scope.Scope

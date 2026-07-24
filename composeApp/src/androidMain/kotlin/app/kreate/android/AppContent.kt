@@ -66,8 +66,8 @@ import app.kreate.gateway.innertube.YouTube
 import app.kreate.player.Player
 import app.kreate.player.PlayerListener
 import app.kreate.preferences.Preferences
-import app.kreate.util.thumbnail
 import app.kreate.utils.Toaster
+import app.kreate.utils.thumbnail
 import app.kreate.widgets.WidgetBroadcastReceiver
 import app.kreate.widgets.state.WidgetColorState
 import co.touchlab.kermit.Logger

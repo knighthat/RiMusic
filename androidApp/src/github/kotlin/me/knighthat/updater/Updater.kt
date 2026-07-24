@@ -4,11 +4,11 @@ import android.content.Context
 import android.os.Looper
 import androidx.compose.ui.util.fastFirstOrNull
 import app.kreate.compose.R
-import app.kreate.util.FLAVOR_ARCH
-import app.kreate.util.FLAVOR_ENV
-import app.kreate.util.VERSION_NAME
+import app.kreate.utils.FLAVOR_ARCH
+import app.kreate.utils.FLAVOR_ENV
 import app.kreate.utils.Repository
 import app.kreate.utils.Toaster
+import app.kreate.utils.VERSION_NAME
 import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

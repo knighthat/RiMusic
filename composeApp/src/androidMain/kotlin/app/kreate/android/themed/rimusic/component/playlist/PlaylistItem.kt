@@ -47,7 +47,7 @@ import app.kreate.database.Database
 import app.kreate.database.models.Playlist
 import app.kreate.gateway.innertube.models.InnertubePlaylist
 import app.kreate.preferences.Preferences
-import app.kreate.util.scrollingText
+import app.kreate.utils.scrollingText
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.ui.styling.Appearance
 import it.fast4x.rimusic.ui.styling.ColorPalette

@@ -1,4 +1,4 @@
-package app.kreate.util.priomap
+package app.kreate.utils.priomap
 
 
 /**

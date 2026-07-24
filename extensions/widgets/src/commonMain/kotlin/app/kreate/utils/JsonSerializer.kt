@@ -1,4 +1,4 @@
-package app.kreate.util
+package app.kreate.utils
 
 import co.touchlab.kermit.Logger
 import kotlinx.serialization.json.Json
