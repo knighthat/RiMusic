@@ -1,5 +1,9 @@
-package me.knighthat.utils
+package app.kreate.utils
 
+
+/**
+ * Constants related to remote Git repository
+ */
 object Repository {
 
     const val GITHUB = "https://github.com"

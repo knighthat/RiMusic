@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import app.kreate.compose.R
+import app.kreate.utils.Repository
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.typography
 import it.fast4x.rimusic.ui.styling.shimmer
@@ -41,7 +42,6 @@ import it.fast4x.rimusic.utils.semiBold
 import me.knighthat.component.dialog.Dialog
 import me.knighthat.component.dialog.InteractiveDialog
 import me.knighthat.updater.DownloadAndInstallDialog.errorMessage
-import me.knighthat.utils.Repository
 import java.io.File
 
 object NewUpdatePrompt: InteractiveDialog {

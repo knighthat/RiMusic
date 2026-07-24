@@ -39,6 +39,7 @@ import app.kreate.android.themed.common.component.settings.entry
 import app.kreate.android.themed.common.component.settings.header
 import app.kreate.components.settings.SettingComponents
 import app.kreate.compose.R
+import app.kreate.utils.Repository
 import app.kreate.utils.Toaster
 import co.touchlab.kermit.Logger
 import it.fast4x.rimusic.colorPalette
@@ -56,7 +57,6 @@ import kotlinx.serialization.json.decodeFromStream
 import me.knighthat.component.settings.Contributor
 import me.knighthat.component.settings.Developer
 import me.knighthat.component.settings.Translator
-import me.knighthat.utils.Repository
 
 
 // Prevent this from being init until it's needed
