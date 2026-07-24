@@ -4,10 +4,11 @@ import android.content.Context
 import app.kreate.gateway.ImageHostingService
 import app.kreate.gateway.discord.DiscordApi
 import app.kreate.utils.ImageProcessor
+import app.kreate.utils.guessMimetype
 import app.kreate.utils.isLocalFile
+import app.kreate.utils.readByteArray
 import co.touchlab.kermit.Logger
 import com.eygraber.uri.Uri
-import com.eygraber.uri.toAndroidUri
 import com.eygraber.uri.toKmpUri
 import kizzy.gateway.DiscordWebSocket
 import kizzy.gateway.DiscordWebSocketImpl
@@ -83,11 +84,13 @@ class DiscordImpl : Discord, KoinComponent {
                     "Upload artwork without any compression"
             }
 
-            val androidUri = uploadableUri.toAndroidUri()
-            val (mimeType, fileData) = with( context.contentResolver ) {
-                getType( androidUri )!! to openInputStream( androidUri )!!.readBytes()
+            val mimetype = requireNotNull( uploadableUri.guessMimetype() ) {
+                "Failed to read mimetype of \"$uploadableUri\""
             }
-            ImageHostingService.uploadToLitterBox( mimeType, fileData )
+            val fileData = requireNotNull( uploadableUri.readByteArray() ) {
+                "Failed to read data from \"$uploadableUri\""
+            }
+            ImageHostingService.uploadToLitterBox( mimetype, fileData )
                                .getOrThrow()
         }.onSuccess {
             logger.d { "Local artwork uploaded successfully" }
