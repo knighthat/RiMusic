@@ -54,6 +54,7 @@ colorpicker = "1.2.0"
 kotlinStdlibVersion = "2.4.0"
 timber = "5.0.1"
 logpose = "0.9.11"
+uri-kmp = "0.0.21"
 
 
 [libraries]
@@ -160,6 +161,7 @@ desugaring-nio = { group = "com.android.tools", name = "desugar_jdk_libs_nio", v
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlibVersion" }
+uri-kmp = { module = "com.eygraber:uri-kmp", version.ref = "uri-kmp" }
 
 
 [plugins]

@@ -47,6 +47,7 @@ kotlin {
         commonMain.dependencies {
             // Expose Path interface for subscribing modules
             api( libs.okio )
+            api( libs.uri.kmp )
             implementation( libs.koin.core )
             implementation( libs.kermit )
             // Compose
