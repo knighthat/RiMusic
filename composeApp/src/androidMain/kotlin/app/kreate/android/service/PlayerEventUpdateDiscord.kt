@@ -58,10 +58,10 @@ class PlayerEventUpdateDiscord : Player.Listener, KoinComponent {
             timeStart = timeStart,
             duration = metadata?.durationMs ?: 0L,
             songName = metadata?.title?.toString().orEmpty(),
-            thumbnailUrl = metadata?.artworkUri,
+            thumbnailUrl = metadata?.artworkUri?.toString(),
             artistName = artistsText.orEmpty(),
             artistUrl = artistUrl,
-            artistThumbnailUrl = artistThumbnailUrl,
+            artistThumbnailUrl = artistThumbnailUrl?.toString(),
             albumName = alumTitle.orEmpty()
         )
     }

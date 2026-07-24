@@ -16,8 +16,12 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation( projects.gateway )
+                implementation( projects.resources )
+
                 implementation( libs.koin.core )
                 implementation( libs.kermit )
+                implementation( libs.uri.kmp )
                 implementation( libs.bundles.ktor )
             }
             kotlin {

@@ -1,11 +1,14 @@
-package me.knighthat.utils
+package app.kreate.utils
 
 import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.provider.OpenableColumns
+import com.eygraber.uri.Uri
+import com.eygraber.uri.toAndroidUri
+import com.eygraber.uri.toKmpUri
+import org.koin.java.KoinJavaComponent
 import java.io.FileOutputStream
 import java.io.IOException
 import kotlin.contracts.ExperimentalContracts
@@ -13,7 +16,8 @@ import kotlin.math.roundToInt
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-internal object ImageProcessor {
+
+actual object ImageProcessor {
 
     private fun calculateInSampleSize(
         srcWidth: Int,
@@ -34,7 +38,7 @@ internal object ImageProcessor {
         return inSampleSize
     }
 
-    private fun queryImageInfo( contentResolver: ContentResolver, artworkUri: Uri ): Triple<Int, Int, Long> {
+    private fun queryImageInfo( contentResolver: ContentResolver, artworkUri: android.net.Uri): Triple<Int, Int, Long> {
         var srcWidth = 0
         var srcHeight = 0
         var srcSize = 0L
@@ -93,22 +97,24 @@ internal object ImageProcessor {
         IOException::class,
         OutOfMemoryError::class
     )
-    fun compressArtwork( context: Context, artworkUri: Uri, maxWidth: Int, maxHeight: Int, maxSize: Long ): Uri {
+    actual fun compressArtwork( artworkUri: Uri, maxWidth: Int, maxHeight: Int, maxSize: Long ): Uri {
         require( artworkUri.isLocalFile() ) {
             "$artworkUri is NOT a local file!"
         }
 
+        val context: Context = KoinJavaComponent.get(Context::class.java)
         val contentResolver = context.contentResolver
-        val mimeType = contentResolver.getType( artworkUri )
-        if ( mimeType == null || !mimeType.startsWith( "image/" ) )
-            throw IllegalArgumentException("The provided URI does not point to an image file. MIME type: $mimeType")
+        val mimeType = artworkUri.guessMimetype()
+        require( mimeType != null && mimeType.startsWith("image/") ) {
+            "Couldn't guess mimetype of \"$artworkUri\" or it's not supported"
+        }
 
-        val (originalWidth, originalHeight, originalFileSize) = queryImageInfo( contentResolver, artworkUri )
+        val androidUri = artworkUri.toAndroidUri()
+        val (originalWidth, originalHeight, originalFileSize) = queryImageInfo( contentResolver, androidUri )
         val needsResizing = originalWidth > maxWidth || originalHeight > maxHeight
         val needsCompression = originalFileSize > maxSize
         if ( !needsResizing && !needsCompression ) return artworkUri
 
-        // Step 5: Process and compress if local limits exceeded
         try {
             // Determine the target dimensions
             val scale = if( needsResizing )
@@ -118,7 +124,7 @@ internal object ImageProcessor {
             val targetWidth = (originalWidth * scale).roundToInt()
             val targetHeight = (originalHeight * scale).roundToInt()
 
-            val decodedBitmap = contentResolver.openInputStream( artworkUri )!!.use { inputStream ->
+            val decodedBitmap = contentResolver.openInputStream( androidUri )!!.use { inputStream ->
                 // Calculate inSampleSize based on target dimensions for decoding
                 val decodeOptions = BitmapFactory.Options().apply {
                     inJustDecodeBounds = false
@@ -127,8 +133,7 @@ internal object ImageProcessor {
 
                 BitmapFactory.decodeStream(inputStream, null, decodeOptions)
             }
-            if (decodedBitmap == null)
-                throw IllegalArgumentException("Failed to decode image into Bitmap from URI: $artworkUri")
+            requireNotNull( decodedBitmap ) { "Failed to decode image into Bitmap from URI: $artworkUri" }
 
             val outputFile = context.cacheDir.resolve( "image_processor/${Uuid.generateV4()}" )
             FileOutputStream(outputFile).use { outStream ->
@@ -139,7 +144,7 @@ internal object ImageProcessor {
                     throw IOException("Failed to compress image to file: ${outputFile.absolutePath}")
             }
 
-            return Uri.fromFile( outputFile )
+            return android.net.Uri.fromFile( outputFile ).toKmpUri()
 
         } catch (e: OutOfMemoryError) {
             System.gc()

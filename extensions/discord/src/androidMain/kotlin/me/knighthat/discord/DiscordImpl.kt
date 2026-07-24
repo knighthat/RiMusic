@@ -1,21 +1,14 @@
 package me.knighthat.discord
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.net.Uri
-import android.webkit.MimeTypeMap
+import app.kreate.gateway.ImageHostingService
+import app.kreate.gateway.discord.DiscordApi
+import app.kreate.utils.ImageProcessor
+import app.kreate.utils.isLocalFile
 import co.touchlab.kermit.Logger
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.forms.formData
-import io.ktor.client.request.forms.submitFormWithBinaryData
-import io.ktor.client.request.header
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.ContentType
-import io.ktor.http.Headers
-import io.ktor.http.HttpHeaders
+import com.eygraber.uri.Uri
+import com.eygraber.uri.toAndroidUri
+import com.eygraber.uri.toKmpUri
 import kizzy.gateway.DiscordWebSocket
 import kizzy.gateway.DiscordWebSocketImpl
 import kizzy.gateway.entities.presence.Activity
@@ -32,15 +25,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.add
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.putJsonArray
+import kotlinx.io.IOException
 import me.knighthat.exception.SessionNotAvailableException
-import me.knighthat.utils.ImageProcessor
-import me.knighthat.utils.isLocalFile
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.concurrent.ConcurrentHashMap
@@ -58,17 +44,14 @@ class DiscordImpl : Discord, KoinComponent {
     companion object {
         private const val LOGGING_TAG = "DiscordRPC"
         private const val APPLICATION_ID = "1370148610158759966"
-        private const val TEMP_FILE_HOST = "https://litterbox.catbox.moe/resources/internals/api.php"
         private const val MAX_DIMENSION = 1024                           // Per Discord's guidelines
         private const val MAX_FILE_SIZE_BYTES = 2L * 1024 * 1024     // 2 MB in bytes
         private const val KREATE_IMAGE_URL = "https://i.ibb.co/v4CzX3kT/discord-rpc-kreate.jpg"
-        private const val API_VERSION = "10"
 
         private val cachedExternalUrls = ConcurrentHashMap<String, String>()
         private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob() + CoroutineName(LOGGING_TAG))
     }
 
-    private val client: HttpClient by inject()
     private val context: Context by inject()
     private val logger = Logger.withTag( LOGGING_TAG )
     private val lock = Mutex()
@@ -85,137 +68,74 @@ class DiscordImpl : Discord, KoinComponent {
     init { onTokenChanged() }
 
     //<editor-fold defaultstate="collapsed" desc="External image handler">
-    private suspend fun uploadLocalArtwork( artworkUri: Uri): Result<String> =
+    private suspend fun uploadLocalArtwork( artworkUri: Uri ): Result<String> =
         runCatching {
-            logger.v { "Uploading local artwork \"$artworkUri\" to online bucket" }
-
             val uploadableUri = ImageProcessor.compressArtwork(
-                context,
                 artworkUri,
                 MAX_DIMENSION,
                 MAX_DIMENSION,
                 MAX_FILE_SIZE_BYTES
             )
-
             logger.d {
                 if( artworkUri !== uploadableUri )
                     "Upload compressed version $uploadableUri"
                 else
-                    "No compression needed"
+                    "Upload artwork without any compression"
             }
 
-            val formData = formData {
-                val (mimeType, fileData) = with( context.contentResolver ) {
-                    getType( uploadableUri )!! to openInputStream( uploadableUri )!!.readBytes()
-                }
-                val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType( mimeType )
-
-                append("reqtype", "fileupload")
-                append("time", "1h")
-                append("fileToUpload", fileData, Headers.build {
-                    append( HttpHeaders.ContentDisposition, "filename=\"${System.currentTimeMillis()}.$extension\"" )
-                    append( HttpHeaders.ContentType, mimeType )
-                })
+            val androidUri = uploadableUri.toAndroidUri()
+            val (mimeType, fileData) = with( context.contentResolver ) {
+                getType( androidUri )!! to openInputStream( androidUri )!!.readBytes()
             }
-
-            client.submitFormWithBinaryData( TEMP_FILE_HOST, formData )
-                .bodyAsText()
+            ImageHostingService.uploadToLitterBox( mimeType, fileData )
+                               .getOrThrow()
         }.onSuccess {
             logger.d { "Local artwork uploaded successfully" }
-        }.onFailure {
-            logger.e( it ) { "Error occurs while uploading local artwork" }
-        }
+        }.onFailure { err ->
+            when( err ) {
+                is IllegalArgumentException,
+                is SecurityException,
+                is IOException,
+                is OutOfMemoryError -> logger.e("Failed to compress image", err)
 
-    private suspend fun submitArtworkUrlToDiscord( imageUrl: String, applicationId: String ): Result<String> =
-        runCatching {
-            Logger.v { "Posting $imageUrl to get external url" }
-
-            if ( imageUrl.startsWith( "mp:" ) ) {
-                Logger.w { "imageUrl already an external url" }
-                return@runCatching imageUrl
+                else -> logger.e( err ) { "Error occurs while uploading local artwork" }
             }
-
-            @SuppressLint("UseKtx")         // Lib not available
-            val scheme = Uri.parse( imageUrl ).scheme
-            require(
-                scheme.equals( "http", true )
-                        || scheme.equals( "https", true )
-            ) { "Only \"http\" and \"https\" are supported!" }
-
-            val postUrl = "https://discord.com/api/v$API_VERSION/applications/$applicationId/external-assets"
-            val response = client.post( postUrl ) {
-                header( HttpHeaders.Authorization, _token.value )
-                // For some reasons, this is required.
-                // "java.lang.ClassCastException: kotlinx.serialization.json.JsonObject cannot be cast to io.ktor.http.content.OutgoingContent"
-                // will be thrown otherwise
-                header( HttpHeaders.ContentType, ContentType.Application.Json )
-
-                setBody(
-                    // Use this to ensure syntax
-                    // {"urls":[imageUrl]}
-                    buildJsonObject {
-                        putJsonArray( "urls" ) { add( imageUrl ) }
-                    }
-                )
-            }.body<JsonArray>()
-
-            response.firstNotNullOf { it.jsonObject["external_asset_path"] }
-                .jsonPrimitive
-                .content
-                .let { "mp:$it" }
-        }.onSuccess {
-            Logger.d { "External url: $it" }
-        }.onFailure {
-            Logger.e( it ) { "Error occurs while posting imageUrl for external url" }
         }
-
 
     @OptIn(ExperimentalContracts::class)
-    private suspend fun getImageUrl( artworkUri: Uri? ): String? {
+    private suspend fun getImageUrl( artworkUri: String? ): String? {
         contract {
             returns( null ) implies( artworkUri == null )
         }
-        if( artworkUri == null || artworkUri.toString().isBlank() )
+        if( artworkUri.isNullOrBlank() )
             return smallImage
 
         logger.v { "Getting external url for artwork $artworkUri" }
 
-        val artworkCacheKey = artworkUri.toString()
+        val artworkCacheKey = artworkUri
         if( cachedExternalUrls.containsKey( artworkCacheKey ) ) {
             logger.d { "artwork is cached" }
             return cachedExternalUrls[artworkCacheKey]
         }
 
+        val kmpUri = artworkUri.toKmpUri()
         val artworkUri =
-            if( artworkUri.isLocalFile() )
-                uploadLocalArtwork( artworkUri ).getOrNull()
-                                                .toString()
+            if( kmpUri.isLocalFile() )
+                uploadLocalArtwork( kmpUri ).getOrNull().toString()
             else
-                artworkUri.toString()
+                artworkUri
 
-        return submitArtworkUrlToDiscord( artworkUri, APPLICATION_ID )
-            .onSuccess {
-                logger.v { "Discord assigns $it as image url" }
-                cachedExternalUrls[artworkCacheKey] = it
-            }
-            .onFailure {
-                logger.e( it ) { "Upload image to Discord failed" }
-            }
-            .getOrDefault( smallImage )
+        return DiscordApi.getExternalImageUrl( artworkUri, _token.value!! )
+                         .onSuccess { cachedExternalUrls[artworkCacheKey] = it }
+                         .getOrDefault( smallImage )
     }
 
     /**
      * This function shouldn't be called anywhere other than initialization of [smallImage]
      */
     private fun getAppLogoUrl(): String? = runBlocking {
-        submitArtworkUrlToDiscord( KREATE_IMAGE_URL, APPLICATION_ID )
-            .onSuccess {
-                logger.d { "Small image: $it" }
-            }
-            .onFailure {
-                logger.e( it ) { "Failed to upload app logo!" }
-            }
-            .getOrNull()
+        DiscordApi.getExternalImageUrl( KREATE_IMAGE_URL, _token.value!! )
+                  .getOrNull()
     }
     //</editor-fold>
 
@@ -242,7 +162,7 @@ class DiscordImpl : Discord, KoinComponent {
         }
     }
 
-    private suspend fun makeAssets( largeImage: Uri?, smallImage: Uri? ): Assets {
+    private suspend fun makeAssets( largeImage: String?, smallImage: String? ): Assets {
         val largeImage = getImageUrl( largeImage )
         val smallImage = if( largeImage == this.smallImage && smallImage == null )
             null
