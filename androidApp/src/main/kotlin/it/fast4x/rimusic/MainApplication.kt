@@ -22,7 +22,6 @@ import app.kreate.logging.setupLogging
 import app.kreate.utils.setDebugMode
 import app.kreate.utils.setFlavorArch
 import app.kreate.utils.setFlavorEnv
-import app.kreate.utils.setVersionName
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
@@ -46,7 +45,6 @@ class MainApplication : Application(), SingletonImageLoader.Factory {
 
         // Set this at the earliest to lock the setter
         setDebugMode( BuildConfig.DEBUG )
-        setVersionName( BuildConfig.VERSION_NAME )
         setFlavorArch( BuildConfig.FLAVOR_arch )
         setFlavorEnv( BuildConfig.FLAVOR_env )
 

@@ -57,8 +57,8 @@ import app.kreate.compose.R
 import app.kreate.database.Database
 import app.kreate.database.models.SearchQuery
 import app.kreate.preferences.Preferences
+import app.kreate.resources.KreateKonfig
 import app.kreate.utils.Toaster
-import app.kreate.utils.VERSION_NAME
 import it.fast4x.rimusic.enums.HomeScreenTabs
 import it.fast4x.rimusic.enums.NavRoutes
 import it.fast4x.rimusic.enums.StatisticsType
@@ -370,7 +370,7 @@ fun AppNavigation(
     crashReportDialog.Render()
 
     val seenVersion by Preferences.SEEN_CHANGELOGS_VERSION.collectAsStateWithLifecycle()
-    if( seenVersion != VERSION_NAME ) {
+    if( seenVersion != KreateKonfig.VERSION_NAME) {
         val changelogs = remember {
             object: ChangelogsDialog(context) {
                 // Automatically enable dialog when this class is init
@@ -378,7 +378,7 @@ fun AppNavigation(
 
                 override fun hideDialog() {
                     super.hideDialog()
-                    Preferences.SEEN_CHANGELOGS_VERSION.update( VERSION_NAME )
+                    Preferences.SEEN_CHANGELOGS_VERSION.update(KreateKonfig.VERSION_NAME )
                 }
             }
         }

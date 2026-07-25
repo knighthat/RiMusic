@@ -66,6 +66,7 @@ import app.kreate.gateway.innertube.YouTube
 import app.kreate.player.Player
 import app.kreate.player.PlayerListener
 import app.kreate.preferences.Preferences
+import app.kreate.resources.KreateKonfig
 import app.kreate.utils.Toaster
 import app.kreate.utils.thumbnail
 import app.kreate.widgets.WidgetBroadcastReceiver
@@ -700,7 +701,7 @@ fun AppCompatActivity.AppContent(
         val uri = intentUriData ?: return@LaunchedEffect
 
         Toaster.n(
-            "${resources.getString(app.kreate.resources.R.string.app_name)} ${this@AppContent.resources.getString( R.string.opening_url )}",
+            "${KreateKonfig.APP_NAME} ${this@AppContent.resources.getString( R.string.opening_url )}",
             duration = Toast.LENGTH_LONG
         )
 

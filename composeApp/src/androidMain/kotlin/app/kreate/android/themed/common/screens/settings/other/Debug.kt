@@ -35,6 +35,7 @@ import app.kreate.components.settings.NumberPickerEntry
 import app.kreate.components.settings.SettingComponents
 import app.kreate.compose.R
 import app.kreate.preferences.Preferences
+import app.kreate.resources.KreateKonfig
 import app.kreate.utils.Toaster
 import app.kreate.utils.getRuntimeLogDir
 import co.touchlab.kermit.Logger
@@ -130,7 +131,7 @@ fun LazyListScope.debugSection(search: SettingEntrySearch ) {
             SettingComponents.BooleanEntry(
                 preference = Preferences.RUNTIME_LOG,
                 title = stringResource( R.string.setting_entry_runtime_log ),
-                subtitle = stringResource( R.string.setting_description_runtime_log, stringResource(app.kreate.resources.R.string.app_name) ),
+                subtitle = stringResource( R.string.setting_description_runtime_log, KreateKonfig.APP_NAME ),
                 action = SettingComponents.Action.RESTART_APP
             )
         val isRuntimeLogEnabled by Preferences.RUNTIME_LOG.collectAsStateWithLifecycle()

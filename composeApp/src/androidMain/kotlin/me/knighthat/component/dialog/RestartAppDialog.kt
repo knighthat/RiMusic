@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import app.kreate.compose.R
+import app.kreate.resources.KreateKonfig
 import it.fast4x.rimusic.colorPalette
 import it.fast4x.rimusic.service.modern.PlayerServiceModern
 import it.fast4x.rimusic.typography
@@ -72,7 +73,7 @@ object RestartAppDialog: ConfirmDialog {
     @Composable
     override fun DialogBody() {
         BasicText(
-            text = stringResource( R.string.restart_dialog_body, stringResource(app.kreate.resources.R.string.app_name) ),
+            text = stringResource( R.string.restart_dialog_body, KreateKonfig.APP_NAME ),
             style = typography().xs.copy( color = colorPalette().text ),
             modifier = Modifier.padding( vertical = 20.dp )
         )

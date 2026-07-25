@@ -15,6 +15,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import app.kreate.compose.R
 import app.kreate.di.PrefType
 import app.kreate.di.Storage
+import app.kreate.resources.KreateKonfig
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +23,6 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import me.knighthat.component.ExportToFileDialog
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 import org.koin.java.KoinJavaComponent.get
 import java.io.OutputStream
 
@@ -92,5 +92,5 @@ class ExportSettingsDialog private constructor(
         @Composable
         get() = stringResource( R.string.title_export_settings )
 
-    override fun defaultFileName(): String = "${get<Context>().getString(app.kreate.resources.R.string.app_name)}_settings"
+    override fun defaultFileName(): String = "${KreateKonfig.APP_NAME}_settings"
 }

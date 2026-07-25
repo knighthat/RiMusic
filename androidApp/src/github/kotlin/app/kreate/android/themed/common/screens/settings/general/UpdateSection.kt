@@ -18,7 +18,7 @@ import app.kreate.components.settings.EnumEntry
 import app.kreate.components.settings.SettingComponents
 import app.kreate.compose.R
 import app.kreate.preferences.Preferences
-import app.kreate.utils.VERSION_NAME
+import app.kreate.resources.KreateKonfig
 import it.fast4x.rimusic.enums.CheckUpdateState
 import it.fast4x.rimusic.ui.components.themed.SecondaryTextButton
 import me.knighthat.updater.ChangelogsDialog
@@ -35,7 +35,7 @@ internal fun updateSection( scope: LazyListScope, search: SettingEntrySearch ) =
         SettingComponents.EnumEntry(
             preference = Preferences.CHECK_UPDATE,
             title = stringResource( R.string.setting_entry_update_checker ),
-            subtitle = stringResource( checkUpdate.subtitleId, stringResource(app.kreate.resources.R.string.app_name) ),
+            subtitle = stringResource( checkUpdate.subtitleId, KreateKonfig.APP_NAME ),
             trailingContent = {
                 AnimatedVisibility(
                     visible = checkUpdate === CheckUpdateState.DISABLED,
@@ -61,7 +61,7 @@ internal fun updateSection( scope: LazyListScope, search: SettingEntrySearch ) =
         SettingComponents.Entry(
             title = stringResource( R.string.setting_entry_view_changelogs ),
             onClick = changelogs::showDialog,
-            subtitle = "v$VERSION_NAME"
+            subtitle = "v${KreateKonfig.VERSION_NAME}"
         )
     }
     item( "showNoUpdateAvailableToaster" ) {

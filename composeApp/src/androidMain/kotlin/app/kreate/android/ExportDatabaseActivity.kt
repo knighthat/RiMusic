@@ -1,6 +1,5 @@
 package app.kreate.android
 
-import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -8,11 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import app.kreate.database.Database
 import app.kreate.di.DATABASE_FILENAME
+import app.kreate.resources.KreateKonfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.knighthat.utils.TimeDateUtils
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 import java.io.FileInputStream
 
 class ExportDatabaseActivity : AppCompatActivity(), KoinComponent {
@@ -61,7 +60,7 @@ class ExportDatabaseActivity : AppCompatActivity(), KoinComponent {
             // 3. Launch the file picker (must be done on Main thread)
             launch(Dispatchers.Main) {
                 // You can set a default filename here
-                exportLauncher.launch("${get<Context>().getString(app.kreate.resources.R.string.app_name)}_database_${TimeDateUtils.localizedDateNoDelimiter()}_${TimeDateUtils.timeNoDelimiter()}")
+                exportLauncher.launch("${KreateKonfig.APP_NAME}_database_${TimeDateUtils.localizedDateNoDelimiter()}_${TimeDateUtils.timeNoDelimiter()}")
             }
         }
     }

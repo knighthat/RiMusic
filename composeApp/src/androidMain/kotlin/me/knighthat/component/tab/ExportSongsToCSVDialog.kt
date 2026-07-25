@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import app.kreate.compose.R
 import app.kreate.database.models.Song
+import app.kreate.resources.KreateKonfig
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import it.fast4x.rimusic.ui.components.tab.toolbar.Descriptive
 import it.fast4x.rimusic.ui.components.tab.toolbar.MenuIcon
@@ -25,7 +26,6 @@ import me.knighthat.component.ExportToFileDialog
 import me.knighthat.utils.TimeDateUtils
 import me.knighthat.utils.csv.SongCSV
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 import org.koin.java.KoinJavaComponent.inject
 import java.io.OutputStream
 
@@ -135,5 +135,5 @@ class ExportSongsToCSVDialog private constructor(
     override fun onShortClick() = showDialog()
 
     override fun defaultFileName(): String =
-        "${get<Context>().getString(app.kreate.resources.R.string.app_name)}_playlist_${TimeDateUtils.localizedDateNoDelimiter()}_${TimeDateUtils.timeNoDelimiter()}"
+        "${KreateKonfig.APP_NAME}_playlist_${TimeDateUtils.localizedDateNoDelimiter()}_${TimeDateUtils.timeNoDelimiter()}"
 }

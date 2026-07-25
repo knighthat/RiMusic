@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.kreate.android.themed.common.component.dialog.Dialog
 import app.kreate.compose.R
+import app.kreate.resources.KreateKonfig
 import app.kreate.utils.IS_DEBUG
 import it.fast4x.rimusic.ui.styling.LocalAppearance
 import it.fast4x.rimusic.utils.bold
@@ -37,7 +38,7 @@ open class ChangelogsDialog(context: Context): Dialog() {
 
     override val dialogTitle: String
         @Composable
-        get() = stringResource( R.string.update_changelogs, stringResource(app.kreate.resources.R.string.app_name) )
+        get() = stringResource( R.string.update_changelogs, KreateKonfig.APP_NAME )
 
     private lateinit var pagerState: PagerState
     private var sections: SnapshotStateList<Section> = mutableStateListOf()

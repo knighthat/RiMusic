@@ -4,11 +4,11 @@ import android.content.Context
 import android.os.Looper
 import androidx.compose.ui.util.fastFirstOrNull
 import app.kreate.compose.R
+import app.kreate.resources.KreateKonfig
 import app.kreate.utils.FLAVOR_ARCH
 import app.kreate.utils.FLAVOR_ENV
 import app.kreate.utils.Repository
 import app.kreate.utils.Toaster
-import app.kreate.utils.VERSION_NAME
 import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -22,7 +22,6 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
 import me.knighthat.updater.Updater.build
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 import org.koin.core.component.inject
 import java.nio.file.NoSuchFileException
 import kotlin.time.ExperimentalTime
@@ -120,7 +119,7 @@ object Updater : KoinComponent {
         try {
             fetchUpdate()
 
-            val isNewUpdateAvailable = trimVersion( VERSION_NAME ) != trimVersion( tagName )
+            val isNewUpdateAvailable = trimVersion( KreateKonfig.VERSION_NAME ) != trimVersion( tagName )
             if( !isNewUpdateAvailable && (showStatus || isForced) ) {
                 Toaster.i( R.string.info_no_update_available )
                 return@launch
@@ -165,7 +164,7 @@ object Updater : KoinComponent {
             else -> error( "Unknown architecture $FLAVOR_ARCH" )
         }
         // e.g. Release version will have name 'Kreate-release.apk'
-        val appName = get<Context>().getString(app.kreate.resources.R.string.app_name)
+        val appName = KreateKonfig.APP_NAME
         return "$appName-$suffix.apk"
     }
 }

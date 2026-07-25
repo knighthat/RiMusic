@@ -1,6 +1,7 @@
 
 [versions]
 # App properties
+appName = "Kreate"
 versionCode = "140"
 versionName = "2.2.2"
 compileSdk = "36"
@@ -55,6 +56,7 @@ kotlinStdlibVersion = "2.4.0"
 timber = "5.0.1"
 logpose = "0.9.11"
 uri-kmp = "0.0.21"
+build-konfig = "0.22.0"
 
 
 [libraries]
@@ -170,6 +172,7 @@ kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref 
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-kmp" }
 room = { id = "androidx.room", version.ref = "room" }
+build-konfig = { id = "com.codingfeline.buildkonfig", version.ref = "build-konfig" }
 
 # Android
 android-application = { id = "com.android.application", version.ref = "agp" }

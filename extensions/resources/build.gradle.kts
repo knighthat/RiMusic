@@ -1,6 +1,11 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec
+
+val packageNamespace = "app.kreate.resources"
+
 plugins {
     // Multiplatform
     alias( libs.plugins.kotlin.multiplatform )
+    alias( libs.plugins.build.konfig )
 
     // Android
     alias( libs.plugins.android.kotlin.multiplatform.library )
@@ -16,7 +21,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     android {
-        namespace = "app.kreate.resources"
+        namespace = packageNamespace
         compileSdk = libs.versions.compileSdk.get().toInt()
         minSdk = libs.versions.minSdk.get().toInt()
         // Expose resources to other modules.
@@ -86,4 +91,22 @@ dependencies {
 compose {
     // Make Res class importable from other places
     resources.publicResClass = true
+}
+
+buildkonfig {
+    packageName = packageNamespace
+    exposeObjectWithName = "KreateKonfig"
+
+    defaultConfigs {
+        buildConfigField( FieldSpec.Type.STRING, "APP_NAME", libs.versions.appName.get(), const = true )
+        buildConfigField( FieldSpec.Type.STRING, "VERSION_NAME", libs.versions.versionName.get(), const = true )
+    }
+
+    targetConfigs {
+        create( "android" ) {
+            buildConfigField( FieldSpec.Type.STRING, "VERSION_CODE", libs.versions.versionCode.get(), const = true )
+            buildConfigField( FieldSpec.Type.STRING, "FLAVOR_ARCH", System.getenv("buildKonfig.arch").orEmpty(), const = true )
+            buildConfigField( FieldSpec.Type.STRING, "FLAVOR_ENV", System.getenv("buildKonfig.env").orEmpty(), const = true )
+        }
+    }
 }

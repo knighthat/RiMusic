@@ -38,6 +38,7 @@ import app.kreate.compose.R
 import app.kreate.database.Database
 import app.kreate.di.CacheType
 import app.kreate.preferences.Preferences
+import app.kreate.resources.KreateKonfig
 import app.kreate.utils.Toaster
 import coil3.imageLoader
 import it.fast4x.rimusic.colorPalette
@@ -256,7 +257,7 @@ fun DataSettings( paddingValues: PaddingValues ) {
 
             header(
                 titleId = R.string.title_backup_and_restore,
-                subtitle = { stringResource( R.string.existing_data_will_be_overwritten, stringResource(app.kreate.resources.R.string.app_name) ) }
+                subtitle = { stringResource(R.string.existing_data_will_be_overwritten, KreateKonfig.APP_NAME) }
             )
             entry( search, R.string.save_to_backup ) {
                 val exportDbDialog = ExportDatabaseDialog( context )

@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 
-val APP_NAME = "Kreate"
-
 private fun String.sha256(): String {
     val digest = MessageDigest.getInstance( "SHA-256" )
     val hashBytes = digest.digest( this.toByteArray() )
@@ -92,7 +90,7 @@ androidComponents {
             else
                 buildType
 
-            it.outputFileName = "$APP_NAME-${suffix}.apk"
+            it.outputFileName = "${libs.versions.appName.get()}-${suffix}.apk"
         }
     }
 }
@@ -144,7 +142,7 @@ extensions.configure<ApplicationExtension> {
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
-            manifestPlaceholders["appName"] = "$APP_NAME-debug"
+            manifestPlaceholders["appName"] = "${libs.versions.appName.get()}-debug"
         }
 
         release {
@@ -259,7 +257,7 @@ extensions.configure<ApplicationExtension> {
 
             // App's properties
             versionName = libs.versions.versionName.get()
-            manifestPlaceholders["appName"] = APP_NAME
+            manifestPlaceholders["appName"] = libs.versions.appName.get()
             versionCode = vCode
         }
         //</editor-fold>

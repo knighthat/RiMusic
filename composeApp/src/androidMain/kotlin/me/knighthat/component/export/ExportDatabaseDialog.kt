@@ -15,13 +15,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import app.kreate.compose.R
 import app.kreate.database.Database
 import app.kreate.di.DATABASE_FILENAME
+import app.kreate.resources.KreateKonfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.knighthat.component.ExportToFileDialog
 import me.knighthat.utils.TimeDateUtils
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 import java.io.FileInputStream
 
 class ExportDatabaseDialog private constructor(
@@ -72,5 +72,5 @@ class ExportDatabaseDialog private constructor(
         get() = stringResource( R.string.title_name_your_export )
 
     override fun defaultFileName(): String =
-        "${get<Context>().getString(app.kreate.resources.R.string.app_name)}_database_${TimeDateUtils.localizedDateNoDelimiter()}_${TimeDateUtils.timeNoDelimiter()}"
+        "${KreateKonfig.APP_NAME}_database_${TimeDateUtils.localizedDateNoDelimiter()}_${TimeDateUtils.timeNoDelimiter()}"
 }
