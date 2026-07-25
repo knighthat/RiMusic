@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <cache-path
+        name="shared_lyrics"
+        path="shared_lyrics/" />
+    <external-path
+        name="external_files"
+        path="." />
+</paths>

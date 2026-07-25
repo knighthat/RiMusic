@@ -78,7 +78,7 @@ object DownloadAndInstallDialog: Dialog {
         val apkUri = if(isAtLeastAndroid7 )
             FileProvider.getUriForFile(
                 context,
-                "${context.packageName}.provider", // must match manifest
+                "${context.packageName}.fileprovider", // must match manifest
                 apkFile
             )
         else
