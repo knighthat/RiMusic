@@ -61,6 +61,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.zIndex
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -210,6 +211,10 @@ fun Lyrics(
         val colorPaletteMode by Preferences.THEME_MODE
 
         var isEditing by remember(mediaId, isShowingSynchronizedLyrics) {
+            mutableStateOf(false)
+        }
+
+        var isLyricsShareMode by remember(mediaId) {
             mutableStateOf(false)
         }
 
@@ -816,10 +821,12 @@ fun Lyrics(
         Box(
             contentAlignment = Alignment.Center,
             modifier = modifier
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onTap = { onDismiss() }
-                    )
+                .pointerInput(isLyricsShareMode) {
+                    if (!isLyricsShareMode) {
+                        detectTapGestures(
+                            onTap = { onDismiss() }
+                        )
+                    }
                 }
                 .fillMaxSize()
                 .background(if (!showlyricsthumbnail) Color.Transparent else Color.Black.copy(0.8f))
@@ -849,6 +856,31 @@ fun Lyrics(
 
             if (text?.isEmpty() == true && !checkedLyricsLrc && !checkedLyricsKugou && !checkedLyricsInnertube)
                 checkLyrics = !checkLyrics
+
+            // Lyrics Share Mode overlay
+            AnimatedVisibility(
+                visible = isLyricsShareMode && text?.isNotEmpty() == true,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .zIndex(10f)
+                    .background(Color.Black.copy(0.95f))
+            ) {
+                val lyricsLines = remember(text, isShowingSynchronizedLyrics) {
+                    app.kreate.android.screens.player.parseLyricsToLines(text, isShowingSynchronizedLyrics)
+                }
+                val mediaMetadata = mediaMetadataProvider()
+                app.kreate.android.screens.player.LyricsSelectionMode(
+                    lyrics = lyricsLines,
+                    songTitle = cleanPrefix(mediaMetadata.title?.toString().orEmpty()),
+                    artistName = cleanPrefix(mediaMetadata.artist?.toString().orEmpty()),
+                    thumbnailUrl = mediaMetadata.artworkUri?.toString(),
+                    mediaId = mediaId,
+                    currentPosition = player.currentPosition,
+                    onDismiss = { isLyricsShareMode = false }
+                )
+            }
 
             if (text?.isNotEmpty() == true) {
                 if (isShowingSynchronizedLyrics) {
@@ -2330,6 +2362,15 @@ fun Lyrics(
                                             onClick = {
                                                 menuState.hide()
                                                 copyToClipboard = true
+                                            }
+                                        )
+
+                                        MenuEntry(
+                                            icon = R.drawable.share_social,
+                                            text = stringResource(R.string.lyrics_share_as_image),
+                                            onClick = {
+                                                menuState.hide()
+                                                isLyricsShareMode = true
                                             }
                                         )
 

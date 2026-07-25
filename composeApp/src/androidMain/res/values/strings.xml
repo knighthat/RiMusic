@@ -916,4 +916,8 @@
     <string name="word_pin">Pin</string>
     <string name="word_unpin">Unpin\n</string>
     <string name="success_playlist_deleted">Deleted %s</string>
+    <string name="lyrics_share_as_image">Share lyrics as image</string>
+    <string name="lyrics_share_select_lines">Select lyrics to share</string>
+    <string name="lyrics_share_create_card">Share</string>
+    <string name="cancel">Cancel</string>
 </resources>
